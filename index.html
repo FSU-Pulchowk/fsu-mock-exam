@@ -155,7 +155,7 @@
   /* ---------- Tab-switch deterrent overlay ---------- */
   .exam-pause { position: fixed; inset: 0; z-index: 100000; display: flex; flex-direction: column; gap: 12px; align-items: center; justify-content: center; text-align: center; padding: 28px; background: #0d2b36; color: #eaf5f8; font-size: 17px; font-weight: 600; line-height: 1.55; }
 
-  /* ---------- Submitted / closing screen (demo-only, simplified) ---------- */
+  /* ---------- Submitted / closing screen ---------- */
   .submitted-card { background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 30px 26px; box-shadow: 0 1px 4px rgba(30,80,100,.06); text-align: center; }
   .submitted-check { width: 56px; height: 56px; border-radius: 50%; background: var(--green); color: #fff; display: grid; place-items: center; margin: 0 auto 14px; font-size: 28px; }
   .submitted-card h2 { margin: 0 0 8px; font-family: var(--font-display); color: var(--ink); }
@@ -163,6 +163,21 @@
   .submitted-stat b { display: block; font-size: 22px; font-family: var(--font-display); color: var(--teal-dark); }
   .submitted-stat span { font-size: 12px; color: var(--muted); }
   .submitted-hint { font-size: 13px; color: var(--muted); background: var(--teal-soft); border-radius: 8px; padding: 12px 14px; margin: 16px auto 0; max-width: 520px; text-align: left; line-height: 1.6; }
+
+  /* ---------- Subject breakdown table ---------- */
+  .breakdown-table { width: 100%; max-width: 520px; margin: 0 auto; border-collapse: collapse; font-size: 13px; }
+  .breakdown-table th, .breakdown-table td { padding: 7px 10px; border-bottom: 1px solid var(--line); text-align: left; }
+  .breakdown-table th { color: var(--muted); font-weight: 600; font-size: 11.5px; text-transform: uppercase; letter-spacing: .03em; }
+  .breakdown-table td:not(:first-child), .breakdown-table th:not(:first-child) { text-align: right; }
+
+  /* ---------- Review mode ---------- */
+  .review-q { padding: 10px 12px; border-radius: 6px; margin-bottom: 8px; border: 1px solid var(--line); text-align: left; max-width: 640px; margin-left: auto; margin-right: auto; }
+  .review-q.review-correct { border-color: #bfe3cc; background: #f2fbf5; }
+  .review-q.review-wrong { border-color: #f0c4c4; background: #fdf3f3; }
+  .review-q.review-unanswered { border-color: var(--line); background: #f7fafb; }
+  .review-q-head { font-size: 14px; display: flex; justify-content: space-between; gap: 10px; }
+  .review-marks { font-family: var(--font-display); font-weight: 700; font-size: 12.5px; color: var(--teal-dark); white-space: nowrap; }
+  .review-line { font-size: 12.5px; color: var(--muted); margin-top: 4px; }
 
   .hidden { display: none !important; }
 </style>
@@ -191,13 +206,14 @@
           </div>
           <h3 class="notice-heading">Examination Notice:</h3>
           <ul class="notice-list">
-            <li>The duration of this exam is <b>2 hr</b>. It has <b>12 questions</b> — the first 8 carry <b>1 mark</b> each and the remaining 4 carry <b>2 marks</b> each, for a total of <b>16 marks</b>.</li>
-            <li>You have to select the radio button on the correct option for each question.</li>
-            <li>You can change your option any time during the examination period.</li>
-            <li>To leave a question blank, simply don't select any option. The list of unanswered questions can be viewed by clicking <b>“View unanswered”</b> on your page.</li>
+            <li>The duration of this exam is <b>2 hr</b>. It has <b id="noticeQCount">12</b> questions across <b id="noticeSubjects">4 subjects</b>, for a total of <b id="noticeTotalMarks">16</b> marks.</li>
+            <li>Each question shows its own mark value beside it. A wrong answer deducts <b id="noticeNegMark">25%</b> of that question's marks; leaving a question blank scores 0 with no penalty.</li>
+            <li>You have to select the radio button on the correct option for each question. You can change your option any time during the examination period.</li>
+            <li>The list of unanswered questions can be viewed by clicking <b>“View unanswered”</b> on your page.</li>
             <li>Information along with time remaining, total attempted and total questions will be displayed in the side panel during the exam.</li>
             <li>When the time is up, your exam will be submitted automatically.</li>
-            <li>Your progress is saved on this device, so an accidental refresh won't lose your answers. <i>(sample copy — this standalone preview doesn't actually persist anything)</i></li>
+            <li>After submitting, you can review your answers against the correct ones and see a subject-wise breakdown, right here in this preview.</li>
+            <li>Your progress is saved on this device, so an accidental refresh won't lose your answers.</li>
           </ul>
           <p class="exam-ready">You can now take examination:</p>
           <div class="notice-actions">
@@ -211,7 +227,7 @@
             <div class="ei-text">
               <div class="ei-name">Demo Student (ID: DEMO123)</div>
               <div class="ei-timer">Time Remaining: <b id="timerText" class="">2:00:00</b></div>
-              <div class="ei-answered">You have answered <b id="answeredCount">0</b> out of <b>12</b></div>
+              <div class="ei-answered">You have answered <b id="answeredCount">0</b> out of <b id="totalCount1">12</b></div>
               <span class="ei-link" onclick="toggleUnanswered()"><span id="unansweredToggleLabel">View</span> unanswered questions</span>
             </div>
             <img class="ei-photo" src="https://ui-avatars.com/api/?name=Demo+Student&background=cfe6ee&color=176c89" alt="" referrerpolicy="no-referrer" />
@@ -235,7 +251,7 @@
 
           <div class="exam-actions">
             <button id="submitBtn" class="btn btn-blue" onclick="askSubmit()">Submit exam</button>
-            <span class="muted">Answered <span id="answeredCount2">0</span> / 12</span>
+            <span class="muted">Answered <span id="answeredCount2">0</span> / <span id="totalCount2">12</span></span>
           </div>
         </div>
 
@@ -249,11 +265,24 @@
             <div class="submitted-stat"><b id="finalUnanswered">0</b><span>Unanswered</span></div>
             <div class="submitted-stat"><b id="finalFlagged">0</b><span>Flagged</span></div>
           </div>
+
+          <div id="subjectBreakdownWrap" class="hidden" style="margin-top:20px;">
+            <h3 style="font-size:13px;color:var(--header-text);margin:0 0 10px;text-align:left;max-width:520px;margin-left:auto;margin-right:auto;">Subject-wise breakdown</h3>
+            <table class="breakdown-table">
+              <thead><tr><th>Subject</th><th>Attempted</th><th>Correct</th><th>Wrong</th><th>Marks</th></tr></thead>
+              <tbody id="subjectBreakdownBody"></tbody>
+            </table>
+          </div>
+
+          <div id="reviewToggleWrap" class="hidden" style="margin-top:16px;">
+            <button id="reviewToggleBtn" class="btn btn-ghost btn-sm" onclick="toggleReview()">Review Answers</button>
+          </div>
+          <div id="reviewHost" class="hidden" style="margin-top:14px;"></div>
+
           <div class="submitted-hint">
-            This is where the UI/UX preview ends. In the real app, submitting takes you straight to a personal
-            <b>Result</b> page: your score out of the total marks, a subject-wise breakdown, a full answer review
-            with worked solutions, and a rank estimate &mdash; none of which is faked here since this demo has no
-            real answer key.
+            This is where the UI/UX preview ends. In the real app, submitting takes you to a personal
+            <b>Result</b> page with worked solutions and a rank estimate against other candidates &mdash;
+            beyond what this standalone preview can show, since it has no real candidate pool or answer key.
           </div>
           <div style="margin-top:18px;">
             <button class="btn btn-ghost btn-sm" onclick="location.reload()">Restart this preview</button>
@@ -288,20 +317,41 @@
   </div>
 
 <script>
-/* ==========================================================================
-   Sample data — placeholder questions only, NOT the real IOE question bank.
-   ========================================================================== */
+const DEMO_QUESTIONS = [
+  { qid: 1, weight: 1, subject: 'Mathematics', question: 'Simplify: 3(x + 4) &minus; 2x.', options: ['x + 12', 'x + 4', '5x + 12', 'x &minus; 12'] },
+  { qid: 2, weight: 1, subject: 'Mathematics', question: 'What is the value of 2<sup>5</sup>?', options: ['10', '16', '32', '64'] },
+  { qid: 3, weight: 1, subject: 'Mathematics', question: 'How many moles are there in 44 g of CO&sup2; (molar mass 44 g/mol)?', options: ['0.5', '1', '2', '4'] },
+  { qid: 4, weight: 1, subject: 'Physics', question: 'The SI unit of force is:', options: ['Joule', 'Newton', 'Watt', 'Pascal'] },
+  { qid: 5, weight: 1, subject: 'Physics', question: 'Which of these quantities is a vector?', options: ['Mass', 'Speed', 'Velocity', 'Energy'] },
+  { qid: 6, weight: 1, subject: 'Chemistry', question: 'The chemical symbol for Sodium is:', options: ['So', 'Sd', 'Na', 'S'] },
+  { qid: 7, weight: 1, subject: 'Chemistry', question: 'A water molecule is composed of hydrogen and:', options: ['Nitrogen', 'Oxygen', 'Carbon', 'Helium'] },
+  { qid: 8, weight: 1, subject: 'English', question: "Select the closest synonym of 'Rapid'.", options: ['Slow', 'Quick', 'Silent', 'Heavy'] },
+  { qid: 9, weight: 2, subject: 'Mathematics', question: 'A train 120 m long crosses a pole in 8 seconds. What is its speed in m/s?', options: ['12', '15', '20', '24'] },
+  { qid: 10, weight: 2, subject: 'Physics', question: 'A ball is dropped from a height of 20 m (g &asymp; 10 m/s&sup2;). About how long does it take to reach the ground?', options: ['1 s', '2 s', '3 s', '4 s'] },
+  { qid: 11, weight: 2, subject: 'Chemistry', question: 'Choose the correctly spelled word.', options: ['Recieve', 'Receive', 'Receeve', 'Receve'] },
+  {
+    qid: 12, weight: 2, subject: 'English',
+    passage: 'Solar panels convert sunlight directly into electricity with no moving parts and almost no fuel cost after installation. Unlike fossil-fuel plants, they produce no emissions while running, though manufacturing and disposal still carry an environmental cost. Their main drawback is that output drops sharply at night and in cloudy weather, so most solar systems are paired with batteries or the main grid to stay reliable.',
+    question: 'According to the passage, what is the main drawback of solar panels mentioned?',
+    options: ['They are expensive to manufacture', 'They produce emissions while running', 'Output drops at night and in cloudy weather', 'They require constant fuel'],
+  },
+];
+
+const DEMO_ANSWERS = { 1: 0, 2: 2, 3: 1, 4: 1, 5: 2, 6: 2, 7: 1, 8: 1, 9: 1, 10: 1, 11: 1, 12: 2 };
+
 let QUESTIONS = [];
 let TOTAL = QUESTIONS.length;
 const PAGE_SIZE = 7;
 const LETTERS = ['a', 'b', 'c', 'd'];
 
-/* Demo timer: labeled as the real 2‑hour duration but compressed into a short
-   wall-clock window so the whole lifecycle (normal → warn → danger → auto-submit)
-   is visible without an actual 2‑hour wait. */
-const SIM_TOTAL_SECONDS = 7200;   // 2 hr, matches the real default duration label
-const WALL_SECONDS = 150;         // ~2.5 real minutes to run the full countdown
+
+const SIM_TOTAL_SECONDS = 7200;
+const WALL_SECONDS = 150; 
 const SPEED = SIM_TOTAL_SECONDS / WALL_SECONDS;
+
+
+const NEGATIVE_MARKING_ENABLED = true;
+const NEGATIVE_MARK_RATIO = 0.25;
 
 let page = 0;
 let answers = {};
@@ -310,69 +360,139 @@ let showUnanswered = false;
 let submitted = false;
 let startedAt = null;
 let timerId = null;
-let marksObtained =0;
+let lastGrade = null;
+
+async function fetchJSON(url) {
+  const response = await fetch(url);
+  if (!response.ok) throw new Error('Request failed: ' + response.status);
+  return response.json();
+}
 
 async function getQuestions() {
-  try{
-  const response = await fetch("http://localhost:5000/getQuestions");  
-  if (!response.ok) throw new Error("Error occured whilst fetching the questions!");
-  const result = await response.json();
-  if (response.isNotTime==true){ 
-    console.log("Test hasnt started yet please try again later");
-    return null;
+  try {
+    const result = await fetchJSON('http://localhost:5000/getQuestions');
+    if (result.isNotTime === true) {
+      console.log('Exam has not started yet, please try again later.');
+      return null;
+    }
+    return result;
+  } catch (err) {
+    console.warn('getQuestions: backend unavailable, using demo fallback data.', err.message);
+    return { questions: DEMO_QUESTIONS };
   }
-  return result
-    
-}
-catch (err){
-  console.log(err.message);
-  return null;
-}
 }
 
 async function getAnswers() {
-  try{
-  const response = await fetch("http://localhost:5000/getAnswers");  
-  if (!response.ok) throw new Error("Error occured whilst fetching the answers!");
-  const result = await response.json();
-  if (response.isNotTime==true){ 
-    console.log("Please wait a while before submitting");
-    return null;
+  try {
+    const result = await fetchJSON('http://localhost:5000/getAnswers');
+    if (result.isNotTime === true) {
+      console.log('Please wait a while before submitting.');
+      return null;
+    }
+    return result;
+  } catch (err) {
+    console.warn('getAnswers: backend unavailable, using demo fallback data.', err.message);
+    return { answers: DEMO_ANSWERS };
   }
-  return result;
-    
-}
-catch (err){
-  console.log(err.message);
-  return null;
-}
 }
 
-async function calculateMarks() {
+
+async function gradeExam() {
   const res = await getAnswers();
-  corrAns = res.answers;
-  let score =0;
-  console.log(corrAns,answers)
-  for (let i = 0;i<corrAns.length;i++){
-    if (corrAns[i]==answers[i]) {
-        
-      score++;
-      if (i>60){
-        score++;
+  if (res == null) return null;
+  const correct = res.answers || {};
+  const bySubject = {};
+  let totalObtained = 0;
+  let totalMax = 0;
+  const perQuestion = [];
+
+  for (const q of QUESTIONS) {
+    const subj = q.subject || 'General';
+    if (!bySubject[subj]) bySubject[subj] = { attempted: 0, unanswered: 0, correctCount: 0, wrongCount: 0, obtained: 0, max: 0 };
+    const bucket = bySubject[subj];
+    bucket.max += q.weight;
+    totalMax += q.weight;
+
+    const chosen = answers[q.qid];
+    const correctIdx = correct[q.qid];
+    let marks = 0;
+    let status = 'unanswered';
+
+    if (chosen === undefined) {
+      bucket.unanswered++;
+    } else {
+      bucket.attempted++;
+      if (chosen === correctIdx) {
+        marks = q.weight;
+        bucket.correctCount++;
+        status = 'correct';
+      } else {
+        marks = NEGATIVE_MARKING_ENABLED ? -(q.weight * NEGATIVE_MARK_RATIO) : 0;
+        bucket.wrongCount++;
+        status = 'wrong';
       }
     }
+    bucket.obtained += marks;
+    totalObtained += marks;
+    perQuestion.push({ qid: q.qid, weight: q.weight, chosen, correctIdx, marks, status });
   }
-  return score;
-}
-async function showSubmittedStats() {
-  const score = await calculateMarks();
-  const item = document.getElementById("submitted-stats-holder")
-  item.innerHTML+=`
-    <div class="submitted-stat"><b >${score}</b><span>Marks</span></div>
-  `;
-  
+
+  return { totalObtained, totalMax, bySubject, perQuestion };
 }
 
+function fmtMarks(n) {
+  const r = Math.round(n * 100) / 100;
+  if (Number.isInteger(r)) return String(r);
+  return r.toFixed(2).replace(/0+$/, '').replace(/\.$/, '');
+}
+
+async function showSubmittedStats() {
+  lastGrade = await gradeExam();
+  const holder = document.getElementById('submitted-stats-holder');
+  if (lastGrade == null) {
+    holder.insertAdjacentHTML('beforeend', '<div class="submitted-stat"><b>&mdash;</b><span>Marks unavailable</span></div>');
+    return;
+  }
+  holder.insertAdjacentHTML('beforeend',
+    `<div class="submitted-stat"><b>${fmtMarks(lastGrade.totalObtained)}</b><span>Marks / ${fmtMarks(lastGrade.totalMax)}</span></div>`);
+  renderSubjectBreakdown();
+  document.getElementById('reviewToggleWrap').classList.remove('hidden');
+}
+
+function renderSubjectBreakdown() {
+  if (!lastGrade) return;
+  const rows = Object.entries(lastGrade.bySubject).map(([subj, b]) => `
+    <tr>
+      <td>${subj}</td>
+      <td>${b.attempted}/${b.attempted + b.unanswered}</td>
+      <td>${b.correctCount}</td>
+      <td>${b.wrongCount}</td>
+      <td>${fmtMarks(b.obtained)} / ${fmtMarks(b.max)}</td>
+    </tr>`).join('');
+  document.getElementById('subjectBreakdownBody').innerHTML = rows;
+  document.getElementById('subjectBreakdownWrap').classList.remove('hidden');
+}
+
+function toggleReview() {
+  const wrap = document.getElementById('reviewHost');
+  const btn = document.getElementById('reviewToggleBtn');
+  const willShow = wrap.classList.contains('hidden');
+  if (willShow && lastGrade) {
+    wrap.innerHTML = lastGrade.perQuestion.map((pq) => {
+      const q = QUESTIONS.find((x) => x.qid === pq.qid);
+      const chosenText = pq.chosen === undefined ? '<i>Not answered</i>' : `${LETTERS[pq.chosen]}) ${q.options[pq.chosen]}`;
+      const correctText = pq.correctIdx === undefined ? 'N/A' : `${LETTERS[pq.correctIdx]}) ${q.options[pq.correctIdx]}`;
+      const cls = pq.status === 'correct' ? 'review-correct' : pq.status === 'wrong' ? 'review-wrong' : 'review-unanswered';
+      return `<div class="review-q ${cls}">
+        <div class="review-q-head"><span><b>${pq.qid}.</b> ${q.question}</span><span class="review-marks">${pq.marks >= 0 ? '+' : ''}${fmtMarks(pq.marks)}</span></div>
+        <div class="review-line">Your answer: ${chosenText}</div>
+        ${pq.status !== 'correct' ? `<div class="review-line">Correct answer: ${correctText}</div>` : ''}
+      </div>`;
+    }).join('');
+  }
+  wrap.classList.toggle('hidden', !willShow);
+  btn.textContent = willShow ? 'Hide review' : 'Review Answers';
+}
 
 function fmtTimer(sec) {
   sec = Math.max(0, Math.floor(sec));
@@ -401,17 +521,17 @@ async function rerender() {
   } catch (err) {
     return false;
   }
-  let restoredFlags;
+  let restoredFlags = {};
   try {
-    restoredFlags = JSON.parse(savedFlags);
+    restoredFlags = savedFlags ? JSON.parse(savedFlags) : {};
   } catch (err) {
-    return false;
+    restoredFlags = {};
   }
 
   QUESTIONS = response.questions;
   TOTAL = QUESTIONS.length;
   answers = restoredAnswers;
-  flags=restoredFlags;
+  flags = restoredFlags;
   startedAt = Number(savedStartedAt);
   submitted = false;
 
@@ -419,6 +539,8 @@ async function rerender() {
   document.getElementById('submittedScreen').classList.add('hidden');
   document.getElementById('examScreen').classList.remove('hidden');
   document.getElementById('goTopBtn').classList.remove('hidden');
+  document.getElementById('totalCount1').textContent = TOTAL;
+  document.getElementById('totalCount2').textContent = TOTAL;
 
   clearInterval(timerId);
   renderAll();
@@ -432,19 +554,23 @@ async function startExam() {
 
   const response = await getQuestions();
   if (response == null) {
-    alert("Exam hasnt started yet");
+    alert('Exam hasnt started yet');
     return null;
   }
   QUESTIONS = response.questions;
   TOTAL = QUESTIONS.length;
   answers = {};
+  flags = {};
   startedAt = Date.now();
   localStorage.setItem('answers', JSON.stringify(answers));
+  localStorage.setItem('flags', JSON.stringify(flags));
   localStorage.setItem('startedAt', String(startedAt));
 
   document.getElementById('gateScreen').classList.add('hidden');
   document.getElementById('examScreen').classList.remove('hidden');
   document.getElementById('goTopBtn').classList.remove('hidden');
+  document.getElementById('totalCount1').textContent = TOTAL;
+  document.getElementById('totalCount2').textContent = TOTAL;
   renderAll();
   timerId = setInterval(tick, 1000);
 }
@@ -452,7 +578,7 @@ async function startExam() {
 function tick() {
   if (submitted) return;
   const elapsedReal = (Date.now() - startedAt) / 1000;
-  const remaining = Math.max(0, SIM_TOTAL_SECONDS - elapsedReal );
+  const remaining = Math.max(0, SIM_TOTAL_SECONDS - elapsedReal * SPEED);
   const timerEl = document.getElementById('timerText');
   timerEl.textContent = fmtTimer(remaining);
   timerEl.className = remaining <= 300 ? 'danger' : remaining <= 900 ? 'warn' : '';
@@ -471,18 +597,15 @@ function goToPage(delta) {
 function choose(no, idx) {
   if (submitted) return;
   answers[no] = idx;
-  console.log(localStorage.getItem("answers"),localStorage.getItem("startedAt"),localStorage.getItem("flags"));
-  localStorage.setItem("answers",JSON.stringify(answers));
-  localStorage.setItem("flags",JSON.stringify(flags));
-  localStorage.setItem("startedAt",startedAt);
-  
+  localStorage.setItem('answers', JSON.stringify(answers));
+  localStorage.setItem('flags', JSON.stringify(flags));
+  localStorage.setItem('startedAt', String(startedAt));
   renderAll();
 }
 
 function toggleFlag(no) {
   if (flags[no]) delete flags[no]; else flags[no] = true;
-  localStorage.setItem("flags",JSON.stringify(flags));
-  console.log(localStorage.getItem("answers"),localStorage.getItem("startedAt"),localStorage.getItem("flags"));
+  localStorage.setItem('flags', JSON.stringify(flags));
   renderAll();
 }
 
@@ -495,7 +618,7 @@ function askSubmit() {
   const answeredCount = Object.keys(answers).length;
   document.getElementById('confirmBody').innerHTML =
     `You have attempted <b>${answeredCount}</b> out of <b>${TOTAL}</b> questions. Do you want to submit it anyway?` +
-    (answeredCount < TOTAL ? '<br><span class="muted">Unanswered questions score 0 (no penalty).</span>' : '');
+    (answeredCount < TOTAL ? '<br><span class="muted">Unanswered questions score 0 (no penalty); incorrect answers may deduct marks.</span>' : '');
   document.getElementById('confirmModal').classList.remove('hidden');
 }
 
@@ -522,8 +645,9 @@ function doSubmit(auto) {
   document.getElementById('finalFlagged').textContent = flaggedCount;
   document.getElementById('submittedScreen').classList.remove('hidden');
   window.scrollTo({ top: 0, behavior: 'smooth' });
-  showSubmittedStats()
+  showSubmittedStats();
   localStorage.removeItem('answers');
+  localStorage.removeItem('flags');
   localStorage.removeItem('startedAt');
 }
 
@@ -575,23 +699,26 @@ function renderAll() {
     pagerNums.appendChild(b);
   }
 
+  let lastSubject = null;
   let lastPassage = null;
   const host = document.getElementById('questionsHost');
   host.innerHTML = pageQuestions.map((q, idx) => {
     const prevQ = QUESTIONS[start + idx - 1];
-    const showSection = !prevQ || prevQ.weight !== q.weight;
-    const sectionNo = q.weight === QUESTIONS[0].weight ? 1 : 2;
-    const groupCount = QUESTIONS.filter((x) => x.weight === q.weight).length;
-    const groupMarks = groupCount * q.weight;
+    const subj = q.subject || 'General';
+    const showSection = !prevQ || (prevQ.subject || 'General') !== subj;
+    const groupQs = QUESTIONS.filter((x) => (x.subject || 'General') === subj);
+    const groupCount = groupQs.length;
+    const groupMarks = groupQs.reduce((s, x) => s + x.weight, 0);
     const showPassage = q.passage && q.passage !== lastPassage;
     if (q.passage) lastPassage = q.passage;
     const chosen = answers[q.qid];
+    const negMark = fmtMarks(q.weight * NEGATIVE_MARK_RATIO);
 
     let html = '';
     if (showSection) {
       html += `<div class="exam-section-head">
-        <span class="es-no">Section ${sectionNo}</span>
-        <span class="es-desc">Group ${sectionNo} &middot; ${groupCount} question${groupCount > 1 ? 's' : ''} &middot; ${q.weight} mark${q.weight > 1 ? 's' : ''} each &middot; ${groupMarks} marks</span>
+        <span class="es-no">${subj}</span>
+        <span class="es-desc">${groupCount} question${groupCount > 1 ? 's' : ''} &middot; ${groupMarks} marks</span>
       </div>`;
     }
     if (showPassage) {
@@ -606,7 +733,7 @@ function renderAll() {
         <span class="q-text">${q.question}</span>
       </div>
       <div class="q-meta">
-        <span>(${q.weight} mark${q.weight > 1 ? 's' : ''})</span>
+        <span>(${q.weight} mark${q.weight > 1 ? 's' : ''}${NEGATIVE_MARKING_ENABLED ? `, &minus;${negMark} if wrong` : ''})</span>
         <button class="flag-icon ${flags[q.qid] ? 'on' : ''}" title="${flags[q.qid] ? 'Flagged for review' : 'Flag for review'}" onclick="toggleFlag(${q.qid})">${flagSvg(!!flags[q.qid])}</button>
       </div>
       <ul class="opts">
@@ -624,6 +751,18 @@ function renderAll() {
   }).join('');
 }
 
+async function primeNotice() {
+  const res = await getQuestions();
+  if (res == null) return;
+  const qs = res.questions || [];
+  if (qs.length === 0) return;
+  const subjects = [...new Set(qs.map((q) => q.subject || 'General'))];
+  const totalMarks = qs.reduce((s, q) => s + q.weight, 0);
+  document.getElementById('noticeQCount').textContent = qs.length;
+  document.getElementById('noticeSubjects').textContent = `${subjects.length} subject${subjects.length > 1 ? 's' : ''} (${subjects.join(', ')})`;
+  document.getElementById('noticeTotalMarks').textContent = totalMarks;
+  document.getElementById('noticeNegMark').textContent = NEGATIVE_MARKING_ENABLED ? `${Math.round(NEGATIVE_MARK_RATIO * 100)}%` : '0%';
+}
 
 /* Tab-switch / screenshot deterrent, mirrors the real exam behaviour. */
 document.addEventListener('visibilitychange', () => {
@@ -632,6 +771,7 @@ document.addEventListener('visibilitychange', () => {
 });
 
 void rerender();
+void primeNotice();
 </script>
 </body>
 </html>
