@@ -354,13 +354,21 @@ async function calculateMarks() {
   let score =0;
   console.log(corrAns,answers)
   for (let i = 0;i<corrAns.length;i++){
-    if (corrAns[i]==answers[i]) {
+    if (corrAns[i]==answers[i+1]) {
         
       score++;
       if (i>60){
         score++;
       }
     }
+    else if (answers[i+1]!==undefined) {
+        
+      score-=0.1;
+      if (i>60){
+        score-=0.1;
+      }
+    }
+    score=Math.round(score*10)/10;
   }
   return score;
 }
@@ -525,6 +533,7 @@ function doSubmit(auto) {
   showSubmittedStats()
   localStorage.removeItem('answers');
   localStorage.removeItem('startedAt');
+  localStorage.removeItem('flags')
 }
 
 function flagSvg(on) {
