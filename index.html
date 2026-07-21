@@ -1,613 +1,1185 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="robots" content="noindex, nofollow" />
-<title>FSU EXAM DEMO — PYQ Exam</title>
-<link rel="icon" href="logo.svg" />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet" />
-<style>
-  :root {
-    --teal: #1f86a8;
-    --teal-dark: #176c89;
-    --teal-banner: #2a8fb0;
-    --teal-soft: #e8f1f4;
-    --header-text: #2c7fa0;
-    --blue: #2f9fd6;
-    --blue-dark: #2585bd;
-    --blue-deep: #1a57b0;
-    --orange: #f2a51e;
-    --orange-dark: #d98e0c;
-    --green: #2e9e5b;
-    --red: #d24b4b;
-    --ink: #1f2e37;
-    --muted: #647781;
-    --line: #d6e2e7;
-    --page-bg: #d9e6ea;
-    --frame-bg: #ffffff;
-    --content-bg: #eff4f6;
-    --shadow: 0 2px 10px rgba(20, 60, 80, 0.12);
-    --font: "Plus Jakarta Sans", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    --font-display: "Sora", "Plus Jakarta Sans", "Segoe UI", Roboto, Arial, sans-serif;
-  }
-  * { box-sizing: border-box; }
-  html, body { height: 100%; }
-  body {
-    margin: 0; font-family: var(--font); color: var(--ink); background: var(--page-bg);
-    -webkit-font-smoothing: antialiased; line-height: 1.45;
-  }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>FSU EXAM DEMO — PYQ Exam</title>
+    <link rel="icon" href="logo.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap"
+        rel="stylesheet" />
+    <style>
+        :root {
+            --teal: #1f86a8;
+            --teal-dark: #176c89;
+            --teal-banner: #2a8fb0;
+            --teal-soft: #e8f1f4;
+            --header-text: #2c7fa0;
+            --blue: #2f9fd6;
+            --blue-dark: #2585bd;
+            --blue-deep: #1a57b0;
+            --orange: #f2a51e;
+            --orange-dark: #d98e0c;
+            --green: #2e9e5b;
+            --red: #d24b4b;
+            --ink: #1f2e37;
+            --muted: #647781;
+            --line: #d6e2e7;
+            --page-bg: #d9e6ea;
+            --frame-bg: #ffffff;
+            --content-bg: #eff4f6;
+            --shadow: 0 2px 10px rgba(20, 60, 80, 0.12);
+            --font: "Plus Jakarta Sans", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            --font-display: "Sora", "Plus Jakarta Sans", "Segoe UI", Roboto, Arial, sans-serif;
+        }
 
-  /* ---------- App frame (mirrors the real site's exam-portal chrome) ---------- */
-  .app-shell { min-height: 100%; display: flex; flex-direction: column; align-items: center; padding: 14px; }
-  .app-frame {
-    width: 100%; max-width: 1080px; background: var(--frame-bg);
-    border: 1px solid var(--teal); border-radius: 4px; overflow: clip;
-    box-shadow: var(--shadow); display: flex; flex-direction: column; flex: 1; position: relative;
-  }
-  .org-header { display: flex; align-items: center; gap: 16px; padding: 12px 20px; background: #fff; }
-  .brand-logo { flex: 0 0 auto; display: block; height: 56px; width: auto; }
-  .org-text { line-height: 1.3; }
-  .org-text .l1 { color: var(--header-text); font-size: 19px; font-weight: 600; }
-  .org-text .l2, .org-text .l3 { color: var(--header-text); font-size: 16px; }
-  .banner { background: linear-gradient(180deg, var(--teal-banner), var(--teal)); color: #fff; padding: 9px 20px; font-size: 15px; font-weight: 500; letter-spacing: .2px; }
-  .content { background: var(--content-bg); padding: 22px; flex: 1; }
-  .footer { background: linear-gradient(180deg, var(--teal), var(--teal-dark)); color: #eaf6fa; text-align: center; padding: 16px; font-size: 12.5px; }
+        * {
+            box-sizing: border-box;
+        }
 
-  /* ---------- Buttons ---------- */
-  .btn { appearance: none; border: 0; cursor: pointer; color: #fff; font-size: 14px; font-weight: 500; padding: 8px 18px; border-radius: 0; transition: filter .15s, transform .02s; box-shadow: 0 1px 2px rgba(0,0,0,.18); }
-  .btn:hover { filter: brightness(1.06); }
-  .btn:active { transform: translateY(1px); }
-  .btn:disabled { opacity: .55; cursor: not-allowed; filter: none; }
-  .btn-blue { background: linear-gradient(180deg, var(--blue), var(--blue-dark)); }
-  .btn-orange { background: linear-gradient(180deg, var(--orange), var(--orange-dark)); }
-  .btn-deep { background: linear-gradient(180deg, #2a6fd0, var(--blue-deep)); }
-  .btn-green { background: linear-gradient(180deg, #37b06a, var(--green)); }
-  .btn-ghost { background: #fff; color: var(--teal-dark); border: 1px solid var(--teal); box-shadow: none; }
-  .btn-sm { padding: 5px 12px; font-size: 13px; }
-  .btn-lg { padding: 11px 30px; font-size: 16px; }
-  .muted { color: var(--muted); }
+        html,
+        body {
+            height: 100%;
+        }
 
-  /* ---------- Instructions / gate screen ---------- */
-  .instructions { background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 22px 24px 24px; box-shadow: 0 1px 4px rgba(30,80,100,.06); }
-  .welcome-banner { background: linear-gradient(180deg, var(--teal-banner), var(--teal)); color: #fff; border-radius: 6px; padding: 16px 22px; margin-bottom: 22px; box-shadow: 0 2px 8px rgba(20,60,80,.16); }
-  .welcome-title { margin: 0 0 3px; font-size: 26px; font-weight: 600; color: #fff; line-height: 1.15; }
-  .welcome-sub { margin: 0; font-size: 14px; opacity: .92; }
-  .notice-heading { color: var(--header-text); font-weight: 700; font-size: 17px; margin: 0 0 12px; }
-  .notice-list { margin: 0 0 18px; padding-left: 22px; }
-  .notice-list li { margin-bottom: 11px; color: var(--ink); }
-  .notice-list i { color: #647781; }
-  .exam-ready { color: var(--green); font-weight: 600; margin: 0 0 14px; }
-  .notice-actions { display: flex; justify-content: flex-end; }
+        body {
+            margin: 0;
+            font-family: var(--font);
+            color: var(--ink);
+            background: var(--page-bg);
+            -webkit-font-smoothing: antialiased;
+            line-height: 1.45;
+        }
 
-  /* ---------- Exam layout ---------- */
-  .exam-main { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 18px 20px; min-height: 60vh; box-shadow: 0 1px 4px rgba(30,80,100,.06); }
-  .exam-infobox {
-    position: absolute; top: 8px; right: 12px; z-index: 15; width: 252px;
-    display: flex; gap: 10px; align-items: flex-start; justify-content: space-between;
-    background: var(--teal); color: #fff; padding: 10px 12px; box-shadow: 0 6px 18px rgba(20,70,90,.3);
-  }
-  .ei-text { min-width: 0; }
-  .ei-name { font-weight: 500; font-size: 13.5px; line-height: 1.2; }
-  .ei-timer { font-size: 12px; margin-top: 3px; }
-  .ei-timer b { font-family: var(--font-display); font-size: 13.5px; font-variant-numeric: tabular-nums; letter-spacing: .02em; }
-  .ei-timer b.warn { color: #ffe1b0; }
-  .ei-timer b.danger { color: #ffd2d2; animation: pulse 1s infinite; }
-  @keyframes pulse { 50% { opacity: .55; } }
-  .ei-answered { font-size: 11.5px; margin-top: 3px; opacity: .95; line-height: 1.3; }
-  .ei-link { color: #eaffff; font-size: 11.5px; text-decoration: underline; cursor: pointer; display: inline-block; margin-top: 5px; }
-  .ei-photo { width: 44px; height: 44px; border-radius: 0; object-fit: cover; border: 2px solid rgba(255,255,255,.5); flex: none; }
-  .ei-popup { position: absolute; top: calc(100% + 6px); right: 0; z-index: 16; width: 280px; max-height: 220px; overflow-y: auto; background: #fff; color: var(--ink); border: 1px solid var(--teal); padding: 9px 11px; font-size: 12.5px; line-height: 1.7; box-shadow: 0 8px 20px rgba(20,70,90,.25); }
-  .ei-popup b { color: var(--teal-dark); }
-  @media (max-width: 600px) {
-    .exam-infobox { position: relative; width: 100%; margin: 0 0 14px; }
-    .ei-popup { width: 100%; }
-  }
+        /* ---------- App frame (mirrors the real site's exam-portal chrome) ---------- */
+        .app-shell {
+            min-height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 14px;
+        }
 
-  .pager { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 2px 0 12px; flex-wrap: wrap; }
-  .pager-bottom { margin-top: 18px; border-top: 1px solid var(--line); padding-top: 14px; }
-  .pager-info { font-size: 13px; color: var(--muted); }
-  .pager-info b { color: var(--ink); }
-  .pager-nums { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
-  .pager-num { min-width: 34px; height: 34px; padding: 0 8px; border: 1px solid var(--line); background: #fff; color: var(--teal-dark); cursor: pointer; font-size: 13px; font-weight: 700; transition: background .12s, border-color .12s; }
-  .pager-num:hover { border-color: var(--teal); background: var(--teal-soft); }
-  .pager-num.active { background: var(--teal); color: #fff; border-color: var(--teal); }
+        .app-frame {
+            width: 100%;
+            max-width: 1080px;
+            background: var(--frame-bg);
+            border: 1px solid var(--teal);
+            border-radius: 4px;
+            overflow: clip;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            position: relative;
+        }
 
-  .exam-section-head { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin: 22px 0 16px; padding: 11px 15px; background: var(--teal-soft); border-left: 4px solid var(--teal); }
-  .es-no { font-family: var(--font-display); font-weight: 700; font-size: 16px; color: var(--teal-dark); letter-spacing: .01em; }
-  .es-desc { font-size: 12.5px; color: var(--muted); }
+        .org-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px 20px;
+            background: #fff;
+        }
 
-  .passage { background: transparent; border: 0; padding: 0; margin-bottom: 14px; white-space: pre-wrap; font-size: 14px; color: var(--ink); }
-  .passage .ptitle { font-weight: 700; color: var(--ink); margin-bottom: 6px; }
+        .brand-logo {
+            flex: 0 0 auto;
+            display: block;
+            height: 56px;
+            width: auto;
+        }
 
-  .q { padding: 12px 4px; border-bottom: 1px dashed #e4ebee; }
-  .q:last-child { border-bottom: 0; }
-  .q.flagged { background: #fff8ec; border-radius: 6px; }
-  .q-head { display: flex; gap: 8px; align-items: baseline; }
-  .q-no { font-weight: 700; color: var(--ink); min-width: 26px; }
-  .q-text { font-size: 15px; overflow-wrap: break-word; }
-  .q-meta { font-size: 12px; color: var(--muted); margin: 2px 0 8px 34px; display: flex; gap: 10px; align-items: center; justify-content: space-between; }
-  .flag-icon { background: none; border: 0; cursor: pointer; color: var(--muted); padding: 2px; line-height: 0; display: inline-grid; place-items: center; transition: color .12s; }
-  .flag-icon:hover { color: var(--orange-dark); }
-  .flag-icon.on { color: var(--orange-dark); }
-  .flag-icon svg { width: 16px; height: 16px; }
-  .flag-icon.on svg path { fill: var(--orange); }
+        .org-text {
+            line-height: 1.3;
+        }
 
-  .opts { list-style: none; margin: 0; padding: 0 0 0 34px; }
-  .opt { display: flex; align-items: flex-start; gap: 10px; padding: 7px 10px; border-radius: 5px; cursor: pointer; border: 1px solid transparent; }
-  .opt:hover { background: #f2f8fa; }
-  .opt input { margin-top: 3px; accent-color: var(--teal); }
-  .opt .ltr { font-weight: 600; color: var(--muted); }
-  .opt > span:last-child { min-width: 0; overflow-wrap: break-word; }
+        .org-text .l1 {
+            color: var(--header-text);
+            font-size: 19px;
+            font-weight: 600;
+        }
 
-  .exam-actions { display: flex; gap: 10px; align-items: center; margin-top: 18px; flex-wrap: wrap; }
-  .go-top { position: fixed; right: 22px; bottom: 22px; z-index: 30; }
+        .org-text .l2,
+        .org-text .l3 {
+            color: var(--header-text);
+            font-size: 16px;
+        }
 
-  /* ---------- Modal ---------- */
-  .modal-overlay { position: fixed; inset: 0; background: rgba(15,40,55,.45); display: grid; place-items: center; z-index: 50; padding: 16px; }
-  .modal { background: #fff; border: 1px solid #c4d4d9; border-radius: 6px; padding: 22px 24px; max-width: 460px; width: 100%; box-shadow: 0 10px 40px rgba(0,0,0,.3); }
-  .modal h3 { margin: 0 0 8px; font-size: 17px; }
-  .modal p { margin: 0 0 18px; color: #364853; }
-  .modal .modal-actions { display: flex; justify-content: flex-end; gap: 10px; }
+        .banner {
+            background: linear-gradient(180deg, var(--teal-banner), var(--teal));
+            color: #fff;
+            padding: 9px 20px;
+            font-size: 15px;
+            font-weight: 500;
+            letter-spacing: .2px;
+        }
 
-  /* ---------- Tab-switch deterrent overlay ---------- */
-  .exam-pause { position: fixed; inset: 0; z-index: 100000; display: flex; flex-direction: column; gap: 12px; align-items: center; justify-content: center; text-align: center; padding: 28px; background: #0d2b36; color: #eaf5f8; font-size: 17px; font-weight: 600; line-height: 1.55; }
+        .content {
+            background: var(--content-bg);
+            padding: 22px;
+            flex: 1;
+        }
 
-  /* ---------- Submitted / closing screen (demo-only, simplified) ---------- */
-  .submitted-card { background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 30px 26px; box-shadow: 0 1px 4px rgba(30,80,100,.06); text-align: center; }
-  .submitted-check { width: 56px; height: 56px; border-radius: 50%; background: var(--green); color: #fff; display: grid; place-items: center; margin: 0 auto 14px; font-size: 28px; }
-  .submitted-card h2 { margin: 0 0 8px; font-family: var(--font-display); color: var(--ink); }
-  .submitted-stats { display: flex; justify-content: center; gap: 26px; margin: 18px 0; flex-wrap: wrap; }
-  .submitted-stat b { display: block; font-size: 22px; font-family: var(--font-display); color: var(--teal-dark); }
-  .submitted-stat span { font-size: 12px; color: var(--muted); }
-  .submitted-hint { font-size: 13px; color: var(--muted); background: var(--teal-soft); border-radius: 8px; padding: 12px 14px; margin: 16px auto 0; max-width: 520px; text-align: left; line-height: 1.6; }
+        .footer {
+            background: linear-gradient(180deg, var(--teal), var(--teal-dark));
+            color: #eaf6fa;
+            text-align: center;
+            padding: 16px;
+            font-size: 12.5px;
+        }
 
-  .hidden { display: none !important; }
-</style>
+        /* ---------- Buttons ---------- */
+        .btn {
+            appearance: none;
+            border: 0;
+            cursor: pointer;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 8px 18px;
+            border-radius: 0;
+            transition: filter .15s, transform .02s;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, .18);
+        }
+
+        .btn:hover {
+            filter: brightness(1.06);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .btn:disabled {
+            opacity: .55;
+            cursor: not-allowed;
+            filter: none;
+        }
+
+        .btn-blue {
+            background: linear-gradient(180deg, var(--blue), var(--blue-dark));
+        }
+
+        .btn-orange {
+            background: linear-gradient(180deg, var(--orange), var(--orange-dark));
+        }
+
+        .btn-deep {
+            background: linear-gradient(180deg, #2a6fd0, var(--blue-deep));
+        }
+
+        .btn-green {
+            background: linear-gradient(180deg, #37b06a, var(--green));
+        }
+
+        .btn-ghost {
+            background: #fff;
+            color: var(--teal-dark);
+            border: 1px solid var(--teal);
+            box-shadow: none;
+        }
+
+        .btn-sm {
+            padding: 5px 12px;
+            font-size: 13px;
+        }
+
+        .btn-lg {
+            padding: 11px 30px;
+            font-size: 16px;
+        }
+
+        .muted {
+            color: var(--muted);
+        }
+
+        /* ---------- Instructions / gate screen ---------- */
+        .instructions {
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 22px 24px 24px;
+            box-shadow: 0 1px 4px rgba(30, 80, 100, .06);
+        }
+
+        .welcome-banner {
+            background: linear-gradient(180deg, var(--teal-banner), var(--teal));
+            color: #fff;
+            border-radius: 6px;
+            padding: 16px 22px;
+            margin-bottom: 22px;
+            box-shadow: 0 2px 8px rgba(20, 60, 80, .16);
+        }
+
+        .welcome-title {
+            margin: 0 0 3px;
+            font-size: 26px;
+            font-weight: 600;
+            color: #fff;
+            line-height: 1.15;
+        }
+
+        .welcome-sub {
+            margin: 0;
+            font-size: 14px;
+            opacity: .92;
+        }
+
+        .notice-heading {
+            color: var(--header-text);
+            font-weight: 700;
+            font-size: 17px;
+            margin: 0 0 12px;
+        }
+
+        .notice-list {
+            margin: 0 0 18px;
+            padding-left: 22px;
+        }
+
+        .notice-list li {
+            margin-bottom: 11px;
+            color: var(--ink);
+        }
+
+        .notice-list i {
+            color: #647781;
+        }
+
+        .exam-ready {
+            color: var(--green);
+            font-weight: 600;
+            margin: 0 0 14px;
+        }
+
+        .notice-actions {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        /* ---------- Exam layout ---------- */
+        .exam-main {
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 18px 20px;
+            min-height: 60vh;
+            box-shadow: 0 1px 4px rgba(30, 80, 100, .06);
+        }
+
+        .exam-infobox {
+            position: absolute;
+            top: 8px;
+            right: 12px;
+            z-index: 15;
+            width: 252px;
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            justify-content: space-between;
+            background: var(--teal);
+            color: #fff;
+            padding: 10px 12px;
+            box-shadow: 0 6px 18px rgba(20, 70, 90, .3);
+        }
+
+        .ei-text {
+            min-width: 0;
+        }
+
+        .ei-name {
+            font-weight: 500;
+            font-size: 13.5px;
+            line-height: 1.2;
+        }
+
+        .ei-timer {
+            font-size: 12px;
+            margin-top: 3px;
+        }
+
+        .ei-timer b {
+            font-family: var(--font-display);
+            font-size: 13.5px;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: .02em;
+        }
+
+        .ei-timer b.warn {
+            color: #ffe1b0;
+        }
+
+        .ei-timer b.danger {
+            color: #ffd2d2;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            50% {
+                opacity: .55;
+            }
+        }
+
+        .ei-answered {
+            font-size: 11.5px;
+            margin-top: 3px;
+            opacity: .95;
+            line-height: 1.3;
+        }
+
+        .ei-link {
+            color: #eaffff;
+            font-size: 11.5px;
+            text-decoration: underline;
+            cursor: pointer;
+            display: inline-block;
+            margin-top: 5px;
+        }
+
+        .ei-photo {
+            width: 44px;
+            height: 44px;
+            border-radius: 0;
+            object-fit: cover;
+            border: 2px solid rgba(255, 255, 255, .5);
+            flex: none;
+        }
+
+        .ei-popup {
+            position: absolute;
+            top: calc(100% + 6px);
+            right: 0;
+            z-index: 16;
+            width: 280px;
+            max-height: 220px;
+            overflow-y: auto;
+            background: #fff;
+            color: var(--ink);
+            border: 1px solid var(--teal);
+            padding: 9px 11px;
+            font-size: 12.5px;
+            line-height: 1.7;
+            box-shadow: 0 8px 20px rgba(20, 70, 90, .25);
+        }
+
+        .ei-popup b {
+            color: var(--teal-dark);
+        }
+
+        @media (max-width: 600px) {
+            .exam-infobox {
+                position: relative;
+                width: 100%;
+                margin: 0 0 14px;
+            }
+
+            .ei-popup {
+                width: 100%;
+            }
+        }
+
+        .pager {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin: 2px 0 12px;
+            flex-wrap: wrap;
+        }
+
+        .pager-bottom {
+            margin-top: 18px;
+            border-top: 1px solid var(--line);
+            padding-top: 14px;
+        }
+
+        .pager-info {
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        .pager-info b {
+            color: var(--ink);
+        }
+
+        .pager-nums {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 14px;
+        }
+
+        .pager-num {
+            min-width: 34px;
+            height: 34px;
+            padding: 0 8px;
+            border: 1px solid var(--line);
+            background: #fff;
+            color: var(--teal-dark);
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 700;
+            transition: background .12s, border-color .12s;
+        }
+
+        .pager-num:hover {
+            border-color: var(--teal);
+            background: var(--teal-soft);
+        }
+
+        .pager-num.active {
+            background: var(--teal);
+            color: #fff;
+            border-color: var(--teal);
+        }
+
+        .exam-section-head {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin: 22px 0 16px;
+            padding: 11px 15px;
+            background: var(--teal-soft);
+            border-left: 4px solid var(--teal);
+        }
+
+        .es-no {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 16px;
+            color: var(--teal-dark);
+            letter-spacing: .01em;
+        }
+
+        .es-desc {
+            font-size: 12.5px;
+            color: var(--muted);
+        }
+
+        .passage {
+            background: transparent;
+            border: 0;
+            padding: 0;
+            margin-bottom: 14px;
+            white-space: pre-wrap;
+            font-size: 14px;
+            color: var(--ink);
+        }
+
+        .passage .ptitle {
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 6px;
+        }
+
+        .q {
+            padding: 12px 4px;
+            border-bottom: 1px dashed #e4ebee;
+        }
+
+        .q:last-child {
+            border-bottom: 0;
+        }
+
+        .q.flagged {
+            background: #fff8ec;
+            border-radius: 6px;
+        }
+
+        .q-head {
+            display: flex;
+            gap: 8px;
+            align-items: baseline;
+        }
+
+        .q-no {
+            font-weight: 700;
+            color: var(--ink);
+            min-width: 26px;
+        }
+
+        .q-text {
+            font-size: 15px;
+            overflow-wrap: break-word;
+        }
+
+        .q-meta {
+            font-size: 12px;
+            color: var(--muted);
+            margin: 2px 0 8px 34px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .flag-icon {
+            background: none;
+            border: 0;
+            cursor: pointer;
+            color: var(--muted);
+            padding: 2px;
+            line-height: 0;
+            display: inline-grid;
+            place-items: center;
+            transition: color .12s;
+        }
+
+        .flag-icon:hover {
+            color: var(--orange-dark);
+        }
+
+        .flag-icon.on {
+            color: var(--orange-dark);
+        }
+
+        .flag-icon svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .flag-icon.on svg path {
+            fill: var(--orange);
+        }
+
+        .opts {
+            list-style: none;
+            margin: 0;
+            padding: 0 0 0 34px;
+        }
+
+        .opt {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 7px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+
+        .opt:hover {
+            background: #f2f8fa;
+        }
+
+        .opt input {
+            margin-top: 3px;
+            accent-color: var(--teal);
+        }
+
+        .opt .ltr {
+            font-weight: 600;
+            color: var(--muted);
+        }
+
+        .opt>span:last-child {
+            min-width: 0;
+            overflow-wrap: break-word;
+        }
+
+        .exam-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-top: 18px;
+            flex-wrap: wrap;
+        }
+
+        .go-top {
+            position: fixed;
+            right: 22px;
+            bottom: 22px;
+            z-index: 30;
+        }
+
+        /* ---------- Modal ---------- */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 40, 55, .45);
+            display: grid;
+            place-items: center;
+            z-index: 50;
+            padding: 16px;
+        }
+
+        .modal {
+            background: #fff;
+            border: 1px solid #c4d4d9;
+            border-radius: 6px;
+            padding: 22px 24px;
+            max-width: 460px;
+            width: 100%;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, .3);
+        }
+
+        .modal h3 {
+            margin: 0 0 8px;
+            font-size: 17px;
+        }
+
+        .modal p {
+            margin: 0 0 18px;
+            color: #364853;
+        }
+
+        .modal .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        /* ---------- Tab-switch deterrent overlay ---------- */
+        .exam-pause {
+            position: fixed;
+            inset: 0;
+            z-index: 100000;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 28px;
+            background: #0d2b36;
+            color: #eaf5f8;
+            font-size: 17px;
+            font-weight: 600;
+            line-height: 1.55;
+        }
+
+        /* ---------- Submitted / closing screen (demo-only, simplified) ---------- */
+        .submitted-card {
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 30px 26px;
+            box-shadow: 0 1px 4px rgba(30, 80, 100, .06);
+            text-align: center;
+        }
+
+        .submitted-check {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--green);
+            color: #fff;
+            display: grid;
+            place-items: center;
+            margin: 0 auto 14px;
+            font-size: 28px;
+        }
+
+        .submitted-card h2 {
+            margin: 0 0 8px;
+            font-family: var(--font-display);
+            color: var(--ink);
+        }
+
+        .submitted-stats {
+            display: flex;
+            justify-content: center;
+            gap: 26px;
+            margin: 18px 0;
+            flex-wrap: wrap;
+        }
+
+        .submitted-stat b {
+            display: block;
+            font-size: 22px;
+            font-family: var(--font-display);
+            color: var(--teal-dark);
+        }
+
+        .submitted-stat span {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .submitted-hint {
+            font-size: 13px;
+            color: var(--muted);
+            background: var(--teal-soft);
+            border-radius: 8px;
+            padding: 12px 14px;
+            margin: 16px auto 0;
+            max-width: 520px;
+            text-align: left;
+            line-height: 1.6;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
 </head>
+
 <body>
 
-  <div class="app-shell">
-    <div class="app-frame">
-      <div class="org-header">
-        <img src="logo.svg" alt="Tribhuvan University, Institute of Engineering" class="brand-logo" />
-        <div class="org-text">
-          <div class="l1">Tribhuvan University</div>
-          <div class="l2">Institute of Engineering</div>
-          <div class="l3">Entrance Examination Portal</div>
-        </div>
-      </div>
-      <div class="banner">B.E./B.Arch. Online Demo Examination</div>
-
-      <main class="content">
-
-        <!-- ================= GATE / INSTRUCTIONS SCREEN ================= -->
-        <div id="gateScreen" class="instructions">
-          <div class="welcome-banner">
-            <h2 class="welcome-title">Welcome!</h2>
-            <p class="welcome-sub">IOE Entrance · Online examination system.</p>
-          </div>
-          <h3 class="notice-heading">Examination Notice:</h3>
-          <ul class="notice-list">
-            <li>The duration of this exam is <b>2 hr</b>. It has <b>12 questions</b> — the first 8 carry <b>1 mark</b> each and the remaining 4 carry <b>2 marks</b> each, for a total of <b>16 marks</b>.</li>
-            <li>You have to select the radio button on the correct option for each question.</li>
-            <li>You can change your option any time during the examination period.</li>
-            <li>To leave a question blank, simply don't select any option. The list of unanswered questions can be viewed by clicking <b>“View unanswered”</b> on your page.</li>
-            <li>Information along with time remaining, total attempted and total questions will be displayed in the side panel during the exam.</li>
-            <li>When the time is up, your exam will be submitted automatically.</li>
-            <li>Your progress is saved on this device, so an accidental refresh won't lose your answers. <i>(sample copy — this standalone preview doesn't actually persist anything)</i></li>
-          </ul>
-          <p class="notice-heading">Disclamer: This is a mock exam conducted by FSU pulchowk campus which is compleletely independent and different from IOE. This is only a platform for students to experience the userinterface and emulate the IOE CBT exam.</p>
-          <p class="exam-ready">You can now take examination:</p>
-          <div class="notice-actions">
-            <button class="btn btn-blue btn-lg" onclick="startExam()">Take Examination</button>
-          </div>
-        </div>
-
-        <!-- ================= LIVE EXAM SCREEN ================= -->
-        <div id="examScreen" class="exam-main hidden">
-          <div class="exam-infobox">
-            <div class="ei-text">
-              <div class="ei-name">Demo Student (ID: DEMO123)</div>
-              <div class="ei-timer">Time Remaining: <b id="timerText" class="">2:00:00</b></div>
-              <div class="ei-answered">You have answered <b id="answeredCount">0</b> out of <b>12</b></div>
-              <span class="ei-link" onclick="toggleUnanswered()"><span id="unansweredToggleLabel">View</span> unanswered questions</span>
+    <div class="app-shell">
+        <div class="app-frame">
+            <div class="org-header">
+                <img src="logo.svg" alt="Tribhuvan University, Institute of Engineering" class="brand-logo" />
+                <div class="org-text">
+                    <div class="l1">Tribhuvan University</div>
+                    <div class="l2">Institute of Engineering</div>
+                    <div class="l3">Entrance Examination Portal</div>
+                </div>
             </div>
-            <img class="ei-photo" src="https://ui-avatars.com/api/?name=Demo+Student&background=cfe6ee&color=176c89" alt="" referrerpolicy="no-referrer" />
-            <div id="unansweredPopup" class="ei-popup hidden"></div>
-          </div>
+            <div class="banner">B.E./B.Arch. Online Demo Examination</div>
 
-          <div class="pager">
-            <button id="prevBtnTop" class="btn btn-ghost btn-sm" onclick="goToPage(-1)">Previous</button>
-            <span class="pager-info" id="pagerInfoTop"></span>
-            <button id="nextBtnTop" class="btn btn-blue btn-sm" onclick="goToPage(1)">Next</button>
-          </div>
-          <div class="pager-nums" id="pagerNums"></div>
+            <main class="content">
+                <div id="gateScreen" class="instructions">
+                    <div class="welcome-banner">
+                        <h2 class="welcome-title">Welcome!</h2>
+                        <p class="welcome-sub">IOE Entrance · Online examination system.</p>
+                    </div>
+                    <h3 class="notice-heading">Examination Notice:</h3>
+                    <ul class="notice-list">
+                        <li>The duration of this exam is <b>2 hr</b>. It has <b>12 questions</b> — the first 8 carry
+                            <b>1 mark</b>
+                            each and the remaining 4 carry <b>2 marks</b> each, for a total of <b>16 marks</b>.</li>
+                        <li>You have to select the radio button on the correct option for each question.</li>
+                        <li>You can change your option any time during the examination period.</li>
+                        <li>To leave a question blank, simply don't select any option. The list of unanswered questions
+                            can be
+                            viewed by clicking <b>“View unanswered”</b> on your page.</li>
+                        <li>Information along with time remaining, total attempted and total questions will be displayed
+                            in the side
+                            panel during the exam.</li>
+                        <li>When the time is up, your exam will be submitted automatically.</li>
+                        <li>Your progress is saved on this device, so an accidental refresh won't lose your answers.
+                            <i>(sample copy
+                                — this standalone preview doesn't actually persist anything)</i></li>
+                    </ul>
+                    <p class="notice-heading">Disclamer: This is a mock exam conducted by FSU pulchowk campus which is
+                        compleletely independent and different from IOE. This is only a platform for students to
+                        experience the
+                        userinterface and emulate the IOE CBT exam.</p>
+                    <p class="exam-ready">You can now take examination:</p>
+                    <div class="notice-actions">
+                        <button class="btn btn-blue btn-lg" onclick="startExam()">Take Examination</button>
+                    </div>
+                </div>
+                <div id="examScreen" class="exam-main hidden">
+                    <div class="exam-infobox">
+                        <div class="ei-text">
+                            <div class="ei-name">Demo Student (ID: DEMO123)</div>
+                            <div class="ei-timer">Time Remaining: <b id="timerText" class="">2:00:00</b></div>
+                            <div class="ei-answered">You have answered <b id="answeredCount">0</b> out of <b>12</b>
+                            </div>
+                            <span class="ei-link" onclick="toggleUnanswered()"><span
+                                    id="unansweredToggleLabel">View</span> unanswered
+                                questions</span>
+                        </div>
+                        <img class="ei-photo"
+                            src="https://ui-avatars.com/api/?name=Demo+Student&background=cfe6ee&color=176c89" alt=""
+                            referrerpolicy="no-referrer" />
+                        <div id="unansweredPopup" class="ei-popup hidden"></div>
+                    </div>
 
-          <div id="questionsHost"></div>
+                    <div class="pager">
+                        <button id="prevBtnTop" class="btn btn-ghost btn-sm" onclick="goToPage(-1)">Previous</button>
+                        <span class="pager-info" id="pagerInfoTop"></span>
+                        <button id="nextBtnTop" class="btn btn-blue btn-sm" onclick="goToPage(1)">Next</button>
+                    </div>
+                    <div class="pager-nums" id="pagerNums"></div>
 
-          <div class="pager pager-bottom">
-            <button id="prevBtnBottom" class="btn btn-ghost btn-sm" onclick="goToPage(-1)">Previous</button>
-            <span class="pager-info" id="pagerInfoBottom"></span>
-            <span id="bottomRightSlot"></span>
-          </div>
+                    <div id="questionsHost"></div>
 
-          <div class="exam-actions">
-            <button id="submitBtn" class="btn btn-blue" onclick="askSubmit()">Submit exam</button>
-            <span class="muted">Answered <span id="answeredCount2">0</span> / 12</span>
-          </div>
+                    <div class="pager pager-bottom">
+                        <button id="prevBtnBottom" class="btn btn-ghost btn-sm" onclick="goToPage(-1)">Previous</button>
+                        <span class="pager-info" id="pagerInfoBottom"></span>
+                        <span id="bottomRightSlot"></span>
+                    </div>
+
+                    <div class="exam-actions">
+                        <button id="submitBtn" class="btn btn-blue" onclick="askSubmit()">Submit exam</button>
+                        <span class="muted">Answered <span id="answeredCount2">0</span> / 12</span>
+                    </div>
+                </div>
+                <div id="submittedScreen" class="submitted-card hidden">
+                    <div class="submitted-check">&#10003;</div>
+                    <h2 id="submittedHeading">Exam submitted</h2>
+                    <p class="muted" id="submittedSub">Thanks — your responses were recorded for this preview.</p>
+                    <div class="submitted-stats" id="submitted-stats-holder">
+                        <div class="submitted-stat"><b id="finalAnswered">0</b><span>Answered</span></div>
+                        <div class="submitted-stat"><b id="finalUnanswered">0</b><span>Unanswered</span></div>
+                        <div class="submitted-stat"><b id="finalFlagged">0</b><span>Flagged</span></div>
+                    </div>
+                    <div class="submitted-hint">
+                        Congratulations on finishing the mock examination, All the best for your IOE entrance.
+                    </div>
+                    <div style="margin-top:18px;">
+                        <button class="btn btn-ghost btn-sm" onclick="location.reload()">Restart this preview</button>
+                    </div>
+                </div>
+
+            </main>
+            <div class="footer">IOE Entrance &middot; PYQ exam UI/UX preview</div>
         </div>
+    </div>
 
-        <!-- ================= SUBMITTED / CLOSING SCREEN ================= -->
-        <div id="submittedScreen" class="submitted-card hidden">
-          <div class="submitted-check">&#10003;</div>
-          <h2 id="submittedHeading">Exam submitted</h2>
-          <p class="muted" id="submittedSub">Thanks — your responses were recorded for this preview.</p>
-          <div class="submitted-stats" id="submitted-stats-holder">
-            <div class="submitted-stat"><b id="finalAnswered">0</b><span>Answered</span></div>
-            <div class="submitted-stat"><b id="finalUnanswered">0</b><span>Unanswered</span></div>
-            <div class="submitted-stat"><b id="finalFlagged">0</b><span>Flagged</span></div>
-          </div>
-          <div class="submitted-hint">
-            Congratulations on finishing the mock examination, All the best for your IOE entrance.
-          </div>
-          <div style="margin-top:18px;">
-            <button class="btn btn-ghost btn-sm" onclick="location.reload()">Restart this preview</button>
-          </div>
+    <button class="btn btn-deep go-top hidden" id="goTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back
+        to
+        top</button>
+
+    <div id="confirmModal" class="modal-overlay hidden" onclick="closeConfirm(event)">
+        <div class="modal" onclick="event.stopPropagation()">
+            <h3>Submit exam?</h3>
+            <p id="confirmBody"></p>
+            <div class="modal-actions">
+                <button class="btn btn-orange" onclick="closeConfirm()">Cancel</button>
+                <button class="btn btn-blue" onclick="doSubmit(false)">OK</button>
+            </div>
         </div>
-
-      </main>
-      <div class="footer">IOE Entrance &middot; PYQ exam UI/UX preview</div>
     </div>
-  </div>
 
-  <button class="btn btn-deep go-top hidden" id="goTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to top</button>
-
-  <!-- Submit confirmation modal -->
-  <div id="confirmModal" class="modal-overlay hidden" onclick="closeConfirm(event)">
-    <div class="modal" onclick="event.stopPropagation()">
-      <h3>Submit exam?</h3>
-      <p id="confirmBody"></p>
-      <div class="modal-actions">
-        <button class="btn btn-orange" onclick="closeConfirm()">Cancel</button>
-        <button class="btn btn-blue" onclick="doSubmit(false)">OK</button>
-      </div>
+    <div id="examPause" class="exam-pause hidden" role="alert">
+        <span>Exam paused</span>
+        <span style="font-weight:500; font-size:14px; max-width:420px;">
+            Return to this tab to continue. Leaving the exam window is discouraged and your timer keeps running.
+        </span>
     </div>
-  </div>
 
-  <!-- Tab-hidden deterrent overlay -->
-  <div id="examPause" class="exam-pause hidden" role="alert">
-    <span>Exam paused</span>
-    <span style="font-weight:500; font-size:14px; max-width:420px;">
-      Return to this tab to continue. Leaving the exam window is discouraged and your timer keeps running.
-    </span>
-  </div>
+    <script>
+        let QUESTIONS = [];
+        let TOTAL = QUESTIONS.length;
+        const PAGE_SIZE = 10;
+        const LETTERS = ['a', 'b', 'c', 'd'];
+        const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://localhost:5000'
+            : '/mock-exam/api';
+        const SIM_TOTAL_SECONDS = 7200;
+        const WALL_SECONDS = 150;
+        const SPEED = SIM_TOTAL_SECONDS / WALL_SECONDS;
 
-<script>
-/* ==========================================================================
-   Sample data — placeholder questions only, NOT the real IOE question bank.
-   ========================================================================== */
-let QUESTIONS = [];
-let TOTAL = QUESTIONS.length;
-const PAGE_SIZE = 10;
-const LETTERS = ['a', 'b', 'c', 'd'];
+        let page = 0;
+        let answers = {};
+        let flags = {};
+        let showUnanswered = false;
+        let submitted = false;
+        let startedAt = null;
+        let timerId = null;
+        let marksObtained = 0;
 
-/* Demo timer: labeled as the real 2‑hour duration but compressed into a short
-   wall-clock window so the whole lifecycle (normal → warn → danger → auto-submit)
-   is visible without an actual 2‑hour wait. */
-const SIM_TOTAL_SECONDS = 7200;   // 2 hr, matches the real default duration label
-const WALL_SECONDS = 150;         // ~2.5 real minutes to run the full countdown
-const SPEED = SIM_TOTAL_SECONDS / WALL_SECONDS;
+        async function getQuestions() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/getQuestions`);
+                if (!response.ok) throw new Error("Error occurred whilst fetching the questions!");
+                const result = await response.json();
+                if (result.isNotTime == true) {
+                    console.log("Test hasn't started yet, please try again later");
+                    return null;
+                }
+                return result;
+            } catch (err) {
+                console.log(err.message);
+                return null;
+            }
+        }
 
-let page = 0;
-let answers = {};
-let flags = {};
-let showUnanswered = false;
-let submitted = false;
-let startedAt = null;
-let timerId = null;
-let marksObtained =0;
+        async function getAnswers() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/getAnswers`);
+                if (!response.ok) throw new Error("Error occurred whilst fetching the answers!");
+                const result = await response.json();
+                if (result.isNotTime == true) {
+                    console.log("Please wait a while before submitting");
+                    return null;
+                }
+                return result;
+            } catch (err) {
+                console.log(err.message);
+                return null;
+            }
+        }
 
-async function getQuestions() {
-  try{
-  const response = await fetch("http://localhost:5000/getQuestions");  
-  if (!response.ok) throw new Error("Error occured whilst fetching the questions!");
-  const result = await response.json();
-  if (response.isNotTime==true){ 
-    console.log("Test hasnt started yet please try again later");
-    return null;
-  }
-  return result
-    
-}
-catch (err){
-  console.log(err.message);
-  return null;
-}
-}
+        async function calculateMarks() {
+            const res = await getAnswers();
+            corrAns = res.answers;
+            let score = 0;
+            console.log(corrAns, answers)
+            for (let i = 0; i < corrAns.length; i++) {
+                if (corrAns[i] == answers[i + 1]) {
 
-async function getAnswers() {
-  try{
-  const response = await fetch("http://localhost:5000/getAnswers");  
-  if (!response.ok) throw new Error("Error occured whilst fetching the answers!");
-  const result = await response.json();
-  if (response.isNotTime==true){ 
-    console.log("Please wait a while before submitting");
-    return null;
-  }
-  return result;
-    
-}
-catch (err){
-  console.log(err.message);
-  return null;
-}
-}
+                    score++;
+                    if (i > 60) {
+                        score++;
+                    }
+                }
+                else if (answers[i + 1] !== undefined) {
 
-async function calculateMarks() {
-  const res = await getAnswers();
-  corrAns = res.answers;
-  let score =0;
-  console.log(corrAns,answers)
-  for (let i = 0;i<corrAns.length;i++){
-    if (corrAns[i]==answers[i+1]) {
-        
-      score++;
-      if (i>60){
-        score++;
-      }
-    }
-    else if (answers[i+1]!==undefined) {
-        
-      score-=0.1;
-      if (i>60){
-        score-=0.1;
-      }
-    }
-    score=Math.round(score*10)/10;
-  }
-  return score;
-}
-async function showSubmittedStats() {
-  const score = await calculateMarks();
-  const item = document.getElementById("submitted-stats-holder")
-  item.innerHTML+=`
+                    score -= 0.1;
+                    if (i > 60) {
+                        score -= 0.1;
+                    }
+                }
+                score = Math.round(score * 10) / 10;
+            }
+            return score;
+        }
+        async function showSubmittedStats() {
+            const score = await calculateMarks();
+            const item = document.getElementById("submitted-stats-holder")
+            item.innerHTML += `
     <div class="submitted-stat"><b >${score}</b><span>Marks</span></div>
   `;
-  
-}
+
+        }
 
 
-function fmtTimer(sec) {
-  sec = Math.max(0, Math.floor(sec));
-  const h = Math.floor(sec / 3600);
-  const m = Math.floor((sec % 3600) / 60);
-  const s = sec % 60;
-  const mm = String(m).padStart(2, '0');
-  const ss = String(s).padStart(2, '0');
-  return h > 0 ? `${h}:${mm}:${ss}` : `${mm}:${ss}`;
-}
+        function fmtTimer(sec) {
+            sec = Math.max(0, Math.floor(sec));
+            const h = Math.floor(sec / 3600);
+            const m = Math.floor((sec % 3600) / 60);
+            const s = sec % 60;
+            const mm = String(m).padStart(2, '0');
+            const ss = String(s).padStart(2, '0');
+            return h > 0 ? `${h}:${mm}:${ss}` : `${mm}:${ss}`;
+        }
 
-function totalPages() { return Math.max(1, Math.ceil(TOTAL / PAGE_SIZE)); }
+        function totalPages() { return Math.max(1, Math.ceil(TOTAL / PAGE_SIZE)); }
 
-async function rerender() {
-  const savedAnswers = localStorage.getItem('answers');
-  const savedStartedAt = localStorage.getItem('startedAt');
-  let savedFlags = localStorage.getItem('flags');
-  if (savedAnswers == null || savedStartedAt == null) return false;
-  if (savedFlags==null) savedFlags={}
-  const response = await getQuestions();
-  if (response == null) return false;
+        async function rerender() {
+            const savedAnswers = localStorage.getItem('answers');
+            const savedStartedAt = localStorage.getItem('startedAt');
+            let savedFlags = localStorage.getItem('flags');
+            if (savedAnswers == null || savedStartedAt == null) return false;
+            if (savedFlags == null) savedFlags = {}
+            const response = await getQuestions();
+            if (response == null) return false;
 
-  let restoredAnswers;
-  try {
-    restoredAnswers = JSON.parse(savedAnswers);
-  } catch (err) {
-    return false;
-  }
-  let restoredFlags;
-  try {
-    restoredFlags = JSON.parse(savedFlags);
-  } catch (err) {
-    return false;
-  }
+            let restoredAnswers;
+            try {
+                restoredAnswers = JSON.parse(savedAnswers);
+            } catch (err) {
+                return false;
+            }
+            let restoredFlags;
+            try {
+                restoredFlags = JSON.parse(savedFlags);
+            } catch (err) {
+                return false;
+            }
 
-  QUESTIONS = response.questions;
-  TOTAL = QUESTIONS.length;
-  answers = restoredAnswers;
-  flags=restoredFlags;
-  startedAt = Number(savedStartedAt);
-  submitted = false;
+            QUESTIONS = response.questions;
+            TOTAL = QUESTIONS.length;
+            answers = restoredAnswers;
+            flags = restoredFlags;
+            startedAt = Number(savedStartedAt);
+            submitted = false;
 
-  document.getElementById('gateScreen').classList.add('hidden');
-  document.getElementById('submittedScreen').classList.add('hidden');
-  document.getElementById('examScreen').classList.remove('hidden');
-  document.getElementById('goTopBtn').classList.remove('hidden');
+            document.getElementById('gateScreen').classList.add('hidden');
+            document.getElementById('submittedScreen').classList.add('hidden');
+            document.getElementById('examScreen').classList.remove('hidden');
+            document.getElementById('goTopBtn').classList.remove('hidden');
 
-  clearInterval(timerId);
-  renderAll();
-  timerId = setInterval(tick, 1000);
-  tick();
-  return true;
-}
+            clearInterval(timerId);
+            renderAll();
+            timerId = setInterval(tick, 1000);
+            tick();
+            return true;
+        }
 
-async function startExam() {
-  if (await rerender()) return;
+        async function startExam() {
+            if (await rerender()) return;
 
-  const response = await getQuestions();
-  if (response == null) {
-    alert("Exam hasnt started yet");
-    return null;
-  }
-  QUESTIONS = response.questions;
-  TOTAL = QUESTIONS.length;
-  answers = {};
-  startedAt = Date.now();
-  localStorage.setItem('answers', JSON.stringify(answers));
-  localStorage.setItem('startedAt', String(startedAt));
+            const response = await getQuestions();
+            if (response == null) {
+                alert("Exam hasnt started yet");
+                return null;
+            }
+            QUESTIONS = response.questions;
+            TOTAL = QUESTIONS.length;
+            answers = {};
+            startedAt = Date.now();
+            localStorage.setItem('answers', JSON.stringify(answers));
+            localStorage.setItem('startedAt', String(startedAt));
 
-  document.getElementById('gateScreen').classList.add('hidden');
-  document.getElementById('examScreen').classList.remove('hidden');
-  document.getElementById('goTopBtn').classList.remove('hidden');
-  renderAll();
-  timerId = setInterval(tick, 1000);
-}
+            document.getElementById('gateScreen').classList.add('hidden');
+            document.getElementById('examScreen').classList.remove('hidden');
+            document.getElementById('goTopBtn').classList.remove('hidden');
+            renderAll();
+            timerId = setInterval(tick, 1000);
+        }
 
-function tick() {
-  if (submitted) return;
-  const elapsedReal = (Date.now() - startedAt) / 1000;
-  const remaining = Math.max(0, SIM_TOTAL_SECONDS - elapsedReal );
-  const timerEl = document.getElementById('timerText');
-  timerEl.textContent = fmtTimer(remaining);
-  timerEl.className = remaining <= 300 ? 'danger' : remaining <= 900 ? 'warn' : '';
-  if (remaining <= 0) {
-    clearInterval(timerId);
-    doSubmit(true);
-  }
-}
+        function tick() {
+            if (submitted) return;
+            const elapsedReal = (Date.now() - startedAt) / 1000;
+            const remaining = Math.max(0, SIM_TOTAL_SECONDS - elapsedReal);
+            const timerEl = document.getElementById('timerText');
+            timerEl.textContent = fmtTimer(remaining);
+            timerEl.className = remaining <= 300 ? 'danger' : remaining <= 900 ? 'warn' : '';
+            if (remaining <= 0) {
+                clearInterval(timerId);
+                doSubmit(true);
+            }
+        }
 
-function goToPage(delta) {
-  page = Math.max(0, Math.min(totalPages() - 1, page + delta));
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-  renderAll();
-}
+        function goToPage(delta) {
+            page = Math.max(0, Math.min(totalPages() - 1, page + delta));
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            renderAll();
+        }
 
-function choose(no, idx) {
-  if (submitted) return;
-  answers[no] = idx;
-  console.log(localStorage.getItem("answers"),localStorage.getItem("startedAt"),localStorage.getItem("flags"));
-  localStorage.setItem("answers",JSON.stringify(answers));
-  localStorage.setItem("flags",JSON.stringify(flags));
-  localStorage.setItem("startedAt",startedAt);
-  
-  renderAll();
-}
+        function choose(no, idx) {
+            if (submitted) return;
+            answers[no] = idx;
+            console.log(localStorage.getItem("answers"), localStorage.getItem("startedAt"), localStorage.getItem("flags"));
+            localStorage.setItem("answers", JSON.stringify(answers));
+            localStorage.setItem("flags", JSON.stringify(flags));
+            localStorage.setItem("startedAt", startedAt);
 
-function toggleFlag(no) {
-  if (flags[no]) delete flags[no]; else flags[no] = true;
-  localStorage.setItem("flags",JSON.stringify(flags));
-  console.log(localStorage.getItem("answers"),localStorage.getItem("startedAt"),localStorage.getItem("flags"));
-  renderAll();
-}
+            renderAll();
+        }
 
-function toggleUnanswered() {
-  showUnanswered = !showUnanswered;
-  renderAll();
-}
+        function toggleFlag(no) {
+            if (flags[no]) delete flags[no]; else flags[no] = true;
+            localStorage.setItem("flags", JSON.stringify(flags));
+            console.log(localStorage.getItem("answers"), localStorage.getItem("startedAt"), localStorage.getItem("flags"));
+            renderAll();
+        }
 
-function askSubmit() {
-  const answeredCount = Object.keys(answers).length;
-  document.getElementById('confirmBody').innerHTML =
-    `You have attempted <b>${answeredCount}</b> out of <b>${TOTAL}</b> questions. Do you want to submit it anyway?` +
-    (answeredCount < TOTAL ? '<br><span class="muted">Unanswered questions score 0 (no penalty).</span>' : '');
-  document.getElementById('confirmModal').classList.remove('hidden');
-}
+        function toggleUnanswered() {
+            showUnanswered = !showUnanswered;
+            renderAll();
+        }
 
-function closeConfirm(e) {
-  if (e && e.target !== e.currentTarget) return;
-  document.getElementById('confirmModal').classList.add('hidden');
-}
+        function askSubmit() {
+            const answeredCount = Object.keys(answers).length;
+            document.getElementById('confirmBody').innerHTML =
+                `You have attempted <b>${answeredCount}</b> out of <b>${TOTAL}</b> questions. Do you want to submit it anyway?` +
+                (answeredCount < TOTAL ? '<br><span class="muted">Unanswered questions score 0 (no penalty).</span>' : '');
+            document.getElementById('confirmModal').classList.remove('hidden');
+        }
 
-function doSubmit(auto) {
-  if (submitted) return;
-  submitted = true;
-  clearInterval(timerId);
-  document.getElementById('confirmModal').classList.add('hidden');
-  document.getElementById('examScreen').classList.add('hidden');
-  document.getElementById('goTopBtn').classList.add('hidden');
-  const answeredCount = Object.keys(answers).length;
-  const flaggedCount = Object.keys(flags).length;
-  document.getElementById('submittedHeading').textContent = auto ? "Time's up — submitted automatically" : 'Exam submitted';
-  document.getElementById('submittedSub').textContent = auto
-    ? 'Your timer reached zero, so this preview auto-submitted for you, just like the real exam would.'
-    : 'Thanks — your responses were recorded for this preview.';
-  document.getElementById('finalAnswered').textContent = answeredCount;
-  document.getElementById('finalUnanswered').textContent = TOTAL - answeredCount;
-  document.getElementById('finalFlagged').textContent = flaggedCount;
-  document.getElementById('submittedScreen').classList.remove('hidden');
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-  showSubmittedStats()
-  localStorage.removeItem('answers');
-  localStorage.removeItem('startedAt');
-  localStorage.removeItem('flags')
-}
+        function closeConfirm(e) {
+            if (e && e.target !== e.currentTarget) return;
+            document.getElementById('confirmModal').classList.add('hidden');
+        }
 
-function flagSvg(on) {
-  return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        async function doSubmit(auto) {
+            if (submitted) return;
+            submitted = true;
+            clearInterval(timerId);
+            document.getElementById('confirmModal').classList.add('hidden');
+            document.getElementById('examScreen').classList.add('hidden');
+            document.getElementById('goTopBtn').classList.add('hidden');
+            const answeredCount = Object.keys(answers).length;
+            const flaggedCount = Object.keys(flags).length;
+            document.getElementById('submittedHeading').textContent = auto ? "Time's up — submitted automatically" : 'Exam submitted';
+            document.getElementById('submittedSub').textContent = auto
+                ? 'Your timer reached zero, so this preview auto-submitted for you, just like the real exam would.'
+                : 'Thanks — your responses were recorded.';
+            document.getElementById('finalAnswered').textContent = answeredCount;
+            document.getElementById('finalUnanswered').textContent = TOTAL - answeredCount;
+            document.getElementById('finalFlagged').textContent = flaggedCount;
+            document.getElementById('submittedScreen').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // Post answers to backend server-side scoring
+            try {
+                const studentId = "DEMO" + Math.floor(1000 + Math.random() * 9000);
+                const res = await fetch(`${API_BASE_URL}/submitAnswers`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ studentId: studentId, answers: answers })
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    const holder = document.getElementById("submitted-stats-holder");
+                    holder.innerHTML += `<div class="submitted-stat"><b>${data.score} / ${data.maxScore}</b><span>Server Score</span></div>`;
+                } else {
+                    showSubmittedStats();
+                }
+            } catch (err) {
+                showSubmittedStats();
+            }
+
+            localStorage.removeItem('answers');
+            localStorage.removeItem('startedAt');
+            localStorage.removeItem('flags');
+        }
+
+        function flagSvg(on) {
+            return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
     <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V4s-1 1-4 1-5-2-8-2-4 1-4 1z" ${on ? 'fill="currentColor"' : ''}/>
     <line x1="4" y1="22" x2="4" y2="15" />
   </svg>`;
-}
+        }
 
-function renderAll() {
-  const start = page * PAGE_SIZE;
-  const pageQuestions = QUESTIONS.slice(start, start + PAGE_SIZE);
-  const answeredCount = Object.keys(answers).length;
-  const unanswered = QUESTIONS.filter((q) => answers[q.no] === undefined).map((q) => q.no);
-  const isLastPage = page >= totalPages() - 1;
+        function renderAll() {
+            const start = page * PAGE_SIZE;
+            const pageQuestions = QUESTIONS.slice(start, start + PAGE_SIZE);
+            const answeredCount = Object.keys(answers).length;
+            const unanswered = QUESTIONS.filter((q) => answers[q.no] === undefined).map((q) => q.no);
+            const isLastPage = page >= totalPages() - 1;
 
-  document.getElementById('answeredCount').textContent = answeredCount;
-  document.getElementById('answeredCount2').textContent = answeredCount;
+            document.getElementById('answeredCount').textContent = answeredCount;
+            document.getElementById('answeredCount2').textContent = answeredCount;
 
-  document.getElementById('unansweredToggleLabel').textContent = showUnanswered ? 'Hide' : 'View';
-  const popup = document.getElementById('unansweredPopup');
-  if (showUnanswered) {
-    popup.classList.remove('hidden');
-    popup.innerHTML = unanswered.length === 0 ? 'All questions answered.' : `<b>Unanswered:</b> ${unanswered.join(', ')}`;
-  } else {
-    popup.classList.add('hidden');
-  }
+            document.getElementById('unansweredToggleLabel').textContent = showUnanswered ? 'Hide' : 'View';
+            const popup = document.getElementById('unansweredPopup');
+            if (showUnanswered) {
+                popup.classList.remove('hidden');
+                popup.innerHTML = unanswered.length === 0 ? 'All questions answered.' : `<b>Unanswered:</b> ${unanswered.join(', ')}`;
+            } else {
+                popup.classList.add('hidden');
+            }
 
-  const pagerInfo = `Questions <b>${start + 1}&ndash;${Math.min(start + PAGE_SIZE, TOTAL)}</b> of ${TOTAL}`;
-  document.getElementById('pagerInfoTop').innerHTML = pagerInfo;
-  document.getElementById('pagerInfoBottom').innerHTML = `Page ${page + 1} of ${totalPages()}`;
-  document.getElementById('prevBtnTop').disabled = page === 0;
-  document.getElementById('nextBtnTop').disabled = isLastPage;
-  document.getElementById('prevBtnBottom').disabled = page === 0;
+            const pagerInfo = `Questions <b>${start + 1}&ndash;${Math.min(start + PAGE_SIZE, TOTAL)}</b> of ${TOTAL}`;
+            document.getElementById('pagerInfoTop').innerHTML = pagerInfo;
+            document.getElementById('pagerInfoBottom').innerHTML = `Page ${page + 1} of ${totalPages()}`;
+            document.getElementById('prevBtnTop').disabled = page === 0;
+            document.getElementById('nextBtnTop').disabled = isLastPage;
+            document.getElementById('prevBtnBottom').disabled = page === 0;
 
-  const bottomSlot = document.getElementById('bottomRightSlot');
-  bottomSlot.innerHTML = isLastPage
-    ? '<button class="btn btn-green btn-sm" onclick="askSubmit()">Submit exam</button>'
-    : '<button class="btn btn-blue btn-sm" onclick="goToPage(1)">Next</button>';
+            const bottomSlot = document.getElementById('bottomRightSlot');
+            bottomSlot.innerHTML = isLastPage
+                ? '<button class="btn btn-green btn-sm" onclick="askSubmit()">Submit exam</button>'
+                : '<button class="btn btn-blue btn-sm" onclick="goToPage(1)">Next</button>';
 
-  const pagerNums = document.getElementById('pagerNums');
-  pagerNums.innerHTML = '';
-  for (let p = 0; p < totalPages(); p++) {
-    const b = document.createElement('button');
-    b.className = `pager-num ${p === page ? 'active' : ''}`;
-    b.textContent = p + 1;
-    b.onclick = () => { page = p; renderAll(); window.scrollTo({ top: 0, behavior: 'smooth' }); };
-    pagerNums.appendChild(b);
-  }
+            const pagerNums = document.getElementById('pagerNums');
+            pagerNums.innerHTML = '';
+            for (let p = 0; p < totalPages(); p++) {
+                const b = document.createElement('button');
+                b.className = `pager-num ${p === page ? 'active' : ''}`;
+                b.textContent = p + 1;
+                b.onclick = () => { page = p; renderAll(); window.scrollTo({ top: 0, behavior: 'smooth' }); };
+                pagerNums.appendChild(b);
+            }
 
-  let lastPassage = null;
-  const host = document.getElementById('questionsHost');
-  host.innerHTML = pageQuestions.map((q, idx) => {
-    const prevQ = QUESTIONS[start + idx - 1];
-    const showSection = !prevQ || prevQ.marks !== q.marks;
-    const sectionNo = q.marks === QUESTIONS[0].marks ? 1 : 2;
-    const groupCount = QUESTIONS.filter((x) => x.marks === q.marks).length;
-    const groupMarks = groupCount * q.marks;
-    const showPassage = q.passage && q.passage !== lastPassage;
-    if (q.passage) lastPassage = q.passage;
-    const chosen = answers[q.no];
+            let lastPassage = null;
+            const host = document.getElementById('questionsHost');
+            host.innerHTML = pageQuestions.map((q, idx) => {
+                const prevQ = QUESTIONS[start + idx - 1];
+                const showSection = !prevQ || prevQ.marks !== q.marks;
+                const sectionNo = q.marks === QUESTIONS[0].marks ? 1 : 2;
+                const groupCount = QUESTIONS.filter((x) => x.marks === q.marks).length;
+                const groupMarks = groupCount * q.marks;
+                const showPassage = q.passage && q.passage !== lastPassage;
+                if (q.passage) lastPassage = q.passage;
+                const chosen = answers[q.no];
 
-    let html = '';
-    if (showSection) {
-      html += `<div class="exam-section-head">
+                let html = '';
+                if (showSection) {
+                    html += `<div class="exam-section-head">
         <span class="es-no">Section ${sectionNo}</span>
         <span class="es-desc">Group ${sectionNo} &middot; ${groupCount} question${groupCount > 1 ? 's' : ''} &middot; ${q.marks} mark${q.marks > 1 ? 's' : ''} each &middot; ${groupMarks} marks</span>
       </div>`;
-    }
-    if (showPassage) {
-      html += `<div class="passage">
+                }
+                if (showPassage) {
+                    html += `<div class="passage">
         <div class="ptitle">Reading Comprehension: read the passage and answer below.</div>
         <div>${q.passage}</div>
       </div>`;
-    }
-    html += `<div class="q ${flags[q.no] ? 'flagged' : ''}" id="q-${q.no}">
+                }
+                html += `<div class="q ${flags[q.no] ? 'flagged' : ''}" id="q-${q.no}">
       <div class="q-head">
         <span class="q-no">${q.no}.</span>
         <span class="q-text">${q.text}</span>
@@ -618,27 +1190,25 @@ function renderAll() {
       </div>
       <ul class="opts">
         ${q.options.map((opt, i) => {
-          const letter = LETTERS[i];
-          return `<li class="opt" onclick="choose(${q.no}, ${i})">
+                    const letter = LETTERS[i];
+                    return `<li class="opt" onclick="choose(${q.no}, ${i})">
             <input type="radio" name="q-${q.no}" ${chosen === i ? 'checked' : ''} onclick="choose(${q.no}, ${i})" />
             <span class="ltr">${letter})</span>
             <span>${opt}</span>
           </li>`;
-        }).join('')}
+                }).join('')}
       </ul>
     </div>`;
-    return html;
-  }).join('');
-}
+                return html;
+            }).join('');
+        }
 
+        document.addEventListener('visibilitychange', () => {
+            if (submitted) return;
+            document.getElementById('examPause').classList.toggle('hidden', !document.hidden);
+        });
 
-/* Tab-switch / screenshot deterrent, mirrors the real exam behaviour. */
-document.addEventListener('visibilitychange', () => {
-  if (submitted) return;
-  document.getElementById('examPause').classList.toggle('hidden', !document.hidden);
-});
-
-void rerender();
-</script>
+        void rerender();
+    </script>
 </body>
 </html>
