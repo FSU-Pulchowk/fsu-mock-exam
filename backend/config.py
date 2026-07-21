@@ -29,7 +29,7 @@ RATE_LIMIT: str = os.getenv("RATE_LIMIT", "120/minute")
 
 # ── Server ────────────────────────────────────────────────────────────────────
 HOST: str = os.getenv("HOST", "0.0.0.0")
-PORT: int = int(os.getenv("PORT", "5000"))
+PORT: int = int(os.getenv("PORT", "6090"))
 ROOT_PATH: str = os.getenv("ROOT_PATH", "")
 
 # ── Worker count ─────────────────────────────────────────────────────────────
