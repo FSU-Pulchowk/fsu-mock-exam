@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="robots" content="noindex, nofollow" />
-<title>IOE Entrance — PYQ Exam UI/UX Preview (Demo)</title>
+<title>FSU EXAM DEMO — PYQ Exam</title>
 <link rel="icon" href="logo.svg" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -179,7 +179,7 @@
           <div class="l3">Entrance Examination Portal</div>
         </div>
       </div>
-      <div class="banner">B.E./B.Arch. Online Entrance Examination</div>
+      <div class="banner">B.E./B.Arch. Online Demo Examination</div>
 
       <main class="content">
 
@@ -199,6 +199,7 @@
             <li>When the time is up, your exam will be submitted automatically.</li>
             <li>Your progress is saved on this device, so an accidental refresh won't lose your answers. <i>(sample copy — this standalone preview doesn't actually persist anything)</i></li>
           </ul>
+          <p class="notice-heading">Disclamer: This is a mock exam conducted by FSU pulchowk campus which is compleletely independent and different from IOE. This is only a platform for students to experience the userinterface and emulate the IOE CBT exam.</p>
           <p class="exam-ready">You can now take examination:</p>
           <div class="notice-actions">
             <button class="btn btn-blue btn-lg" onclick="startExam()">Take Examination</button>
@@ -250,10 +251,7 @@
             <div class="submitted-stat"><b id="finalFlagged">0</b><span>Flagged</span></div>
           </div>
           <div class="submitted-hint">
-            This is where the UI/UX preview ends. In the real app, submitting takes you straight to a personal
-            <b>Result</b> page: your score out of the total marks, a subject-wise breakdown, a full answer review
-            with worked solutions, and a rank estimate &mdash; none of which is faked here since this demo has no
-            real answer key.
+            Congratulations on finishing the mock examination, All the best for your IOE entrance.
           </div>
           <div style="margin-top:18px;">
             <button class="btn btn-ghost btn-sm" onclick="location.reload()">Restart this preview</button>
@@ -293,7 +291,7 @@
    ========================================================================== */
 let QUESTIONS = [];
 let TOTAL = QUESTIONS.length;
-const PAGE_SIZE = 7;
+const PAGE_SIZE = 10;
 const LETTERS = ['a', 'b', 'c', 'd'];
 
 /* Demo timer: labeled as the real 2‑hour duration but compressed into a short
@@ -396,10 +394,10 @@ function totalPages() { return Math.max(1, Math.ceil(TOTAL / PAGE_SIZE)); }
 
 async function rerender() {
   const savedAnswers = localStorage.getItem('answers');
-  const savedFlags = localStorage.getItem('flags');
   const savedStartedAt = localStorage.getItem('startedAt');
+  let savedFlags = localStorage.getItem('flags');
   if (savedAnswers == null || savedStartedAt == null) return false;
-
+  if (savedFlags==null) savedFlags={}
   const response = await getQuestions();
   if (response == null) return false;
 
@@ -547,7 +545,7 @@ function renderAll() {
   const start = page * PAGE_SIZE;
   const pageQuestions = QUESTIONS.slice(start, start + PAGE_SIZE);
   const answeredCount = Object.keys(answers).length;
-  const unanswered = QUESTIONS.filter((q) => answers[q.qid] === undefined).map((q) => q.qid);
+  const unanswered = QUESTIONS.filter((q) => answers[q.no] === undefined).map((q) => q.no);
   const isLastPage = page >= totalPages() - 1;
 
   document.getElementById('answeredCount').textContent = answeredCount;
@@ -588,19 +586,19 @@ function renderAll() {
   const host = document.getElementById('questionsHost');
   host.innerHTML = pageQuestions.map((q, idx) => {
     const prevQ = QUESTIONS[start + idx - 1];
-    const showSection = !prevQ || prevQ.weight !== q.weight;
-    const sectionNo = q.weight === QUESTIONS[0].weight ? 1 : 2;
-    const groupCount = QUESTIONS.filter((x) => x.weight === q.weight).length;
-    const groupMarks = groupCount * q.weight;
+    const showSection = !prevQ || prevQ.marks !== q.marks;
+    const sectionNo = q.marks === QUESTIONS[0].marks ? 1 : 2;
+    const groupCount = QUESTIONS.filter((x) => x.marks === q.marks).length;
+    const groupMarks = groupCount * q.marks;
     const showPassage = q.passage && q.passage !== lastPassage;
     if (q.passage) lastPassage = q.passage;
-    const chosen = answers[q.qid];
+    const chosen = answers[q.no];
 
     let html = '';
     if (showSection) {
       html += `<div class="exam-section-head">
         <span class="es-no">Section ${sectionNo}</span>
-        <span class="es-desc">Group ${sectionNo} &middot; ${groupCount} question${groupCount > 1 ? 's' : ''} &middot; ${q.weight} mark${q.weight > 1 ? 's' : ''} each &middot; ${groupMarks} marks</span>
+        <span class="es-desc">Group ${sectionNo} &middot; ${groupCount} question${groupCount > 1 ? 's' : ''} &middot; ${q.marks} mark${q.marks > 1 ? 's' : ''} each &middot; ${groupMarks} marks</span>
       </div>`;
     }
     if (showPassage) {
@@ -609,20 +607,20 @@ function renderAll() {
         <div>${q.passage}</div>
       </div>`;
     }
-    html += `<div class="q ${flags[q.qid] ? 'flagged' : ''}" id="q-${q.qid}">
+    html += `<div class="q ${flags[q.no] ? 'flagged' : ''}" id="q-${q.no}">
       <div class="q-head">
-        <span class="q-no">${q.qid}.</span>
-        <span class="q-text">${q.question}</span>
+        <span class="q-no">${q.no}.</span>
+        <span class="q-text">${q.text}</span>
       </div>
       <div class="q-meta">
-        <span>(${q.weight} mark${q.weight > 1 ? 's' : ''})</span>
-        <button class="flag-icon ${flags[q.qid] ? 'on' : ''}" title="${flags[q.qid] ? 'Flagged for review' : 'Flag for review'}" onclick="toggleFlag(${q.qid})">${flagSvg(!!flags[q.qid])}</button>
+        <span>(${q.marks} mark${q.marks > 1 ? 's' : ''})</span>
+        <button class="flag-icon ${flags[q.no] ? 'on' : ''}" title="${flags[q.no] ? 'Flagged for review' : 'Flag for review'}" onclick="toggleFlag(${q.no})">${flagSvg(!!flags[q.no])}</button>
       </div>
       <ul class="opts">
         ${q.options.map((opt, i) => {
           const letter = LETTERS[i];
-          return `<li class="opt" onclick="choose(${q.qid}, ${i})">
-            <input type="radio" name="q-${q.qid}" ${chosen === i ? 'checked' : ''} onclick="choose(${q.qid}, ${i})" />
+          return `<li class="opt" onclick="choose(${q.no}, ${i})">
+            <input type="radio" name="q-${q.no}" ${chosen === i ? 'checked' : ''} onclick="choose(${q.no}, ${i})" />
             <span class="ltr">${letter})</span>
             <span>${opt}</span>
           </li>`;
