@@ -1,0 +1,31 @@
+{
+  "questionSet":1,
+
+  "questions":[
+  { "qid": 1, "question": "What is the capital of France?", "options": ["Lyon", "Paris", "Nice", "Marseille"], "answer": 1, "weight": 1 },
+  { "qid": 2, "question": "What is the largest planet in our solar system?", "options": ["Earth", "Saturn", "Jupiter", "Neptune"], "answer": 2, "weight": 1 },
+  { "qid": 3, "question": "Who wrote 'Romeo and Juliet'?", "options": ["Charles Dickens", "Mark Twain", "William Shakespeare", "Leo Tolstoy"], "answer": 2, "weight": 1 },
+  { "qid": 4, "question": "What is the chemical symbol for gold?", "options": ["Go", "Ag", "Au", "Gd"], "answer": 2, "weight": 1 },
+  { "qid": 5, "question": "Which ocean is the largest?", "options": ["Indian", "Pacific", "Atlantic", "Arctic"], "answer": 1, "weight": 1 },
+  { "qid": 6, "question": "How many continents are there?", "options": ["8", "6", "5", "7"], "answer": 3, "weight": 1 },
+  { "qid": 7, "question": "What is the smallest prime number?", "options": ["3", "2", "1", "0"], "answer": 1, "weight": 1 },
+  { "qid": 8, "question": "Which country is known as the Land of the Rising Sun?", "options": ["South Korea", "China", "Japan", "Thailand"], "answer": 2, "weight": 1 },
+  { "qid": 9, "question": "What is the freezing point of water in Celsius?", "options": ["32", "-1", "100", "0"], "answer": 3, "weight": 1 },
+  { "qid": 10, "question": "Who painted the Mona Lisa?", "options": ["Michelangelo", "Leonardo da Vinci", "Vincent van Gogh", "Pablo Picasso"], "answer": 1, "weight": 1 },
+  { "qid": 11, "question": "What is the longest river in the world?", "options": ["Amazon", "Mississippi", "Yangtze", "Nile"], "answer": 3, "weight": 1 },
+  { "qid": 12, "question": "How many legs does a spider have?", "options": ["6", "10", "8", "12"], "answer": 2, "weight": 1 },
+  { "qid": 13, "question": "What gas do plants primarily absorb for photosynthesis?", "options": ["Nitrogen", "Hydrogen", "Carbon dioxide", "Oxygen"], "answer": 2, "weight": 1 },
+  { "qid": 14, "question": "Which planet is known as the Red Planet?", "options": ["Mercury", "Mars", "Jupiter", "Venus"], "answer": 1, "weight": 1 },
+  { "qid": 15, "question": "What is the capital of Japan?", "options": ["Kyoto", "Osaka", "Tokyo", "Hiroshima"], "answer": 2, "weight": 1 },
+  { "qid": 16, "question": "Which element has the atomic number 1?", "options": ["Helium", "Carbon", "Oxygen", "Hydrogen"], "answer": 3, "weight": 1 },
+  { "qid": 17, "question": "What is the largest mammal in the world?", "options": ["Elephant", "Blue whale", "Hippopotamus", "Giraffe"], "answer": 1, "weight": 1 },
+  { "qid": 18, "question": "Who developed the theory of general relativity?", "options": ["Isaac Newton", "Galileo Galilei", "Albert Einstein", "Niels Bohr"], "answer": 2, "weight": 1 },
+  { "qid": 19, "question": "What is the capital of Italy?", "options": ["Florence", "Rome", "Milan", "Venice"], "answer": 1, "weight": 1 },
+  { "qid": 20, "question": "How many colors are there in a rainbow?", "options": ["6", "5", "8", "7"], "answer": 3, "weight": 1 },
+  { "qid": 21, "question": "What is the currency of Japan?", "options": ["Yuan", "Ringgit", "Won", "Yen"], "answer": 3, "weight": 1 },
+  { "qid": 22, "question": "Which country hosted the 2016 Summer Olympics?", "options": ["Russia", "United Kingdom", "Brazil", "China"], "answer": 2, "weight": 1 },
+  { "qid": 23, "question": "What is the tallest mountain in the world?", "options": ["Denali", "Mount Everest", "K2", "Kangchenjunga"], "answer": 1, "weight": 1 },
+  { "qid": 24, "question": "Which organ pumps blood throughout the human body?", "options": ["Kidneys", "Heart", "Liver", "Lungs"], "answer": 1, "weight": 1 },
+  { "qid": 25, "question": "What is the main language spoken in Brazil?", "options": ["French", "Italian", "Spanish", "Portuguese"], "answer": 3, "weight": 1 }
+]
+}
