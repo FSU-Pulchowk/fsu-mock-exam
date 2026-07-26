@@ -35,8 +35,10 @@ Memory profile (2.3 GB budget, 5K typical / 20K peak users)
   Total               ≈ 760 MB   (well under 2.3 GB)
 """
 
+import asyncio
 import logging
 import sys
+import time
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request
@@ -47,6 +49,7 @@ from slowapi.errors import RateLimitExceeded
 
 import cache
 import config
+import database
 from middleware.rate_limit import limiter
 from routers import exam as exam_router
 from routers import health as health_router
@@ -71,6 +74,9 @@ async def lifespan(app: FastAPI):
     logger.info("   Data directory : %s", config.DATA_DIR)
     logger.info("   Rate limit     : %s", config.RATE_LIMIT)
     logger.info("   CORS origins   : %s", config.CORS_ORIGINS)
+    logger.info("   Database       : %s", config.DB_PATH)
+
+    database.init_db(config.DB_PATH)
 
     loaded_suffixes = cache.load_all_sets(config.DATA_DIR)
 
@@ -90,16 +96,27 @@ async def lifespan(app: FastAPI):
         logger.warning("[WARN] No answer sets loaded — /getAnswers will return 503")
 
     logger.info("[STARTUP] Complete. Listening on %s:%d", config.HOST, config.PORT)
+
+    async def _prune_loop():
+        while True:
+            await asyncio.sleep(3600)
+            try:
+                deleted = database.prune_old_logs(max_age_hours=48)
+                logger.info("[DB PRUNE] %s", deleted)
+            except Exception as exc:
+                logger.warning("[DB PRUNE] Failed: %s", exc)
+
+    prune_task = asyncio.create_task(_prune_loop())
+
     yield  # ← application runs here
 
-    # Shutdown
+    prune_task.cancel()
     logger.info("[SHUTDOWN] Shutting down -- flushing submissions ...")
     flush_path = config.BASE_DIR / "submissions.json"
     cache.flush_submissions(flush_path)
     logger.info("[SHUTDOWN] Complete.")
 
 
-# ── App factory ───────────────────────────────────────────────────────────────
 
 def create_app() -> FastAPI:
     app = FastAPI(
@@ -119,10 +136,15 @@ def create_app() -> FastAPI:
     # ── Traffic telemetry middleware ────────────────────────────────────────
     @app.middleware("http")
     async def _track_traffic(request: Request, call_next):
+        t0 = time.perf_counter()
         response = await call_next(request)
-        # Skip tracking for admin pings to avoid noise
+        response_ms = round((time.perf_counter() - t0) * 1000, 1)
         path = request.url.path
         cache.record_traffic(path, request.method, response.status_code)
+        try:
+            database.insert_traffic(path, request.method, response.status_code, response_ms)
+        except Exception:
+            pass  
         return response
 
     # ── Rate limiter ──────────────────────────────────────────────────────────

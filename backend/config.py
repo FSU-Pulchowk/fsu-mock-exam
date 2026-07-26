@@ -57,3 +57,5 @@ ANSWERS_FILE: Path | None = (
 )
 
 ADMIN_TOKEN: str = os.getenv("ADMIN_TOKEN", "changeme")
+
+DB_PATH: Path = BASE_DIR / os.getenv("DB_PATH", "data/fsu_exam.db")

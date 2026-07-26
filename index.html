@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -815,11 +816,13 @@
                     <form onsubmit="handleLogin(event)">
                         <div class="form-group">
                             <label for="fullName">Full Name</label>
-                            <input type="text" id="fullName" placeholder="e.g. Demo Student" required autocomplete="off" />
+                            <input type="text" id="fullName" placeholder="e.g. Demo Student" required
+                                autocomplete="off" />
                         </div>
                         <div class="form-group">
                             <label for="emailAddr">Email Address</label>
-                            <input type="email" id="emailAddr" placeholder="e.g. student@example.com" required autocomplete="off" />
+                            <input type="email" id="emailAddr" placeholder="e.g. student@example.com" required
+                                autocomplete="off" />
                         </div>
                         <div class="form-group">
                             <label for="examSetSelect">Select Model Set</label>
@@ -829,8 +832,14 @@
                             </select>
                         </div>
                         <div id="loginError" class="login-error"></div>
-                        <button type="submit" class="btn btn-blue btn-lg" style="width: 100%; margin-top: 6px;">Login & Continue</button>
+                        <button type="submit" class="btn btn-blue btn-lg" style="width: 100%; margin-top: 6px;">Login &
+                            Continue</button>
                     </form>
+                    <p class="login-disclaimer">
+                        <strong>Internal Use Only:</strong> This login screen is part of the FSU Pulchowk mock exam
+                        platform for testing and internal purposes. It will <strong>not</strong> appear in the real IOE
+                        Entrance examination.
+                    </p>
                 </div>
 
                 <div id="gateScreen" class="instructions hidden">
@@ -840,7 +849,9 @@
                     </div>
                     <h3 class="notice-heading">Examination Notice:</h3>
                     <ul class="notice-list">
-                        <li id="examNoticeStats">The duration of this exam is <b>2 hr</b>. It has <b>100 questions</b> — the first 60 carry <b>1 mark</b> each and the remaining 40 carry <b>2 marks</b> each, for a total of <b>140 marks</b>.</li>
+                        <li id="examNoticeStats">The duration of this exam is <b>2 hr</b>. It has <b>100 questions</b> —
+                            the first 60 carry <b>1 mark</b> each and the remaining 40 carry <b>2 marks</b> each, for a
+                            total of <b>140 marks</b>.</li>
                         <li>You have to select the radio button on the correct option for each question.</li>
                         <li>You can change your option any time during the examination period.</li>
                         <li>To leave a question blank, simply don't select any option. The list of unanswered questions
@@ -852,7 +863,8 @@
                         <li>When the time is up, your exam will be submitted automatically.</li>
                         <li>Your progress is saved on this device, so an accidental refresh won't lose your answers.
                             <i>(sample copy
-                                — this standalone preview doesn't actually persist anything)</i></li>
+                                — this standalone preview doesn't actually persist anything)</i>
+                        </li>
                     </ul>
                     <p class="notice-heading">Disclamer: This is a mock exam conducted by FSU pulchowk campus which is
                         compleletely independent and different from IOE. This is only a platform for students to
@@ -868,7 +880,8 @@
                         <div class="ei-text">
                             <div class="ei-name"><span id="studentDisplayName">Demo Student</span></div>
                             <div class="ei-timer">Time Remaining: <b id="timerText" class="">2:00:00</b></div>
-                            <div class="ei-answered">You have answered <b id="answeredCount">0</b> out of <b id="totalCount">—</b>
+                            <div class="ei-answered">You have answered <b id="answeredCount">0</b> out of <b
+                                    id="totalCount">—</b>
                             </div>
                             <span class="ei-link" onclick="toggleUnanswered()"><span
                                     id="unansweredToggleLabel">View</span> unanswered
@@ -897,7 +910,8 @@
 
                     <div class="exam-actions">
                         <button id="submitBtn" class="btn btn-blue" onclick="askSubmit()">Submit exam</button>
-                        <span class="muted">Answered <span id="answeredCount2">0</span> / <span id="totalCount2">—</span></span>
+                        <span class="muted">Answered <span id="answeredCount2">0</span> / <span
+                                id="totalCount2">—</span></span>
                     </div>
                 </div>
                 <div id="submittedScreen" class="submitted-card hidden">
@@ -1095,7 +1109,9 @@
             document.getElementById('examScreen').classList.remove('hidden');
             document.getElementById('goTopBtn').classList.remove('hidden');
 
-            document.getElementById('studentDisplayName').textContent = studentName || 'Demo Student';
+            const _name1 = studentName || 'Demo Student';
+            document.getElementById('studentDisplayName').textContent = _name1;
+            document.querySelector('img.ei-photo').src = `https://ui-avatars.com/api/?name=${encodeURIComponent(_name1)}&background=cfe6ee&color=176c89`;
 
             clearInterval(timerId);
             renderAll();
@@ -1170,7 +1186,9 @@
             document.getElementById('examScreen').classList.remove('hidden');
             document.getElementById('goTopBtn').classList.remove('hidden');
 
-            document.getElementById('studentDisplayName').textContent = studentName || 'Demo Student';
+            const _name2 = studentName || 'Demo Student';
+            document.getElementById('studentDisplayName').textContent = _name2;
+            document.querySelector('img.ei-photo').src = `https://ui-avatars.com/api/?name=${encodeURIComponent(_name2)}&background=cfe6ee&color=176c89`;
 
             renderAll();
             timerId = setInterval(tick, 1000);
@@ -1383,7 +1401,7 @@
         });
 
         async function initPage() {
-            fetch(`${API_BASE_URL}/admin/ping`, { method: 'POST' }).catch(() => {});
+            fetch(`${API_BASE_URL}/admin/ping`, { method: 'POST' }).catch(() => { });
             const isRestored = await rerender();
             if (!isRestored) {
                 document.getElementById('loginScreen').classList.remove('hidden');
@@ -1395,4 +1413,5 @@
         void initPage();
     </script>
 </body>
+
 </html>

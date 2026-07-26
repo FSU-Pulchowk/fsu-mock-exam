@@ -124,6 +124,42 @@
   .card-value.yellow { color: var(--yellow); }
   .card-value.blue { color: #60a5fa; }
   .card-value.orange { color: var(--orange); }
+  .card-value.red  { color: var(--red); }
+
+  /* ─── RISK / CAPACITY PANEL ───────────────────────────────────────────── */
+  .risk-panel {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;
+  }
+  .risk-header { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+  .risk-badge {
+    font-size: 12px; font-weight: 700; padding: 5px 14px;
+    border-radius: 100px; letter-spacing: 0.8px; text-transform: uppercase;
+  }
+  .risk-badge.LOW      { background: rgba(34,197,94,.15);  color: #22c55e; border: 1px solid rgba(34,197,94,.3); }
+  .risk-badge.MODERATE { background: rgba(234,179,8,.15);  color: #eab308; border: 1px solid rgba(234,179,8,.3); }
+  .risk-badge.HIGH     { background: rgba(249,115,22,.15); color: #f97316; border: 1px solid rgba(249,115,22,.3); }
+  .risk-badge.CRITICAL { background: rgba(239,68,68,.15);  color: #ef4444; border: 1px solid rgba(239,68,68,.3); }
+  .risk-score { font-family: var(--mono); font-size: 24px; font-weight: 700; }
+  .risk-title { font-size: 13px; font-weight: 600; }
+  .risk-sub   { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .risk-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 16px; }
+  .risk-metric {
+    background: var(--bg); border-radius: 6px; padding: 12px 14px;
+    border: 1px solid var(--border);
+  }
+  .risk-metric-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .risk-metric-val   { font-family: var(--mono); font-size: 18px; font-weight: 600; }
+  .risk-flags  { margin-bottom: 12px; }
+  .risk-flag   { display: flex; align-items: flex-start; gap: 8px; font-size: 12px; color: var(--muted); margin-bottom: 6px; line-height: 1.5; }
+  .risk-flag::before { content: '⚑'; flex-shrink: 0; margin-top: 1px; }
+  .risk-recs   { border-top: 1px solid var(--border); padding-top: 12px; }
+  .risk-rec    { display: flex; align-items: flex-start; gap: 8px; font-size: 12px; color: #60a5fa; margin-bottom: 5px; }
+  .risk-rec::before { content: '→'; flex-shrink: 0; }
+  .endpoint-table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 12px; }
+  .endpoint-table th { text-align: left; padding: 6px 10px; color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.4px; border-bottom: 1px solid var(--border); }
+  .endpoint-table td { padding: 7px 10px; border-bottom: 1px solid rgba(37,42,56,.6); font-family: var(--mono); }
+  .endpoint-table tr:last-child td { border-bottom: none; }
 
   /* ─── SECTION HEADERS ─────────────────────────────────────────────────── */
   .section-head {
@@ -260,6 +296,7 @@
     <button class="tab-btn" onclick="switchTab('traffic')">Traffic</button>
     <button class="tab-btn" onclick="switchTab('health')">Server Health</button>
     <button class="tab-btn" onclick="switchTab('submissions')">Submissions</button>
+    <button class="tab-btn" onclick="switchTab('logins')">Logins <span id="login-count-badge" style="font-size:10px;background:#1e3a5f;color:#93c5fd;padding:1px 6px;border-radius:100px;margin-left:4px;">—</span></button>
   </div>
 
   <div class="main">
@@ -278,15 +315,78 @@
           <div class="card-sub" id="c-subs-sub">—</div>
         </div>
         <div class="card">
-          <div class="card-label">Sets Loaded</div>
-          <div class="card-value" id="c-sets">—</div>
-          <div class="card-sub" id="c-sets-sub">—</div>
+          <div class="card-label">Total Logins</div>
+          <div class="card-value" id="c-sessions">—</div>
+          <div class="card-sub">candidate sessions</div>
         </div>
         <div class="card">
           <div class="card-label">Uptime</div>
           <div class="card-value orange" id="c-uptime">—</div>
           <div class="card-sub" id="c-uptime-sub">—</div>
         </div>
+        <div class="card">
+          <div class="card-label">Sets Loaded</div>
+          <div class="card-value" id="c-sets">—</div>
+          <div class="card-sub" id="c-sets-sub">—</div>
+        </div>
+      </div>
+
+      <!-- req/sec live metrics -->
+      <div class="section-head"><h2>Live Request Rate</h2><small id="rps-updated">—</small></div>
+      <div class="cards" style="grid-template-columns:repeat(5,1fr);margin-bottom:20px;">
+        <div class="card">
+          <div class="card-label">req/sec (1s)</div>
+          <div class="card-value mono" id="rps-1s" style="font-size:22px;">—</div>
+        </div>
+        <div class="card">
+          <div class="card-label">req/sec (5s)</div>
+          <div class="card-value mono" id="rps-5s" style="font-size:22px;">—</div>
+        </div>
+        <div class="card">
+          <div class="card-label">req/sec (10s)</div>
+          <div class="card-value mono" id="rps-10s" style="font-size:22px;">—</div>
+        </div>
+        <div class="card">
+          <div class="card-label">req/sec (60s)</div>
+          <div class="card-value mono" id="rps-60s" style="font-size:22px;">—</div>
+        </div>
+        <div class="card">
+          <div class="card-label">req/sec (5m)</div>
+          <div class="card-value mono" id="rps-5m" style="font-size:22px;">—</div>
+        </div>
+      </div>
+
+      <!-- capacity / risk panel -->
+      <div class="section-head"><h2>Server Capacity &amp; Risk</h2><small id="cap-updated">—</small></div>
+      <div class="risk-panel" id="risk-panel">
+        <div class="risk-header">
+          <span class="risk-badge" id="risk-badge">—</span>
+          <div>
+            <div class="risk-title">Concurrency Risk Level</div>
+            <div class="risk-sub">Score: <span id="risk-score" style="font-family:var(--mono);">—</span>/100 · Safe concurrent users: <b id="risk-max-users">—</b></div>
+          </div>
+          <div style="margin-left:auto;text-align:right;">
+            <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;">Load %</div>
+            <div style="font-family:var(--mono);font-size:20px;font-weight:700;" id="risk-load-pct">—</div>
+          </div>
+        </div>
+        <div class="risk-grid">
+          <div class="risk-metric"><div class="risk-metric-label">Error Rate</div><div class="risk-metric-val" id="rm-err">—</div></div>
+          <div class="risk-metric"><div class="risk-metric-label">Avg Resp (ms)</div><div class="risk-metric-val" id="rm-avg">—</div></div>
+          <div class="risk-metric"><div class="risk-metric-label">p95 Resp (ms)</div><div class="risk-metric-val" id="rm-p95">—</div></div>
+          <div class="risk-metric"><div class="risk-metric-label">Active Sessions (30m)</div><div class="risk-metric-val" id="rm-sess">—</div></div>
+          <div class="risk-metric"><div class="risk-metric-label">Capacity (rps)</div><div class="risk-metric-val" id="rm-cap">—</div></div>
+          <div class="risk-metric"><div class="risk-metric-label">Workers</div><div class="risk-metric-val" id="rm-workers">—</div></div>
+        </div>
+        <div class="risk-flags" id="risk-flags"></div>
+        <div class="risk-recs"  id="risk-recs"></div>
+        <details style="margin-top:14px;">
+          <summary style="font-size:12px;color:var(--muted);cursor:pointer;">Top endpoints (last 60 s)</summary>
+          <table class="endpoint-table" id="endpoint-table">
+            <thead><tr><th>Endpoint</th><th>Method</th><th>Hits</th><th>Errors</th><th>Avg ms</th></tr></thead>
+            <tbody id="endpoint-body"><tr><td colspan="5" style="color:var(--muted);padding:10px;">Loading…</td></tr></tbody>
+          </table>
+        </details>
       </div>
 
       <div class="section-head"><h2>Quick Traffic (last 60 min)</h2><small id="ov-updated">—</small></div>
@@ -425,6 +525,34 @@
       </div>
     </div>
 
+    <!-- ── LOGINS TAB ─────────────────────────────────────────────────── -->
+    <div id="tab-logins" class="tab-panel">
+      <div class="section-head">
+        <h2>Active Candidate Sessions</h2>
+        <small id="logins-updated" style="font-family:var(--mono);font-size:12px;color:var(--muted);">—</small>
+      </div>
+      <div class="table-wrap">
+        <div class="table-toolbar">
+          <span>Candidates who have logged in — most recent first</span>
+          <input type="text" id="login-search" placeholder="Search Name or Email…" oninput="filterLogins()" />
+        </div>
+        <table id="logins-table">
+          <thead>
+            <tr>
+              <th>Candidate Name</th>
+              <th>Email Address</th>
+              <th>Set</th>
+              <th>Login Time</th>
+              <th>Session Age</th>
+            </tr>
+          </thead>
+          <tbody id="logins-body">
+            <tr><td colspan="5" class="empty"><span class="spinner"></span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
   </div><!-- /.main -->
 </div><!-- /#dashboard -->
 
@@ -497,10 +625,12 @@
       if (currentTab === 'overview') loadOverview();
       if (currentTab === 'traffic') loadTraffic();
       if (currentTab === 'health') loadHealth();
+      if (currentTab === 'submissions') loadSubmissions();
+      if (currentTab === 'logins') loadLogins();
     }, 15000);
   }
 
-  function loadAll() { loadOverview(); loadTraffic(); loadHealth(); loadSubmissions(); }
+  function loadAll() { loadOverview(); loadTraffic(); loadHealth(); loadSubmissions(); loadLogins(); }
 
   function setRefreshStatus() {
     document.getElementById('refresh-status').textContent =
@@ -518,7 +648,7 @@
   function switchTab(name) {
     currentTab = name;
     document.querySelectorAll('.tab-btn').forEach((b, i) => {
-      const tabs = ['overview', 'traffic', 'health', 'submissions'];
+      const tabs = ['overview', 'traffic', 'health', 'submissions', 'logins'];
       b.classList.toggle('active', tabs[i] === name);
     });
     document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
@@ -526,22 +656,35 @@
     if (name === 'health') loadHealth();
     if (name === 'traffic') loadTraffic();
     if (name === 'submissions') renderSubsTable();
+    if (name === 'logins') loadLogins();
   }
 
   // ── Overview ──────────────────────────────────────────────────────────────
   async function loadOverview() {
     try {
       const d = await api('/admin/overview');
-      document.getElementById('c-visitors').textContent = fmt(d.totalVisitors);
+      document.getElementById('c-visitors').textContent  = fmt(d.totalVisitors);
       document.getElementById('c-visitors-sub').textContent = `${fmt(d.visitorsLast60m)} in last 60 min`;
-      document.getElementById('c-subs').textContent = fmt(d.totalSubmissions);
-      document.getElementById('c-subs-sub').textContent = `across all sets`;
-      document.getElementById('c-sets').textContent = d.setsLoaded.length;
-      document.getElementById('c-sets-sub').textContent = d.setsLoaded.join(', ') || 'none';
-      document.getElementById('c-uptime').textContent = d.uptimeFormatted;
+      document.getElementById('c-subs').textContent      = fmt(d.totalSubmissions);
+      document.getElementById('c-subs-sub').textContent  = `across all sets`;
+      document.getElementById('c-sessions').textContent  = fmt(d.totalSessions);
+      document.getElementById('c-sets').textContent      = d.setsLoaded.length;
+      document.getElementById('c-sets-sub').textContent  = d.setsLoaded.join(', ') || 'none';
+      document.getElementById('c-uptime').textContent    = d.uptimeFormatted;
       document.getElementById('c-uptime-sub').textContent = `${Math.floor(d.uptimeSeconds)}s total`;
-      document.getElementById('ov-updated').textContent = 'Updated ' + new Date().toLocaleTimeString();
+      document.getElementById('ov-updated').textContent  = 'Updated ' + new Date().toLocaleTimeString();
       setRefreshStatus();
+
+      // req/sec cards
+      if (d.reqPerSec) {
+        const rps = d.reqPerSec;
+        document.getElementById('rps-1s').textContent  = rps['1s']  ?? '—';
+        document.getElementById('rps-5s').textContent  = rps['5s']  ?? '—';
+        document.getElementById('rps-10s').textContent = rps['10s'] ?? '—';
+        document.getElementById('rps-60s').textContent = rps['60s'] ?? '—';
+        document.getElementById('rps-5m').textContent  = rps['5m']  ?? '—';
+        document.getElementById('rps-updated').textContent = 'Updated ' + new Date().toLocaleTimeString();
+      }
 
       // Mini traffic chart on overview
       const t = await api('/admin/traffic?minutes=60');
@@ -549,7 +692,60 @@
 
       // Score distribution if submissions loaded
       if (subsData.length > 0) drawScoreDistChart();
+
+      // Capacity / risk panel
+      loadCapacity();
     } catch (e) { console.error('overview error', e); }
+  }
+
+  // ── Capacity / Risk ───────────────────────────────────────────────────────
+  async function loadCapacity() {
+    try {
+      const d = await api('/admin/capacity');
+      const m = d.metrics;
+      const badge = document.getElementById('risk-badge');
+      badge.textContent  = d.riskLevel;
+      badge.className    = `risk-badge ${d.riskLevel}`;
+      document.getElementById('risk-score').textContent    = d.score;
+      document.getElementById('risk-max-users').textContent = fmt(m.maxConcurrentUsersSafe);
+      document.getElementById('risk-load-pct').textContent  = m.rpsRatioPct + '%';
+      document.getElementById('rm-err').textContent      = m.errorRatePct + '%';
+      document.getElementById('rm-avg').textContent      = m.avgResponseMs ?? '—';
+      document.getElementById('rm-p95').textContent      = m.p95ResponseMs ?? '—';
+      document.getElementById('rm-sess').textContent     = fmt(m.activeSessionsLast30m);
+      document.getElementById('rm-cap').textContent      = m.capacityRps;
+      document.getElementById('rm-workers').textContent  = m.workers;
+      document.getElementById('cap-updated').textContent = 'Updated ' + new Date().toLocaleTimeString();
+
+      // Color the load pct
+      const pct = m.rpsRatioPct || 0;
+      const loadEl = document.getElementById('risk-load-pct');
+      loadEl.style.color = pct >= 90 ? 'var(--red)' : pct >= 70 ? 'var(--orange)' : pct >= 40 ? 'var(--yellow)' : 'var(--green)';
+
+      // Flags
+      document.getElementById('risk-flags').innerHTML =
+        (d.flags || []).map(f => `<div class="risk-flag">${esc(f)}</div>`).join('');
+
+      // Recommendations
+      document.getElementById('risk-recs').innerHTML =
+        (d.recommendations || []).map(r => `<div class="risk-rec">${esc(r)}</div>`).join('');
+
+      // Top endpoints
+      const tbody = document.getElementById('endpoint-body');
+      if (d.topEndpoints && d.topEndpoints.length > 0) {
+        tbody.innerHTML = d.topEndpoints.map(ep =>
+          `<tr>
+            <td style="color:var(--text);">${esc(ep.endpoint)}</td>
+            <td style="color:var(--muted);">${esc(ep.method)}</td>
+            <td>${fmt(ep.count)}</td>
+            <td style="color:${ep.errors > 0 ? 'var(--red)' : 'var(--green)'}">${fmt(ep.errors)}</td>
+            <td>${ep.avg_ms != null ? ep.avg_ms + ' ms' : '—'}</td>
+          </tr>`
+        ).join('');
+      } else {
+        tbody.innerHTML = '<tr><td colspan="5" style="color:var(--muted);padding:10px;">No data yet.</td></tr>';
+      }
+    } catch (e) { console.error('capacity error', e); }
   }
 
   // ── Traffic ───────────────────────────────────────────────────────────────
@@ -749,6 +945,44 @@
     document.getElementById('next-page').disabled = subsPage >= totalPages;
     document.getElementById('page-info').textContent =
       `${start + 1}–${Math.min(start + PER_PAGE, filteredSubs.length)} of ${filteredSubs.length}`;
+  }
+
+  // ── Logins ────────────────────────────────────────────────────────────────
+  let loginsData = [];
+  let filteredLogins = [];
+
+  async function loadLogins() {
+    try {
+      const d = await api('/admin/sessions');
+      loginsData = d.sessions;
+      filteredLogins = [...loginsData];
+      document.getElementById('login-count-badge').textContent = d.total;
+      document.getElementById('logins-updated').textContent = 'Updated ' + new Date().toLocaleTimeString();
+      renderLoginsTable();
+    } catch (e) { console.error('logins error', e); }
+  }
+
+  function filterLogins() {
+    const q = document.getElementById('login-search').value.toLowerCase();
+    filteredLogins = q
+      ? loginsData.filter(s => (s.name || '').toLowerCase().includes(q) || (s.email || '').toLowerCase().includes(q))
+      : [...loginsData];
+    renderLoginsTable();
+  }
+
+  function renderLoginsTable() {
+    const tbody = document.getElementById('logins-body');
+    if (filteredLogins.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" class="empty">No active sessions yet.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = filteredLogins.map(s => `<tr>
+      <td><b>${esc(s.name || '—')}</b></td>
+      <td class="mono" style="color:var(--muted);">${esc(s.email || '—')}</td>
+      <td class="mono"><span class="topbar-badge" style="background:#252a38;color:#93c5fd;font-size:10px;">Set ${esc((s.set || 'I').toUpperCase())}</span></td>
+      <td style="color:var(--muted);font-size:12px;">${esc(s.loginTime)}</td>
+      <td class="mono" style="color:var(--muted);">${s.ageMinutes} min ago</td>
+    </tr>`).join('');
   }
 
   // ── Utilities ─────────────────────────────────────────────────────────────

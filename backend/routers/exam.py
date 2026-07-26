@@ -24,6 +24,7 @@ from fastapi import APIRouter, Header, HTTPException, Request, Response
 from fastapi.responses import JSONResponse
 
 import cache
+import database
 from config import EXAM_START, EXAM_END, RATE_LIMIT
 from middleware.rate_limit import limiter
 from models import (
@@ -74,6 +75,7 @@ def _calculate_score(
     correct_answers: list[int],
     negative_per_wrong: float,
     sections: dict,
+    set_suffix: str | None = None,
 ) -> tuple[float, float]:
     """
     Server-side scoring with negative marking.
@@ -85,7 +87,7 @@ def _calculate_score(
     """
     # Build a map: question_number (1-based) → marks_per_question
     marks_map: dict[int, float] = {}
-    questions_data = cache.get_questions()
+    questions_data = cache.get_questions(set_suffix)
     if questions_data:
         for q in questions_data.get("questions", []):
             marks_map[q["no"]] = float(q.get("marks", 1))
@@ -130,6 +132,18 @@ async def login(request: Request, response: Response, payload: LoginRequest) -> 
     
     token = cache.create_session(payload.fullName, payload.email, payload.setSuffix)
     logger.info("[LOGIN] Session created for %s (%s) set=%s", payload.fullName, payload.email, payload.setSuffix)
+
+    try:
+        client_ip = request.client.host if request.client else None
+        database.insert_session(
+            name=payload.fullName,
+            email=payload.email,
+            set_suffix=payload.setSuffix,
+            ip=client_ip,
+        )
+    except Exception as exc:
+        logger.warning("[DB] Failed to persist session: %s", exc)
+
     return LoginResponse(
         sessionToken=token,
         studentName=payload.fullName,
@@ -229,7 +243,7 @@ async def submit_answers(request: Request, response: Response, payload: SubmitRe
     sections = questions_data.get("sections", {})
 
     score, max_score = _calculate_score(
-        payload.answers, correct, negative, sections
+        payload.answers, correct, negative, sections, set_suffix=payload.setSuffix
     )
 
     cache.store_submission(
@@ -240,6 +254,18 @@ async def submit_answers(request: Request, response: Response, payload: SubmitRe
         answers=payload.answers,
         score=score,
     )
+
+    try:
+        database.insert_submission(
+            student_id=payload.studentId,
+            student_name=payload.studentName,
+            student_email=payload.studentEmail,
+            set_suffix=payload.setSuffix,
+            score=score,
+            answered=len(payload.answers),
+        )
+    except Exception as exc:
+        logger.warning("[DB] Failed to persist submission: %s", exc)
 
     logger.info(
         "[SUBMIT] student=%s (%s / %s) set=%s answered=%d score=%.1f/%.1f",
