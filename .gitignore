@@ -2,7 +2,9 @@
 .env
 *.env
 !.env.example
-
+*.db
+*.db-shm
+*.db-wal
 # Submissions & runtime output
 backend/submissions.json
 
