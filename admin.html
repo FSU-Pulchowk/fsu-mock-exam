@@ -1,0 +1,769 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FSU Admin — Exam Dashboard</title>
+<link rel="icon" href="logo.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:       #0f1117;
+    --surface:  #181b24;
+    --border:   #252a38;
+    --border2:  #2e3447;
+    --text:     #e2e6f0;
+    --muted:    #7a8399;
+    --accent:   #3b82f6;
+    --accent-d: #2563eb;
+    --green:    #22c55e;
+    --yellow:   #eab308;
+    --red:      #ef4444;
+    --orange:   #f97316;
+    --mono:     'JetBrains Mono', 'Fira Code', monospace;
+    --sans:     'Inter', system-ui, sans-serif;
+  }
+
+  html, body { height: 100%; background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 14px; line-height: 1.5; }
+
+  /* ─── AUTH SCREEN ─────────────────────────────────────────────────────── */
+  #auth-screen {
+    display: flex; align-items: center; justify-content: center;
+    min-height: 100vh;
+  }
+  .auth-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 40px 36px;
+    width: 360px;
+  }
+  .auth-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 28px; }
+  .auth-logo img { width: 36px; height: 36px; }
+  .auth-logo span { font-size: 15px; font-weight: 600; color: var(--text); letter-spacing: -0.2px; }
+  .auth-box h1 { font-size: 20px; font-weight: 600; margin-bottom: 6px; }
+  .auth-box p { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+  .auth-box label { display: block; font-size: 12px; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .auth-box input {
+    width: 100%; padding: 9px 12px;
+    background: var(--bg); border: 1px solid var(--border2);
+    border-radius: 6px; color: var(--text); font-family: var(--mono); font-size: 13px;
+    outline: none; transition: border-color 0.15s;
+  }
+  .auth-box input:focus { border-color: var(--accent); }
+  .auth-error { color: var(--red); font-size: 12px; margin-top: 8px; min-height: 16px; }
+  .auth-box button {
+    margin-top: 20px; width: 100%; padding: 10px;
+    background: var(--accent); border: none; border-radius: 6px;
+    color: #fff; font-family: var(--sans); font-size: 14px; font-weight: 600;
+    cursor: pointer; transition: background 0.15s;
+  }
+  .auth-box button:hover { background: var(--accent-d); }
+
+  /* ─── LAYOUT ──────────────────────────────────────────────────────────── */
+  #dashboard { display: none; flex-direction: column; min-height: 100vh; }
+
+  .topbar {
+    display: flex; align-items: center; gap: 12px;
+    padding: 0 20px; height: 52px;
+    background: var(--surface); border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; z-index: 10;
+  }
+  .topbar-logo { display: flex; align-items: center; gap: 8px; }
+  .topbar-logo img { width: 26px; height: 26px; }
+  .topbar-title { font-weight: 600; font-size: 14px; }
+  .topbar-sep { width: 1px; height: 20px; background: var(--border2); margin: 0 4px; }
+  .topbar-badge {
+    font-size: 11px; font-weight: 500; padding: 2px 8px;
+    border-radius: 100px; background: #1e3a5f; color: #93c5fd;
+    letter-spacing: 0.3px; text-transform: uppercase;
+  }
+  .topbar-right { margin-left: auto; display: flex; align-items: center; gap: 14px; }
+  #refresh-status { font-size: 12px; color: var(--muted); font-family: var(--mono); }
+  .btn-logout {
+    font-size: 12px; color: var(--muted); background: none; border: 1px solid var(--border2);
+    border-radius: 5px; padding: 4px 10px; cursor: pointer; transition: color 0.1s;
+  }
+  .btn-logout:hover { color: var(--red); border-color: var(--red); }
+
+  .nav-tabs {
+    display: flex; gap: 2px;
+    padding: 12px 20px 0;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+  .tab-btn {
+    padding: 8px 16px; font-size: 13px; font-weight: 500;
+    background: none; border: none; border-bottom: 2px solid transparent;
+    color: var(--muted); cursor: pointer; transition: color 0.15s;
+    margin-bottom: -1px;
+  }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  .main { flex: 1; padding: 24px 20px; max-width: 1200px; width: 100%; margin: 0 auto; }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ─── STAT CARDS ──────────────────────────────────────────────────────── */
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 24px; }
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 18px 20px;
+  }
+  .card-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.6px; font-weight: 500; margin-bottom: 10px; }
+  .card-value { font-family: var(--mono); font-size: 28px; font-weight: 600; line-height: 1; }
+  .card-sub { font-size: 12px; color: var(--muted); margin-top: 6px; }
+  .card-value.green { color: var(--green); }
+  .card-value.yellow { color: var(--yellow); }
+  .card-value.blue { color: #60a5fa; }
+  .card-value.orange { color: var(--orange); }
+
+  /* ─── SECTION HEADERS ─────────────────────────────────────────────────── */
+  .section-head {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 12px; margin-top: 8px;
+  }
+  .section-head h2 { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); }
+  .section-head small { font-size: 11px; color: var(--muted); font-family: var(--mono); }
+
+  /* ─── CHART CONTAINER ─────────────────────────────────────────────────── */
+  .chart-wrap {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 16px 20px; margin-bottom: 20px;
+  }
+  .chart-title { font-size: 13px; font-weight: 600; margin-bottom: 14px; }
+  #traffic-chart { width: 100%; height: 240px; }
+  #score-dist-chart { width: 100%; height: 240px; }
+
+  /* ─── HEALTH BARS ─────────────────────────────────────────────────────── */
+  .health-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; margin-bottom: 20px; }
+  .health-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 18px 20px;
+  }
+  .health-card-title { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); margin-bottom: 14px; }
+  .health-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .health-row:last-child { margin-bottom: 0; }
+  .health-label { font-size: 12px; color: var(--muted); min-width: 68px; }
+  .health-bar-wrap { flex: 1; height: 6px; background: var(--border2); border-radius: 3px; overflow: hidden; }
+  .health-bar { height: 100%; border-radius: 3px; transition: width 0.6s ease; }
+  .health-bar.ok { background: var(--green); }
+  .health-bar.warn { background: var(--yellow); }
+  .health-bar.crit { background: var(--red); }
+  .health-val { font-family: var(--mono); font-size: 12px; min-width: 44px; text-align: right; }
+
+  .health-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
+  .meta-item { background: var(--bg); border-radius: 5px; padding: 8px 10px; }
+  .meta-key { font-size: 11px; color: var(--muted); margin-bottom: 2px; }
+  .meta-val { font-family: var(--mono); font-size: 13px; font-weight: 500; }
+
+  /* ─── SUBMISSIONS TABLE ───────────────────────────────────────────────── */
+  .table-wrap {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; overflow: hidden;
+  }
+  .table-toolbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 16px; border-bottom: 1px solid var(--border);
+  }
+  .table-toolbar span { font-size: 12px; color: var(--muted); }
+  .table-toolbar input {
+    padding: 6px 10px; background: var(--bg); border: 1px solid var(--border2);
+    border-radius: 5px; color: var(--text); font-size: 12px; font-family: var(--mono);
+    outline: none; width: 200px;
+  }
+  table { width: 100%; border-collapse: collapse; }
+  thead th {
+    padding: 10px 16px; text-align: left; font-size: 11px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted);
+    border-bottom: 1px solid var(--border); cursor: pointer; user-select: none;
+    white-space: nowrap;
+  }
+  thead th:hover { color: var(--text); }
+  thead th.sorted { color: var(--accent); }
+  tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: rgba(59,130,246,0.05); }
+  tbody td { padding: 10px 16px; font-size: 13px; }
+  td.mono { font-family: var(--mono); }
+  td.score { font-family: var(--mono); font-weight: 600; }
+  .score-hi { color: var(--green); }
+  .score-mid { color: var(--yellow); }
+  .score-lo { color: var(--red); }
+  .pager { display: flex; align-items: center; gap: 8px; padding: 12px 16px; border-top: 1px solid var(--border); }
+  .pager button {
+    padding: 5px 12px; background: var(--bg); border: 1px solid var(--border2);
+    border-radius: 5px; color: var(--text); font-size: 12px; cursor: pointer;
+  }
+  .pager button:disabled { opacity: 0.35; cursor: not-allowed; }
+  .pager button:not(:disabled):hover { border-color: var(--accent); color: var(--accent); }
+  .pager-info { font-size: 12px; color: var(--muted); font-family: var(--mono); margin-left: auto; }
+
+  /* ─── MISC ────────────────────────────────────────────────────────────── */
+  .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid var(--border2); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.6s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .empty { padding: 40px; text-align: center; color: var(--muted); font-size: 13px; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
+  .dot.green { background: var(--green); }
+  .dot.red { background: var(--red); }
+  .server-time { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+
+  @media (max-width: 640px) {
+    .main { padding: 16px 12px; }
+    .cards { grid-template-columns: 1fr 1fr; }
+    .health-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── AUTH SCREEN ─────────────────────────────────────────────────────────── -->
+<div id="auth-screen">
+  <div class="auth-box">
+    <div class="auth-logo">
+      <img src="logo.svg" alt="FSU" />
+      <span>FSU Exam Portal</span>
+    </div>
+    <h1>Admin Dashboard</h1>
+    <p>Enter your admin token to continue.</p>
+    <label for="token-input">Access Token</label>
+    <input type="password" id="token-input" placeholder="Bearer token…" autocomplete="current-password" />
+    <div class="auth-error" id="auth-error"></div>
+    <button onclick="doLogin()">Sign in</button>
+  </div>
+</div>
+
+<!-- ── DASHBOARD ───────────────────────────────────────────────────────────── -->
+<div id="dashboard">
+  <div class="topbar">
+    <div class="topbar-logo">
+      <img src="logo.svg" alt="FSU" />
+      <span class="topbar-title">Admin Dashboard</span>
+    </div>
+    <div class="topbar-sep"></div>
+    <span class="topbar-badge">Restricted</span>
+    <div class="topbar-right">
+      <span id="refresh-status">—</span>
+      <button class="btn-logout" onclick="doLogout()">Sign out</button>
+    </div>
+  </div>
+
+  <div class="nav-tabs">
+    <button class="tab-btn active" onclick="switchTab('overview')">Overview</button>
+    <button class="tab-btn" onclick="switchTab('traffic')">Traffic</button>
+    <button class="tab-btn" onclick="switchTab('health')">Server Health</button>
+    <button class="tab-btn" onclick="switchTab('submissions')">Submissions</button>
+  </div>
+
+  <div class="main">
+
+    <!-- ── OVERVIEW TAB ──────────────────────────────────────────────── -->
+    <div id="tab-overview" class="tab-panel active">
+      <div class="cards">
+        <div class="card">
+          <div class="card-label">Total Visitors</div>
+          <div class="card-value blue" id="c-visitors">—</div>
+          <div class="card-sub" id="c-visitors-sub">—</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Submissions</div>
+          <div class="card-value green" id="c-subs">—</div>
+          <div class="card-sub" id="c-subs-sub">—</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Sets Loaded</div>
+          <div class="card-value" id="c-sets">—</div>
+          <div class="card-sub" id="c-sets-sub">—</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Uptime</div>
+          <div class="card-value orange" id="c-uptime">—</div>
+          <div class="card-sub" id="c-uptime-sub">—</div>
+        </div>
+      </div>
+
+      <div class="section-head"><h2>Quick Traffic (last 60 min)</h2><small id="ov-updated">—</small></div>
+      <div class="chart-wrap">
+        <div id="mini-traffic-chart" style="width:100%;height:180px;"></div>
+      </div>
+
+      <div class="section-head"><h2>Score Distribution</h2></div>
+      <div class="chart-wrap">
+        <div id="score-dist-chart" style="width:100%;height:220px;"></div>
+      </div>
+    </div>
+
+    <!-- ── TRAFFIC TAB ────────────────────────────────────────────────── -->
+    <div id="tab-traffic" class="tab-panel">
+      <div class="section-head">
+        <h2>API Traffic</h2>
+        <span style="display:flex;gap:8px;align-items:center;">
+          <label style="font-size:12px;color:var(--muted);">Window:</label>
+          <select id="traffic-window" onchange="loadTraffic()" style="background:var(--bg);border:1px solid var(--border2);color:var(--text);padding:4px 8px;border-radius:5px;font-size:12px;">
+            <option value="30">30 min</option>
+            <option value="60" selected>60 min</option>
+            <option value="120">2 hr</option>
+            <option value="360">6 hr</option>
+            <option value="720">12 hr</option>
+          </select>
+        </span>
+      </div>
+      <div class="chart-wrap">
+        <div class="chart-title">Requests per Minute</div>
+        <div id="traffic-chart" style="width:100%;height:260px;"></div>
+      </div>
+      <div class="cards" style="grid-template-columns:repeat(3,1fr);">
+        <div class="card"><div class="card-label">Total Requests</div><div class="card-value mono" id="tr-total">—</div></div>
+        <div class="card"><div class="card-label">Peak / min</div><div class="card-value mono" id="tr-peak">—</div></div>
+        <div class="card"><div class="card-label">Errors (4xx/5xx)</div><div class="card-value red mono" id="tr-errors">—</div></div>
+      </div>
+    </div>
+
+    <!-- ── HEALTH TAB ─────────────────────────────────────────────────── -->
+    <div id="tab-health" class="tab-panel">
+      <div class="section-head"><h2>System Resources</h2><small class="server-time" id="health-time">—</small></div>
+      <div class="health-grid">
+        <!-- RAM -->
+        <div class="health-card">
+          <div class="health-card-title">Memory (RAM)</div>
+          <div class="health-row">
+            <span class="health-label">Used</span>
+            <div class="health-bar-wrap"><div class="health-bar ok" id="ram-bar" style="width:0%"></div></div>
+            <span class="health-val" id="ram-pct">—</span>
+          </div>
+          <div class="health-meta">
+            <div class="meta-item"><div class="meta-key">Total</div><div class="meta-val" id="ram-total">—</div></div>
+            <div class="meta-item"><div class="meta-key">Used</div><div class="meta-val" id="ram-used">—</div></div>
+            <div class="meta-item"><div class="meta-key">Available</div><div class="meta-val" id="ram-avail">—</div></div>
+            <div class="meta-item"><div class="meta-key">This process</div><div class="meta-val" id="ram-proc">—</div></div>
+          </div>
+        </div>
+
+        <!-- CPU -->
+        <div class="health-card">
+          <div class="health-card-title">CPU</div>
+          <div class="health-row">
+            <span class="health-label">Usage</span>
+            <div class="health-bar-wrap"><div class="health-bar ok" id="cpu-bar" style="width:0%"></div></div>
+            <span class="health-val" id="cpu-pct">—</span>
+          </div>
+          <div class="health-meta">
+            <div class="meta-item"><div class="meta-key">Physical cores</div><div class="meta-val" id="cpu-cores">—</div></div>
+            <div class="meta-item"><div class="meta-key">Threads</div><div class="meta-val" id="cpu-threads">—</div></div>
+            <div class="meta-item"><div class="meta-key">Load avg 1m</div><div class="meta-val" id="load-1">—</div></div>
+            <div class="meta-item"><div class="meta-key">Load avg 5m</div><div class="meta-val" id="load-5">—</div></div>
+          </div>
+        </div>
+
+        <!-- Disk -->
+        <div class="health-card">
+          <div class="health-card-title">Disk</div>
+          <div class="health-row">
+            <span class="health-label">Used</span>
+            <div class="health-bar-wrap"><div class="health-bar ok" id="disk-bar" style="width:0%"></div></div>
+            <span class="health-val" id="disk-pct">—</span>
+          </div>
+          <div class="health-meta">
+            <div class="meta-item"><div class="meta-key">Total</div><div class="meta-val" id="disk-total">—</div></div>
+            <div class="meta-item"><div class="meta-key">Used</div><div class="meta-val" id="disk-used">—</div></div>
+            <div class="meta-item"><div class="meta-key">Free</div><div class="meta-val" id="disk-free">—</div></div>
+            <div class="meta-item"><div class="meta-key">PID</div><div class="meta-val" id="proc-pid">—</div></div>
+          </div>
+        </div>
+
+        <!-- Network -->
+        <div class="health-card">
+          <div class="health-card-title">Network I/O</div>
+          <div class="health-meta" style="margin-top:0;">
+            <div class="meta-item"><div class="meta-key">Bytes sent</div><div class="meta-val" id="net-sent">—</div></div>
+            <div class="meta-item"><div class="meta-key">Bytes recv</div><div class="meta-val" id="net-recv">—</div></div>
+            <div class="meta-item"><div class="meta-key">Pkts sent</div><div class="meta-val" id="net-psent">—</div></div>
+            <div class="meta-item"><div class="meta-key">Pkts recv</div><div class="meta-val" id="net-precv">—</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SUBMISSIONS TAB ────────────────────────────────────────────── -->
+    <div id="tab-submissions" class="tab-panel">
+      <div class="section-head">
+        <h2>Submissions</h2>
+        <small id="subs-count-label" style="font-family:var(--mono);font-size:12px;color:var(--muted);">—</small>
+      </div>
+      <div class="table-wrap">
+        <div class="table-toolbar">
+          <span>All submitted exams — most recent first</span>
+          <input type="text" id="sub-search" placeholder="Search student ID…" oninput="filterSubs()" />
+        </div>
+        <table id="subs-table">
+          <thead>
+            <tr>
+              <th onclick="sortSubs('studentId')">Student ID</th>
+              <th onclick="sortSubs('score')" class="sorted">Score</th>
+              <th onclick="sortSubs('answered')">Answered</th>
+              <th onclick="sortSubs('ts')">Submitted At</th>
+            </tr>
+          </thead>
+          <tbody id="subs-body">
+            <tr><td colspan="4" class="empty"><span class="spinner"></span></td></tr>
+          </tbody>
+        </table>
+        <div class="pager">
+          <button id="prev-page" onclick="changePage(-1)" disabled>← Prev</button>
+          <button id="next-page" onclick="changePage(1)" disabled>Next →</button>
+          <span class="pager-info" id="page-info">—</span>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /.main -->
+</div><!-- /#dashboard -->
+
+<script>
+  google.charts.load('current', { packages: ['corechart', 'line'] });
+
+  // ── State ─────────────────────────────────────────────────────────────────
+  const API = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:5000'
+    : '/mock-exam/api';
+
+  let TOKEN = sessionStorage.getItem('admin_token') || '';
+  let currentTab = 'overview';
+  let subsData = [];
+  let filteredSubs = [];
+  let subsPage = 1;
+  const PER_PAGE = 30;
+  let subsSortKey = 'ts';
+  let subsSortDir = -1;
+  let trafficChart = null;
+  let miniChart = null;
+  let refreshInterval = null;
+
+  // ── Auth ──────────────────────────────────────────────────────────────────
+  async function doLogin() {
+    const input = document.getElementById('token-input');
+    TOKEN = input.value.trim();
+    if (!TOKEN) { setAuthError('Enter a token.'); return; }
+
+    try {
+      const res = await fetch(`${API}/admin/overview`, {
+        headers: { 'Authorization': `Bearer ${TOKEN}` }
+      });
+      if (res.status === 401 || res.status === 403) {
+        setAuthError('Invalid token. Access denied.');
+        return;
+      }
+      if (!res.ok) { setAuthError('Server error. Check if the backend is running.'); return; }
+      sessionStorage.setItem('admin_token', TOKEN);
+      showDashboard();
+    } catch (e) {
+      setAuthError('Cannot reach the server. Is the backend running?');
+    }
+  }
+
+  function setAuthError(msg) { document.getElementById('auth-error').textContent = msg; }
+
+  function doLogout() {
+    sessionStorage.removeItem('admin_token');
+    TOKEN = '';
+    clearInterval(refreshInterval);
+    document.getElementById('dashboard').style.display = 'none';
+    document.getElementById('auth-screen').style.display = 'flex';
+  }
+
+  document.getElementById('token-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') doLogin();
+  });
+
+  // ── Boot ──────────────────────────────────────────────────────────────────
+  function showDashboard() {
+    document.getElementById('auth-screen').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'flex';
+    google.charts.setOnLoadCallback(onChartsReady);
+  }
+
+  function onChartsReady() {
+    loadAll();
+    refreshInterval = setInterval(() => {
+      if (currentTab === 'overview') loadOverview();
+      if (currentTab === 'traffic') loadTraffic();
+      if (currentTab === 'health') loadHealth();
+    }, 15000);
+  }
+
+  function loadAll() { loadOverview(); loadTraffic(); loadHealth(); loadSubmissions(); }
+
+  function setRefreshStatus() {
+    document.getElementById('refresh-status').textContent =
+      'Updated ' + new Date().toLocaleTimeString();
+  }
+
+  // ── Fetch helper ──────────────────────────────────────────────────────────
+  async function api(path) {
+    const r = await fetch(`${API}${path}`, { headers: { 'Authorization': `Bearer ${TOKEN}` } });
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    return r.json();
+  }
+
+  // ── Tab switching ─────────────────────────────────────────────────────────
+  function switchTab(name) {
+    currentTab = name;
+    document.querySelectorAll('.tab-btn').forEach((b, i) => {
+      const tabs = ['overview', 'traffic', 'health', 'submissions'];
+      b.classList.toggle('active', tabs[i] === name);
+    });
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById(`tab-${name}`).classList.add('active');
+    if (name === 'health') loadHealth();
+    if (name === 'traffic') loadTraffic();
+    if (name === 'submissions') renderSubsTable();
+  }
+
+  // ── Overview ──────────────────────────────────────────────────────────────
+  async function loadOverview() {
+    try {
+      const d = await api('/admin/overview');
+      document.getElementById('c-visitors').textContent = fmt(d.totalVisitors);
+      document.getElementById('c-visitors-sub').textContent = `${fmt(d.visitorsLast60m)} in last 60 min`;
+      document.getElementById('c-subs').textContent = fmt(d.totalSubmissions);
+      document.getElementById('c-subs-sub').textContent = `across all sets`;
+      document.getElementById('c-sets').textContent = d.setsLoaded.length;
+      document.getElementById('c-sets-sub').textContent = d.setsLoaded.join(', ') || 'none';
+      document.getElementById('c-uptime').textContent = d.uptimeFormatted;
+      document.getElementById('c-uptime-sub').textContent = `${Math.floor(d.uptimeSeconds)}s total`;
+      document.getElementById('ov-updated').textContent = 'Updated ' + new Date().toLocaleTimeString();
+      setRefreshStatus();
+
+      // Mini traffic chart on overview
+      const t = await api('/admin/traffic?minutes=60');
+      drawMiniChart(t.buckets);
+
+      // Score distribution if submissions loaded
+      if (subsData.length > 0) drawScoreDistChart();
+    } catch (e) { console.error('overview error', e); }
+  }
+
+  // ── Traffic ───────────────────────────────────────────────────────────────
+  async function loadTraffic() {
+    try {
+      const mins = document.getElementById('traffic-window').value;
+      const d = await api(`/admin/traffic?minutes=${mins}`);
+      drawTrafficChart(d.buckets);
+      const total = d.buckets.reduce((s, b) => s + b.count, 0);
+      const peak = Math.max(...d.buckets.map(b => b.count), 0);
+      const errors = d.buckets.reduce((s, b) => s + b.errors, 0);
+      document.getElementById('tr-total').textContent = fmt(total);
+      document.getElementById('tr-peak').textContent = fmt(peak);
+      document.getElementById('tr-errors').textContent = fmt(errors);
+      setRefreshStatus();
+    } catch (e) { console.error('traffic error', e); }
+  }
+
+  function drawTrafficChart(buckets) {
+    const data = new google.visualization.DataTable();
+    data.addColumn('string', 'Time');
+    data.addColumn('number', 'Requests');
+    data.addColumn('number', 'Errors');
+    data.addRows(buckets.map(b => [b.label, b.count, b.errors]));
+
+    const opts = chartOpts(260);
+    opts.series = { 0: { color: '#3b82f6' }, 1: { color: '#ef4444', lineDashStyle: [4, 2] } };
+    opts.legend = { position: 'top', textStyle: { color: '#7a8399', fontSize: 11 } };
+
+    if (!trafficChart) {
+      trafficChart = new google.visualization.LineChart(document.getElementById('traffic-chart'));
+    }
+    trafficChart.draw(data, opts);
+  }
+
+  function drawMiniChart(buckets) {
+    const data = new google.visualization.DataTable();
+    data.addColumn('string', 'Time');
+    data.addColumn('number', 'Requests');
+    data.addRows(buckets.map(b => [b.label, b.count]));
+
+    const opts = chartOpts(180);
+    opts.series = { 0: { color: '#3b82f6', areaOpacity: 0.12 } };
+    opts.chartArea = { left: 40, top: 10, right: 10, bottom: 30, width: '100%', height: '100%' };
+    opts.legend = { position: 'none' };
+
+    const chart = new google.visualization.AreaChart(document.getElementById('mini-traffic-chart'));
+    chart.draw(data, opts);
+  }
+
+  function chartOpts(height) {
+    return {
+      backgroundColor: 'transparent',
+      hAxis: { textStyle: { color: '#7a8399', fontSize: 10 }, gridlines: { color: 'transparent' } },
+      vAxis: { textStyle: { color: '#7a8399', fontSize: 10 }, gridlines: { color: '#252a38' }, minValue: 0 },
+      chartArea: { left: 40, top: 10, right: 10, bottom: 40, width: '100%', height: '100%' },
+      curveType: 'function',
+      pointSize: 0,
+      lineWidth: 2,
+      tooltip: { textStyle: { color: '#e2e6f0' }, showColorCode: true },
+    };
+  }
+
+  // ── Score dist ────────────────────────────────────────────────────────────
+  function drawScoreDistChart() {
+    const scores = subsData.map(s => s.score);
+    const buckets = { '0-40': 0, '40-60': 0, '60-80': 0, '80-100': 0, '100-120': 0, '120+': 0 };
+    scores.forEach(sc => {
+      if (sc < 40) buckets['0-40']++;
+      else if (sc < 60) buckets['40-60']++;
+      else if (sc < 80) buckets['60-80']++;
+      else if (sc < 100) buckets['80-100']++;
+      else if (sc < 120) buckets['100-120']++;
+      else buckets['120+']++;
+    });
+
+    const data = new google.visualization.DataTable();
+    data.addColumn('string', 'Score Range');
+    data.addColumn('number', 'Count');
+    Object.entries(buckets).forEach(([k, v]) => data.addRow([k, v]));
+
+    const chart = new google.visualization.ColumnChart(document.getElementById('score-dist-chart'));
+    chart.draw(data, {
+      backgroundColor: 'transparent',
+      colors: ['#3b82f6'],
+      hAxis: { textStyle: { color: '#7a8399', fontSize: 11 }, gridlines: { color: 'transparent' } },
+      vAxis: { textStyle: { color: '#7a8399', fontSize: 11 }, gridlines: { color: '#252a38' }, minValue: 0 },
+      chartArea: { left: 40, top: 10, right: 10, bottom: 40 },
+      legend: { position: 'none' },
+    });
+  }
+
+  // ── Health ────────────────────────────────────────────────────────────────
+  async function loadHealth() {
+    try {
+      const d = await api('/admin/health');
+
+      // RAM
+      setBar('ram-bar', d.ram.percentUsed);
+      document.getElementById('ram-pct').textContent = d.ram.percentUsed + '%';
+      document.getElementById('ram-total').textContent = fmtMb(d.ram.totalMb);
+      document.getElementById('ram-used').textContent = fmtMb(d.ram.usedMb);
+      document.getElementById('ram-avail').textContent = fmtMb(d.ram.availableMb);
+      document.getElementById('ram-proc').textContent = fmtMb(d.process.memoryMb);
+
+      // CPU
+      setBar('cpu-bar', d.cpu.percentUsed);
+      document.getElementById('cpu-pct').textContent = d.cpu.percentUsed + '%';
+      document.getElementById('cpu-cores').textContent = d.cpu.coreCount ?? '—';
+      document.getElementById('cpu-threads').textContent = d.cpu.threadCount ?? '—';
+      document.getElementById('load-1').textContent = d.cpu.loadAvg['1m'] ?? 'N/A';
+      document.getElementById('load-5').textContent = d.cpu.loadAvg['5m'] ?? 'N/A';
+
+      // Disk
+      setBar('disk-bar', d.disk.percentUsed);
+      document.getElementById('disk-pct').textContent = d.disk.percentUsed + '%';
+      document.getElementById('disk-total').textContent = d.disk.totalGb + ' GB';
+      document.getElementById('disk-used').textContent = d.disk.usedGb + ' GB';
+      document.getElementById('disk-free').textContent = d.disk.freeGb + ' GB';
+      document.getElementById('proc-pid').textContent = d.process.pid;
+
+      // Network
+      if (d.network) {
+        document.getElementById('net-sent').textContent = fmtBytes(d.network.bytesSent);
+        document.getElementById('net-recv').textContent = fmtBytes(d.network.bytesRecv);
+        document.getElementById('net-psent').textContent = fmt(d.network.packetsSent);
+        document.getElementById('net-precv').textContent = fmt(d.network.packetsRecv);
+      }
+
+      document.getElementById('health-time').textContent = d.serverTime;
+      setRefreshStatus();
+    } catch (e) { console.error('health error', e); }
+  }
+
+  function setBar(id, pct) {
+    const el = document.getElementById(id);
+    el.style.width = pct + '%';
+    el.className = 'health-bar ' + (pct > 85 ? 'crit' : pct > 65 ? 'warn' : 'ok');
+  }
+
+  // ── Submissions ───────────────────────────────────────────────────────────
+  async function loadSubmissions() {
+    try {
+      // Load all at once (up to 500)
+      const d = await api('/admin/submissions?per_page=500');
+      subsData = d.submissions;
+      filteredSubs = [...subsData];
+      document.getElementById('subs-count-label').textContent = `${d.total} total`;
+      renderSubsTable();
+      if (subsData.length > 0) drawScoreDistChart();
+    } catch (e) { console.error('subs error', e); }
+  }
+
+  function filterSubs() {
+    const q = document.getElementById('sub-search').value.toLowerCase();
+    filteredSubs = q
+      ? subsData.filter(s => s.studentId.toLowerCase().includes(q))
+      : [...subsData];
+    subsPage = 1;
+    renderSubsTable();
+  }
+
+  let _sortDir = { studentId: 1, score: -1, answered: -1, ts: -1 };
+  function sortSubs(key) {
+    _sortDir[key] = -_sortDir[key];
+    filteredSubs.sort((a, b) => _sortDir[key] * (a[key] > b[key] ? 1 : a[key] < b[key] ? -1 : 0));
+    document.querySelectorAll('thead th').forEach(th => th.classList.remove('sorted'));
+    renderSubsTable();
+  }
+
+  function changePage(d) { subsPage = Math.max(1, subsPage + d); renderSubsTable(); }
+
+  function renderSubsTable() {
+    const tbody = document.getElementById('subs-body');
+    const start = (subsPage - 1) * PER_PAGE;
+    const slice = filteredSubs.slice(start, start + PER_PAGE);
+    const totalPages = Math.max(1, Math.ceil(filteredSubs.length / PER_PAGE));
+
+    if (slice.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="4" class="empty">No submissions yet.</td></tr>';
+    } else {
+      tbody.innerHTML = slice.map(s => {
+        const sc = s.score;
+        const cls = sc >= 100 ? 'score-hi' : sc >= 60 ? 'score-mid' : 'score-lo';
+        return `<tr>
+          <td class="mono">${esc(s.studentId)}</td>
+          <td class="score ${cls}">${sc}</td>
+          <td class="mono">${s.answered}</td>
+          <td style="color:var(--muted);font-size:12px;">${s.time || '—'}</td>
+        </tr>`;
+      }).join('');
+    }
+
+    document.getElementById('prev-page').disabled = subsPage <= 1;
+    document.getElementById('next-page').disabled = subsPage >= totalPages;
+    document.getElementById('page-info').textContent =
+      `${start + 1}–${Math.min(start + PER_PAGE, filteredSubs.length)} of ${filteredSubs.length}`;
+  }
+
+  // ── Utilities ─────────────────────────────────────────────────────────────
+  function fmt(n) { return n == null ? '—' : Number(n).toLocaleString(); }
+  function fmtMb(mb) { return mb >= 1024 ? (mb / 1024).toFixed(1) + ' GB' : mb + ' MB'; }
+  function fmtBytes(b) {
+    if (b == null) return '—';
+    if (b > 1e9) return (b / 1e9).toFixed(1) + ' GB';
+    if (b > 1e6) return (b / 1e6).toFixed(1) + ' MB';
+    if (b > 1e3) return (b / 1e3).toFixed(1) + ' KB';
+    return b + ' B';
+  }
+  function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+
+  // ── Auto-login if token in session ────────────────────────────────────────
+  if (TOKEN) {
+    document.getElementById('token-input').value = TOKEN;
+    showDashboard();
+  }
+</script>
+</body>
+</html>

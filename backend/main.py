@@ -5,23 +5,24 @@ Architecture overview
 ─────────────────────
   ┌─────────────────────────────────────────────────────────┐
   │  Nginx / Caddy (optional reverse proxy, TLS termination) │
-  └───────────────────────────┬─────────────────────────────┘
+  └───────────────────────────┬───────────────────────────────┘
                               │ HTTP/1.1 or HTTP/2
-  ┌───────────────────────────▼─────────────────────────────┐
+  ┌───────────────────────────▼───────────────────────────────┐
   │  Gunicorn (process manager)                              │
   │    Worker 1  ─┐                                          │
   │    Worker 2  ─┤  each is a Uvicorn ASGI worker           │
   │    Worker N  ─┘  using uvloop (epoll on Linux)           │
-  └───────────────────────────┬─────────────────────────────┘
+  └───────────────────────────┬───────────────────────────────┘
                               │
-  ┌───────────────────────────▼─────────────────────────────┐
+  ┌───────────────────────────▼───────────────────────────────┐
   │  FastAPI app (this file)                                 │
   │    Middleware: CORS, SlowAPI rate limiter                 │
-  │    Routers:   /getQuestions  /getAnswers                 │
-  │               /submitAnswers /examInfo                   │
-  │               /health        /                           │
-  │    Cache:     questions & answers loaded once at startup  │
-  └─────────────────────────────────────────────────────────┘
+  │    Routers:   /getQuestions  /getAnswers                  │
+  │               /submitAnswers /examInfo                    │
+  │               /health        /                            │
+  │    Cache:     ALL sets_*.json / answers_*.json loaded once │
+  │               at startup and served from RAM              │
+  └───────────────────────────────────────────────────────────┘
 
 Memory profile (2.3 GB budget, 5K typical / 20K peak users)
 ────────────────────────────────────────────────────────────
@@ -49,6 +50,7 @@ import config
 from middleware.rate_limit import limiter
 from routers import exam as exam_router
 from routers import health as health_router
+from routers import admin as admin_router
 
 # ── Logging ───────────────────────────────────────────────────────────────────
 logging.basicConfig(
@@ -64,22 +66,28 @@ logger = logging.getLogger(__name__)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Load data into memory at startup; flush submissions at shutdown."""
+    """Load ALL sets_*/answers_* data pairs into memory at startup; flush submissions at shutdown."""
     logger.info("[STARTUP] FSU Exam API starting up ...")
-    logger.info("   Questions file : %s", config.QUESTIONS_FILE)
-    logger.info("   Answers file   : %s", config.ANSWERS_FILE)
+    logger.info("   Data directory : %s", config.DATA_DIR)
     logger.info("   Rate limit     : %s", config.RATE_LIMIT)
     logger.info("   CORS origins   : %s", config.CORS_ORIGINS)
 
-    # Load data into memory — this is the key performance decision.
-    # After this, every request is served from RAM, not disk.
-    cache.load_questions(config.QUESTIONS_FILE)
-    cache.load_answers(config.ANSWERS_FILE)
+    loaded_suffixes = cache.load_all_sets(config.DATA_DIR)
 
-    if not cache.is_questions_loaded():
-        logger.warning("[WARN] Questions could not be loaded -- /getQuestions will return 503")
+    if config.QUESTIONS_FILE:
+        logger.info("   [legacy] QUESTIONS_FILE override: %s", config.QUESTIONS_FILE)
+        cache.load_questions(config.QUESTIONS_FILE)
+    if config.ANSWERS_FILE:
+        logger.info("   [legacy] ANSWERS_FILE override  : %s", config.ANSWERS_FILE)
+        cache.load_answers(config.ANSWERS_FILE)
+
+    if loaded_suffixes:
+        logger.info("[STARTUP] Loaded %d set(s): %s", len(loaded_suffixes), loaded_suffixes)
+    else:
+        logger.warning("[WARN] No question sets loaded — /getQuestions will return 503")
+
     if not cache.is_answers_loaded():
-        logger.warning("[WARN] Answers could not be loaded -- /getAnswers will return 503")
+        logger.warning("[WARN] No answer sets loaded — /getAnswers will return 503")
 
     logger.info("[STARTUP] Complete. Listening on %s:%d", config.HOST, config.PORT)
     yield  # ← application runs here
@@ -108,6 +116,15 @@ def create_app() -> FastAPI:
         redoc_url="/redoc",
     )
 
+    # ── Traffic telemetry middleware ────────────────────────────────────────
+    @app.middleware("http")
+    async def _track_traffic(request: Request, call_next):
+        response = await call_next(request)
+        # Skip tracking for admin pings to avoid noise
+        path = request.url.path
+        cache.record_traffic(path, request.method, response.status_code)
+        return response
+
     # ── Rate limiter ──────────────────────────────────────────────────────────
     app.state.limiter = limiter
     app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
@@ -126,6 +143,7 @@ def create_app() -> FastAPI:
     # ── Routers ───────────────────────────────────────────────────────────────
     app.include_router(exam_router.router)
     app.include_router(health_router.router)
+    app.include_router(admin_router.router)
 
     # ── Global error handler ──────────────────────────────────────────────────
     @app.exception_handler(Exception)

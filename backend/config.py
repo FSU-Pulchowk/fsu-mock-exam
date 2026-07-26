@@ -50,7 +50,15 @@ def _default_workers() -> int:
 
 WORKERS: int = int(os.getenv("WORKERS", str(_default_workers())))
 
-# ── Data files ────────────────────────────────────────────────────────────────
 BASE_DIR = Path(__file__).parent
-QUESTIONS_FILE: Path = BASE_DIR / os.getenv("QUESTIONS_FILE", "data/set_i.json")
-ANSWERS_FILE: Path = BASE_DIR / os.getenv("ANSWERS_FILE", "data/answers_i.json")
+
+DATA_DIR: Path = BASE_DIR / os.getenv("DATA_DIR", "data")
+
+QUESTIONS_FILE: Path | None = (
+    BASE_DIR / os.getenv("QUESTIONS_FILE") if os.getenv("QUESTIONS_FILE") else None
+)
+ANSWERS_FILE: Path | None = (
+    BASE_DIR / os.getenv("ANSWERS_FILE") if os.getenv("ANSWERS_FILE") else None
+)
+
+ADMIN_TOKEN: str = os.getenv("ADMIN_TOKEN", "changeme")
