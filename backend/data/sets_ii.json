@@ -1,0 +1,1549 @@
+{
+  "id": "25",
+  "title": "IOE Practice Set 25 (Model Set II)",
+  "total": 100,
+  "fullMarks": 140,
+  "counts": {
+    "Mathematics": 35,
+    "Physics": 27,
+    "Chemistry": 22,
+    "English": 16
+  },
+  "subjects": [
+    "Mathematics",
+    "Physics",
+    "Chemistry",
+    "English"
+  ],
+  "durationSec": 7200,
+  "negativePerWrong": 0.1,
+  "sections": {
+    "A": {
+      "marksPerQuestion": 1,
+      "questions": 60,
+      "marks": 60,
+      "subjectCounts": {
+        "Mathematics": 20,
+        "Physics": 14,
+        "Chemistry": 14,
+        "English": 12
+      }
+    },
+    "B": {
+      "marksPerQuestion": 2,
+      "questions": 40,
+      "marks": 80,
+      "subjectCounts": {
+        "Mathematics": 15,
+        "Physics": 13,
+        "Chemistry": 8,
+        "English": 4
+      }
+    }
+  },
+  "questions": [
+    {
+      "no": 1,
+      "section": "A",
+      "marks": 1,
+      "subject": "Mathematics",
+      "chapter": "Set, Logic & Functions",
+      "topic": "Functions",
+      "text": "The domain of the real valued function f(x) = 1/√(x² − 4) is:",
+      "options": [
+        "[−2, 2]",
+        "(−2, 2)",
+        "(−∞, −2) ∪ (2, ∞)",
+        "all real numbers except 2 and −2"
+      ]
+    },
+    {
+      "no": 2,
+      "section": "A",
+      "marks": 1,
+      "subject": "Mathematics",
+      "chapter": "Algebra",
+      "topic": "Algebra & Indices",
+      "text": "If log √(2x) = 6, then the value of x is:",
+      "options": [
+        "e⁶",
+        "e¹²",
+        "e⁶/2",
+        "e¹²/2"
+      ]
+    },
+    {
+      "no": 3,
+      "section": "A",
+      "marks": 1,
+      "subject": "Mathematics",
+      "chapter": "Algebra",
+      "topic": "Complex Numbers",
+      "text": "(a + ib)/(2 + 4i) = 2 + 4i, then a, b is:",
+      "options": [
+        "12, 16",
+        "12, −16",
+        "−12, 16",
+        "−12, −16"
+      ]
+    },
+    {
+      "no": 4,
+      "section": "A",
+      "marks": 1,
+      "subject": "Mathematics",
+      "chapter": "Algebra",
+      "topic": "Matrices & Determinants",
+      "text": "In a 3×3 matrix the element in the ith row and jth column is given by i² − j². The matrix is:",
+      "options": [
+        "skew matrix",
+        "unit matrix",
+        "skew symmetric matrix",
+        "symmetric matrix"
+      ]
+    },
+    {
+      "no": 5,
+      "section": "A",
+      "marks": 1,
+      "subject": "Mathematics",
+      "chapter": "Algebra",
+      "topic": "Sequences & Series",
+      "text": "If 5, x, y, z and 405 are in geometric progression, then z is:",
+      "options": [
+        "45",
+        "135",
+        "27",
+        "81"
+      ]
+    },
+    {
+      "no": 6,
+      "section": "A",
+      "marks": 1,
+      "subject": "Mathematics",
+      "chapter": "Trigonometry",
+      "topic": "Trigonometry",
+      "text": "If sin θ − cos θ = 0 and 0 < θ < π/2, then θ is equal to:",
+      "options": [
+        "π/2",
+        "π/6",
+        "0",
+        "π/4"
+      ]
+    },
+    {
+      "no": 7,
+      "section": "A",
+      "marks": 1,
+      "subject": "Mathematics",
+      "chapter": "Trigonometry",
+      "topic": "Trigonometry",
+      "text": "In a triangle ABC, find the value of (cos A)/a + (cos B)/b + (cos C)/c.",
+      "options": [
+        "(a² + b² + c²)/(abc)",
+        "(a + b + c)/(2abc)",
+        "1/(2R)",
+        "(a² + b² + c²)/(2abc)"
+      ]
+    },
+    {
+      "no": 8,
+      "section": "A",
+      "marks": 1,
+      "subject": "Mathematics",
+      "chapter": "Trigonometry",
+      "topic": "Inverse Trigonometry",
+      "text": "If θ = sin⁻¹x + cos⁻¹x − tan⁻¹x for x ≥ 0, then θ must satisfy:",
+      "options": [
+        "0 < θ < π",
+        "0 < θ ≤ π/2",
+        "0 ≤ θ ≤ π/2",
+        "−π/4 < θ < π/4"
+      ]
+    },
+    {
+      "no": 9,
+      "section": "A",
+      "marks": 1,
+      "subject": "Mathematics",
+      "chapter": "Calculus",
+      "topic": "Limits & Continuity",
+      "text": "For the function f(x) = xⁿ, the value of f''(1) is:",
+      "options": [
+        "C(n, 1)",
+        "2·C(n, 1)",
+        "2·C(n, 2)",
+        "C(n, 0)"
+      ]
+    },
+    {
+      "no": 10,
+      "section": "A",
+      "marks": 1,
+      "subject": "Mathematics",
+      "chapter": "Calculus",
+      "topic": "Limits & Continuity",
+      "text": "If the limit of (xⁿ − 4ⁿ)/(x − 4) as x approaches 4 is 256, then n is:",
+      "options": [
+        "4",
+        "1",
+        "2",
+        "3"
+      ]
+    },
+    {
+      "no": 11,
+      "section": "A",
+      "marks": 1,
+      "subject": "Mathematics",
+      "chapter": "Calculus",
+      "topic": "Differentiation",
+      "text": "If y = eˣ + e⁻ˣ, then dy/dx =",
+      "options": [
+        "√(y² − 4)",
+        "√(y − 4)",
+        "√(y² + 4)",
+        "√(y + 4)"
+      ]
+    },
+    {
+      "no": 12,
+      "section": "A",
+      "marks": 1,
+      "subject": "Mathematics",
+      "chapter": "Calculus",
+      "topic": "Applications of Derivatives",
+      "text": "A cube expands so that its volume increases at 24 cm³/min. The rate of increase of its surface area when the surface area is 48 cm² is:",
+      "options": [
+        "32 cm²/min",
+        "24√2 cm²/min",
+        "12 cm²/min",
+        "48 cm²/min"
+      ]
+    },
+    {
+      "no": 13,
+      "section": "A",
+      "marks": 1,
+      "subject": "Mathematics",
+      "chapter": "Calculus",
+      "topic": "Integration",
+      "text": "The indefinite integral of xˣ(1 + log x) with respect to x is:",
+      "options": [
+        "xˣ + c",
+        "xˣ log x + c",
+        "x log x + c",
+        "x² log x + c"
+      ]
+    },
+    {
+      "no": 14,
+      "section": "A",
+      "marks": 1,
+      "subject": "Mathematics",
+      "chapter": "Calculus",
+      "topic": "Differential Equations",
+      "text": "The order and the degree of the differential equation (d²y/dx²)² + (dy/dx)³ = x sin(dy/dx) are respectively:",
+      "options": [
+        "2 and 2",
+        "2 and 3",
+        "2 and not defined",
+        "3 and 2"
+      ]
+    },
+    {
+      "no": 15,
+      "section": "A",
+      "marks": 1,
+      "subject": "Mathematics",
+      "chapter": "Coordinate Geometry",
+      "topic": "Coordinate Geometry (2D)",
+      "text": "If the sum of the slopes of the lines x² − kxy + y² = 0 is twice the product of the slopes, then k is:",
+      "options": [
+        "1",
+        "2",
+        "1/2",
+        "4"
+      ]
+    },
+    {
+      "no": 16,
+      "section": "A",
+      "marks": 1,
+      "subject": "Mathematics",
+      "chapter": "Coordinate Geometry",
+      "topic": "Conic Sections",
+      "text": "The eccentricity of the ellipse 9x² + 25y² = 225 is:",
+      "options": [
+        "3/5",
+        "5/4",
+        "4/5",
+        "16/25"
+      ]
+    },
+    {
+      "no": 17,
+      "section": "A",
+      "marks": 1,
+      "subject": "Mathematics",
+      "chapter": "Coordinate Geometry",
+      "topic": "Conic Sections",
+      "text": "If the line 2x + y + k = 0 is normal to the parabola y² = −8x, find the value of k.",
+      "options": [
+        "−24",
+        "12",
+        "24",
+        "16"
+      ]
+    },
+    {
+      "no": 18,
+      "section": "A",
+      "marks": 1,
+      "subject": "Mathematics",
+      "chapter": "Coordinate Geometry",
+      "topic": "3D Geometry",
+      "text": "Find the equation of the plane passing through the points (1, 1, 1) and (2, 1, 2) and parallel to the y-axis.",
+      "options": [
+        "x − z = 0",
+        "x + z = 0",
+        "x − y = 0",
+        "x − z = m"
+      ]
+    },
+    {
+      "no": 19,
+      "section": "A",
+      "marks": 1,
+      "subject": "Mathematics",
+      "chapter": "Statistics & Probability",
+      "topic": "Probability",
+      "text": "For two events A and B, P(A) = 0.6 and P(B) = 0.5. Then A and B cannot be:",
+      "options": [
+        "equally likely",
+        "exhaustive",
+        "independent",
+        "mutually exclusive"
+      ]
+    },
+    {
+      "no": 20,
+      "section": "A",
+      "marks": 1,
+      "subject": "Mathematics",
+      "chapter": "Vectors",
+      "topic": "Vectors",
+      "text": "For any two non-zero vectors a and b, the value of |a × b|² + (a · b)² is:",
+      "options": [
+        "2|a| |b|",
+        "|a|² + |b|²",
+        "0",
+        "|a|² |b|²"
+      ]
+    },
+    {
+      "no": 21,
+      "section": "A",
+      "marks": 1,
+      "subject": "Physics",
+      "chapter": "Mechanics",
+      "topic": "Units, Measurement & Vectors",
+      "text": "Which of the following pairs of physical quantities has the same dimensional formula?",
+      "options": [
+        "Pressure and force",
+        "Impulse and energy",
+        "Work and torque",
+        "Force and momentum"
+      ]
+    },
+    {
+      "no": 22,
+      "section": "A",
+      "marks": 1,
+      "subject": "Physics",
+      "chapter": "Mechanics",
+      "topic": "Mechanics — Kinematics & Dynamics",
+      "text": "A projectile is thrown at 45° to the horizontal. At the highest point of its path:",
+      "options": [
+        "PE = KE",
+        "PE > KE",
+        "KE > PE",
+        "none"
+      ]
+    },
+    {
+      "no": 23,
+      "section": "A",
+      "marks": 1,
+      "subject": "Physics",
+      "chapter": "Mechanics",
+      "topic": "Friction",
+      "text": "The coefficient of friction between two surfaces depends mainly on:",
+      "options": [
+        "the area of contact",
+        "the mass of the body",
+        "the nature of the two surfaces in contact",
+        "the normal reaction"
+      ]
+    },
+    {
+      "no": 24,
+      "section": "A",
+      "marks": 1,
+      "subject": "Physics",
+      "chapter": "Mechanics",
+      "topic": "Circular & Rotational Motion",
+      "text": "The moment of inertia of a uniform rod of mass M and length L about an axis through one end and perpendicular to its length is:",
+      "options": [
+        "ML²/12",
+        "ML²/2",
+        "ML²/3",
+        "ML²"
+      ]
+    },
+    {
+      "no": 25,
+      "section": "A",
+      "marks": 1,
+      "subject": "Physics",
+      "chapter": "Mechanics",
+      "topic": "Work, Energy & Power",
+      "text": "A particle is carried once around a closed path in a conservative force field. The work done by the field is:",
+      "options": [
+        "always negative",
+        "equal to the kinetic energy of the particle",
+        "zero",
+        "always positive"
+      ]
+    },
+    {
+      "no": 26,
+      "section": "A",
+      "marks": 1,
+      "subject": "Physics",
+      "chapter": "Waves & Sound",
+      "topic": "Sound",
+      "text": "The same note played on a violin and on a flute, with the same pitch and the same loudness, can still be distinguished because the two notes differ in:",
+      "options": [
+        "frequency",
+        "amplitude",
+        "wavelength",
+        "quality"
+      ]
+    },
+    {
+      "no": 27,
+      "section": "A",
+      "marks": 1,
+      "subject": "Physics",
+      "chapter": "Waves & Sound",
+      "topic": "SHM & Waves",
+      "text": "In simple harmonic motion the phase difference between the acceleration and the displacement of the particle is:",
+      "options": [
+        "π/2",
+        "zero",
+        "π/4",
+        "π"
+      ]
+    },
+    {
+      "no": 28,
+      "section": "A",
+      "marks": 1,
+      "subject": "Physics",
+      "chapter": "Heat & Thermodynamics",
+      "topic": "Heat & Thermodynamics",
+      "text": "When 4 kg of water at 0 °C is mixed with 20 kg of water at 10 °C, the final temperature of the mixture is:",
+      "options": [
+        "5°C",
+        "8.33°C",
+        "7.5°C",
+        "9.17°C"
+      ]
+    },
+    {
+      "no": 29,
+      "section": "A",
+      "marks": 1,
+      "subject": "Physics",
+      "chapter": "Optics",
+      "topic": "Geometric Optics",
+      "text": "In a compound microscope the focal length of the objective is 2.5 cm and that of the eyepiece is 3 cm. An object is placed 5 cm in front of the objective and the final image is formed at infinity. The magnifying power is:",
+      "options": [
+        "25",
+        "16.7",
+        "33.3",
+        "8.3"
+      ]
+    },
+    {
+      "no": 30,
+      "section": "A",
+      "marks": 1,
+      "subject": "Physics",
+      "chapter": "Optics",
+      "topic": "Physical Optics",
+      "text": "An astronaut in a spacecraft outside the earth's atmosphere sees the sky as:",
+      "options": [
+        "black",
+        "white",
+        "red",
+        "blue"
+      ]
+    },
+    {
+      "no": 31,
+      "section": "A",
+      "marks": 1,
+      "subject": "Physics",
+      "chapter": "Electricity & Magnetism",
+      "topic": "Current Electricity",
+      "text": "The SI unit of the capacitive time constant of a circuit is the:",
+      "options": [
+        "hertz",
+        "second",
+        "farad",
+        "ohm"
+      ]
+    },
+    {
+      "no": 32,
+      "section": "A",
+      "marks": 1,
+      "subject": "Physics",
+      "chapter": "Electricity & Magnetism",
+      "topic": "AC & Electronics",
+      "text": "An alternating supply of 200 V is applied across a resistor of 20 Ω. The r.m.s. current is:",
+      "options": [
+        "10 A",
+        "10√3 A",
+        "10/√3 A",
+        "10√2 A"
+      ]
+    },
+    {
+      "no": 33,
+      "section": "A",
+      "marks": 1,
+      "subject": "Physics",
+      "chapter": "Modern Physics",
+      "topic": "Modern Physics (Photoelectric, Atomic, Nuclear)",
+      "text": "The wave nature of the electron is established directly by:",
+      "options": [
+        "black-body radiation",
+        "the photoelectric effect",
+        "the emission of X-rays",
+        "the diffraction of electrons by a crystal"
+      ]
+    },
+    {
+      "no": 34,
+      "section": "A",
+      "marks": 1,
+      "subject": "Physics",
+      "chapter": "Modern Physics",
+      "topic": "Modern Physics (Photoelectric, Atomic, Nuclear)",
+      "text": "When a nucleus emits a beta-minus particle, its:",
+      "options": [
+        "mass number remains unchanged and atomic number increases by one",
+        "mass number remains unchanged and atomic number decreases by one",
+        "mass number decreases by four",
+        "mass number increases by one"
+      ]
+    },
+    {
+      "no": 35,
+      "section": "A",
+      "marks": 1,
+      "subject": "Chemistry",
+      "chapter": "Physical Chemistry",
+      "topic": "Mole Concept & Stoichiometry",
+      "text": "The fraction of chloride precipitated by AgNO₃ solution from [Co(NH₃)₅Cl]Cl₂ is:",
+      "options": [
+        "1/2",
+        "2/3",
+        "1/3",
+        "2/7"
+      ]
+    },
+    {
+      "no": 36,
+      "section": "A",
+      "marks": 1,
+      "subject": "Chemistry",
+      "chapter": "Physical Chemistry",
+      "topic": "Atomic Structure",
+      "text": "Which of the following sets of quantum numbers is NOT permissible?",
+      "options": [
+        "n = 2, l = 1, m = 0",
+        "n = 3, l = 3, m = 0",
+        "n = 3, l = 2, m = −2",
+        "n = 4, l = 0, m = 0"
+      ]
+    },
+    {
+      "no": 37,
+      "section": "A",
+      "marks": 1,
+      "subject": "Chemistry",
+      "chapter": "Physical Chemistry",
+      "topic": "Atomic Structure",
+      "text": "4.5 g of aluminium is deposited at the cathode from a solution of Al³⁺ ions by a certain quantity of charge. The volume of hydrogen liberated at STP by the same quantity of charge is:",
+      "options": [
+        "44.8 L",
+        "5.6 L",
+        "11.2 L",
+        "22.4 L"
+      ]
+    },
+    {
+      "no": 38,
+      "section": "A",
+      "marks": 1,
+      "subject": "Chemistry",
+      "chapter": "Physical Chemistry",
+      "topic": "Chemical Bonding",
+      "text": "In which of the following pairs do both the compounds have the same bond angle?",
+      "options": [
+        "ethane, ethylene",
+        "ethylene, acetylene",
+        "ethylene, benzene",
+        "acetylene, benzene"
+      ]
+    },
+    {
+      "no": 39,
+      "section": "A",
+      "marks": 1,
+      "subject": "Chemistry",
+      "chapter": "Physical Chemistry",
+      "topic": "States of Matter & Physical Properties",
+      "text": "Under identical conditions of temperature and pressure, the ratio of the rate of diffusion of hydrogen to that of oxygen is:",
+      "options": [
+        "4 : 1",
+        "1 : 4",
+        "16 : 1",
+        "1 : 16"
+      ]
+    },
+    {
+      "no": 40,
+      "section": "A",
+      "marks": 1,
+      "subject": "Chemistry",
+      "chapter": "Inorganic Chemistry",
+      "topic": "Metallurgy & Extraction",
+      "text": "The chief ore from which copper is extracted is:",
+      "options": [
+        "Malachite",
+        "Azurite",
+        "Cuprite",
+        "Chalcopyrite"
+      ]
+    },
+    {
+      "no": 41,
+      "section": "A",
+      "marks": 1,
+      "subject": "Chemistry",
+      "chapter": "Inorganic Chemistry",
+      "topic": "Periodic Table & Periodicity",
+      "text": "The electron affinity of fluorine is lower than that of chlorine because:",
+      "options": [
+        "the small size of fluorine causes greater inter-electronic repulsion",
+        "fluorine is less electronegative than chlorine",
+        "fluorine has a larger atomic radius than chlorine",
+        "chlorine has a higher effective nuclear charge"
+      ]
+    },
+    {
+      "no": 42,
+      "section": "A",
+      "marks": 1,
+      "subject": "Chemistry",
+      "chapter": "Inorganic Chemistry",
+      "topic": "d-block, f-block & Coordination Compounds",
+      "text": "Transition elements exhibit variable oxidation states mainly because:",
+      "options": [
+        "they form coloured compounds",
+        "they have large atomic radii",
+        "the (n − 1)d and ns orbitals have nearly equal energies",
+        "they are all paramagnetic"
+      ]
+    },
+    {
+      "no": 43,
+      "section": "A",
+      "marks": 1,
+      "subject": "Chemistry",
+      "chapter": "Inorganic Chemistry",
+      "topic": "p-block Elements & Redox",
+      "text": "Zn reacts with hot and conc. HNO₃ to give:",
+      "options": [
+        "NO₂",
+        "NH₄NO₃",
+        "NO",
+        "N₂O"
+      ]
+    },
+    {
+      "no": 44,
+      "section": "A",
+      "marks": 1,
+      "subject": "Chemistry",
+      "chapter": "Inorganic Chemistry",
+      "topic": "s-block Elements",
+      "text": "Among the carbonates of the alkaline earth metals, the most thermally stable one is:",
+      "options": [
+        "MgCO₃",
+        "BaCO₃",
+        "CaCO₃",
+        "BeCO₃"
+      ]
+    },
+    {
+      "no": 45,
+      "section": "A",
+      "marks": 1,
+      "subject": "Chemistry",
+      "chapter": "Organic Chemistry",
+      "topic": "Aromatic Compounds & Amines",
+      "text": "Aniline does not undergo the Friedel–Crafts reaction because:",
+      "options": [
+        "the lone pair on nitrogen forms a salt with the Lewis acid, deactivating the ring",
+        "the amino group is meta directing",
+        "no position on the ring is free",
+        "aniline is not aromatic"
+      ]
+    },
+    {
+      "no": 46,
+      "section": "A",
+      "marks": 1,
+      "subject": "Chemistry",
+      "chapter": "Organic Chemistry",
+      "topic": "Hydrocarbons",
+      "text": "The oxidation of an alkyne to a carboxylic acid is carried out in the presence of:",
+      "options": [
+        "H₂O/Zn",
+        "Basic KMnO₄",
+        "Neutral KMnO₄",
+        "Acidified KMnO₄"
+      ]
+    },
+    {
+      "no": 47,
+      "section": "A",
+      "marks": 1,
+      "subject": "Chemistry",
+      "chapter": "Organic Chemistry",
+      "topic": "Organic Basics & Isomerism",
+      "text": "Which of the following pairs are position isomers?",
+      "options": [
+        "1-propanol and 2-propanol",
+        "n-butane and isobutane",
+        "ethanol and dimethyl ether",
+        "propanal and propanone"
+      ]
+    },
+    {
+      "no": 48,
+      "section": "A",
+      "marks": 1,
+      "subject": "Chemistry",
+      "chapter": "Organic Chemistry",
+      "topic": "Organic Basics & Isomerism",
+      "text": "Chain isomers differ from one another in the:",
+      "options": [
+        "length of the carbon chain",
+        "empirical formula",
+        "molecular formula",
+        "molecular weight"
+      ]
+    },
+    {
+      "no": 49,
+      "section": "A",
+      "marks": 1,
+      "subject": "English",
+      "chapter": "Grammar I",
+      "topic": "Grammar — Tenses & Verb Forms",
+      "text": "Choose the correct verb form: By next April she ______ in this office for ten years.",
+      "options": [
+        "will work",
+        "will have worked",
+        "would work",
+        "has worked"
+      ]
+    },
+    {
+      "no": 50,
+      "section": "A",
+      "marks": 1,
+      "subject": "English",
+      "chapter": "Grammar II",
+      "topic": "Grammar — Sentences & Usage",
+      "text": "Choose the option that completes the sentence correctly: Neither the manager nor his assistants ______ available today.",
+      "options": [
+        "is",
+        "are",
+        "was",
+        "has been"
+      ]
+    },
+    {
+      "no": 51,
+      "section": "A",
+      "marks": 1,
+      "subject": "English",
+      "chapter": "Grammar II",
+      "topic": "Grammar — Sentences & Usage",
+      "text": "Which of the following sentences uses the gerund correctly?",
+      "options": [
+        "Smoking is injurious to health.",
+        "A smoking is injurious to health.",
+        "The smoking is injurious to health.",
+        "Smoking are injurious to health."
+      ]
+    },
+    {
+      "no": 52,
+      "section": "A",
+      "marks": 1,
+      "subject": "English",
+      "chapter": "Grammar II",
+      "topic": "Grammar — Sentences & Usage",
+      "text": "Choose the option that completes the sentence correctly: He is one of the best players who ______ ever represented the college.",
+      "options": [
+        "was",
+        "have",
+        "has",
+        "is"
+      ]
+    },
+    {
+      "no": 53,
+      "section": "A",
+      "marks": 1,
+      "subject": "English",
+      "chapter": "Grammar II",
+      "topic": "Grammar — Conditionals & Subjunctives",
+      "text": "Choose the correct form: If he ______ harder, he would have passed the examination.",
+      "options": [
+        "had worked",
+        "would have worked",
+        "has worked",
+        "worked"
+      ]
+    },
+    {
+      "no": 54,
+      "section": "A",
+      "marks": 1,
+      "subject": "English",
+      "chapter": "Grammar II",
+      "topic": "Grammar — Prepositions",
+      "text": "Complete the sentence with the correct preposition: She has been suffering ______ malaria for a week.",
+      "options": [
+        "with",
+        "of",
+        "by",
+        "from"
+      ]
+    },
+    {
+      "no": 55,
+      "section": "A",
+      "marks": 1,
+      "subject": "English",
+      "chapter": "Grammar II",
+      "topic": "Narration (Direct & Indirect Speech)",
+      "text": "Choose the correct indirect speech: He said to me, 'Please close the door.'",
+      "options": [
+        "He told that I close the door.",
+        "He said me to close the door.",
+        "He asked me that I closed the door.",
+        "He requested me to close the door."
+      ]
+    },
+    {
+      "no": 56,
+      "section": "A",
+      "marks": 1,
+      "subject": "English",
+      "chapter": "Grammar II",
+      "topic": "Vocabulary — Synonyms",
+      "text": "Choose the word most nearly similar in meaning to 'PRAGMATIC':",
+      "options": [
+        "Theoretical",
+        "Idealistic",
+        "Practical",
+        "Emotional"
+      ]
+    },
+    {
+      "no": 57,
+      "section": "A",
+      "marks": 1,
+      "subject": "English",
+      "chapter": "Grammar II",
+      "topic": "Vocabulary — Antonyms",
+      "text": "Choose the word most nearly opposite in meaning to 'BENEVOLENT':",
+      "options": [
+        "Generous",
+        "Malevolent",
+        "Compassionate",
+        "Charitable"
+      ]
+    },
+    {
+      "no": 58,
+      "section": "A",
+      "marks": 1,
+      "subject": "English",
+      "chapter": "Grammar II",
+      "topic": "Idioms & Phrases",
+      "text": "The idiom 'to smell a rat' means:",
+      "options": [
+        "to suspect that something is wrong",
+        "to search for something lost",
+        "to feel deeply disgusted",
+        "to spread a false rumour"
+      ]
+    },
+    {
+      "no": 59,
+      "section": "A",
+      "marks": 1,
+      "subject": "English",
+      "chapter": "Phonetics",
+      "topic": "Pronunciation & Word Stress",
+      "text": "Three of the following words have the same vowel sound. Which one is different?",
+      "options": [
+        "Break",
+        "Great",
+        "Bread",
+        "Steak"
+      ]
+    },
+    {
+      "no": 60,
+      "section": "A",
+      "marks": 1,
+      "subject": "English",
+      "chapter": "Phonetics",
+      "topic": "Pronunciation & Word Stress",
+      "text": "In which of the following words does the main stress fall on the second syllable?",
+      "options": [
+        "Open",
+        "Table",
+        "Between",
+        "English"
+      ]
+    },
+    {
+      "no": 61,
+      "section": "B",
+      "marks": 2,
+      "subject": "Mathematics",
+      "chapter": "Algebra",
+      "topic": "Algebra & Indices",
+      "text": "If x = 2 + √3, then the value of x³ + 1/x³ is:",
+      "options": [
+        "14",
+        "76",
+        "36",
+        "52"
+      ]
+    },
+    {
+      "no": 62,
+      "section": "B",
+      "marks": 2,
+      "subject": "Mathematics",
+      "chapter": "Algebra",
+      "topic": "Complex Numbers",
+      "text": "The value of (1 + i)¹⁰ is:",
+      "options": [
+        "32",
+        "−32",
+        "−32i",
+        "32i"
+      ]
+    },
+    {
+      "no": 63,
+      "section": "B",
+      "marks": 2,
+      "subject": "Mathematics",
+      "chapter": "Algebra",
+      "topic": "Matrices & Determinants",
+      "text": "If A is the matrix with first row (2, 3) and second row (1, 4), then the determinant of adj A is:",
+      "options": [
+        "25",
+        "5",
+        "10",
+        "1"
+      ]
+    },
+    {
+      "no": 64,
+      "section": "B",
+      "marks": 2,
+      "subject": "Mathematics",
+      "chapter": "Algebra",
+      "topic": "Permutation, Combination & Binomial",
+      "text": "The third term in the expansion of (x² − 1/x³)ⁿ is independent of x, then n =",
+      "options": [
+        "3",
+        "5",
+        "4",
+        "2"
+      ]
+    },
+    {
+      "no": 65,
+      "section": "B",
+      "marks": 2,
+      "subject": "Mathematics",
+      "chapter": "Algebra",
+      "topic": "Permutation, Combination & Binomial",
+      "text": "In a conference, 105 handshakes were counted without repetition. How many delegates were there?",
+      "options": [
+        "14",
+        "16",
+        "15",
+        "21"
+      ]
+    },
+    {
+      "no": 66,
+      "section": "B",
+      "marks": 2,
+      "subject": "Mathematics",
+      "chapter": "Algebra",
+      "topic": "Sequences & Series",
+      "text": "The sum of the first 20 terms of the series 1 + 3 + 6 + 10 + … , whose nth term is n(n + 1)/2, is:",
+      "options": [
+        "1330",
+        "1240",
+        "1450",
+        "1540"
+      ]
+    },
+    {
+      "no": 67,
+      "section": "B",
+      "marks": 2,
+      "subject": "Mathematics",
+      "chapter": "Trigonometry",
+      "topic": "Trigonometry",
+      "text": "In ΔABC, a(b² + c²)cos A + b(c² + a²)cos B + c(a² + b²)cos C = ?",
+      "options": [
+        "a²b²c²",
+        "abc",
+        "3abc",
+        "2abc"
+      ]
+    },
+    {
+      "no": 68,
+      "section": "B",
+      "marks": 2,
+      "subject": "Mathematics",
+      "chapter": "Calculus",
+      "topic": "Differentiation",
+      "text": "If y = sin⁻¹(2x√(1 − x²)) and |x| < 1/√2, then dy/dx equals:",
+      "options": [
+        "2x/√(1 − x²)",
+        "2/√(1 − x²)",
+        "−2/√(1 − x²)",
+        "1/√(1 − x²)"
+      ]
+    },
+    {
+      "no": 69,
+      "section": "B",
+      "marks": 2,
+      "subject": "Mathematics",
+      "chapter": "Calculus",
+      "topic": "Integration",
+      "text": "The value of the definite integral of sin²x from x = 0 to x = π is:",
+      "options": [
+        "π",
+        "π/4",
+        "π/2",
+        "2π"
+      ]
+    },
+    {
+      "no": 70,
+      "section": "B",
+      "marks": 2,
+      "subject": "Mathematics",
+      "chapter": "Calculus",
+      "topic": "Integration",
+      "text": "The indefinite integral of √(tan⁻¹x)/(1 + x²) with respect to x is:",
+      "options": [
+        "(3/2)(tan⁻¹x)^(3/2) + C",
+        "2√(tan⁻¹x) + C",
+        "(2/3)(tan⁻¹x)^(3/2) + C",
+        "(2/3)(tan⁻¹x)^(1/2) + C"
+      ]
+    },
+    {
+      "no": 71,
+      "section": "B",
+      "marks": 2,
+      "subject": "Mathematics",
+      "chapter": "Calculus",
+      "topic": "Integration",
+      "text": "The value of the definite integral of ln x from x = 1 to x = e is:",
+      "options": [
+        "0",
+        "1",
+        "e",
+        "e − 1"
+      ]
+    },
+    {
+      "no": 72,
+      "section": "B",
+      "marks": 2,
+      "subject": "Mathematics",
+      "chapter": "Calculus",
+      "topic": "Areas & Definite Integrals",
+      "text": "The area bounded by the parabola y = x² and the straight line y = x is:",
+      "options": [
+        "1/3",
+        "1/6",
+        "1/2",
+        "2/3"
+      ]
+    },
+    {
+      "no": 73,
+      "section": "B",
+      "marks": 2,
+      "subject": "Mathematics",
+      "chapter": "Coordinate Geometry",
+      "topic": "Coordinate Geometry (2D)",
+      "text": "The equation of the circle passing through the points (0, 0), (a, 0) and (0, b) is:",
+      "options": [
+        "x² + y² + ax + by = 0",
+        "x² + y² − ax − by = 0",
+        "x² + y² − ax + by = 0",
+        "x² + y² = a² + b²"
+      ]
+    },
+    {
+      "no": 74,
+      "section": "B",
+      "marks": 2,
+      "subject": "Mathematics",
+      "chapter": "Coordinate Geometry",
+      "topic": "3D Geometry",
+      "text": "The distance between the parallel planes 2x − 3y + 6z + 7 = 0 and 2x − 3y + 6z − 7 = 0 is:",
+      "options": [
+        "2",
+        "14",
+        "1",
+        "7"
+      ]
+    },
+    {
+      "no": 75,
+      "section": "B",
+      "marks": 2,
+      "subject": "Mathematics",
+      "chapter": "Statistics & Probability",
+      "topic": "Statistics",
+      "text": "The standard deviation of a set of observations is 5. If every observation is multiplied by 4 and then 3 is subtracted from each, the new variance is:",
+      "options": [
+        "400",
+        "20",
+        "25",
+        "100"
+      ]
+    },
+    {
+      "no": 76,
+      "section": "B",
+      "marks": 2,
+      "subject": "Physics",
+      "chapter": "Mechanics",
+      "topic": "Mechanics — Kinematics & Dynamics",
+      "text": "A ball thrown vertically upward returns to the thrower after 6 s. The maximum height reached by it is:",
+      "options": [
+        "30 m",
+        "45 m",
+        "90 m",
+        "180 m"
+      ]
+    },
+    {
+      "no": 77,
+      "section": "B",
+      "marks": 2,
+      "subject": "Physics",
+      "chapter": "Mechanics",
+      "topic": "Mechanics — Kinematics & Dynamics",
+      "text": "A block of mass 5 kg is pulled along a rough horizontal surface by a horizontal force of 30 N. If the coefficient of kinetic friction is 0.2 and g = 10 m/s², the acceleration of the block is:",
+      "options": [
+        "6 m/s²",
+        "2 m/s²",
+        "4 m/s²",
+        "5 m/s²"
+      ]
+    },
+    {
+      "no": 78,
+      "section": "B",
+      "marks": 2,
+      "subject": "Physics",
+      "chapter": "Mechanics",
+      "topic": "Elasticity & Fluids",
+      "text": "A wire of length L and radius r stretches by e under a load F. Another wire of the same material, of length 2L and radius 2r, is stretched by the same load. Its extension is:",
+      "options": [
+        "2e",
+        "4e",
+        "e",
+        "e/2"
+      ]
+    },
+    {
+      "no": 79,
+      "section": "B",
+      "marks": 2,
+      "subject": "Physics",
+      "chapter": "Mechanics",
+      "topic": "Gravitation",
+      "text": "The height above the surface of the earth at which the acceleration due to gravity becomes one ninth of its value at the surface is, in terms of the earth's radius R:",
+      "options": [
+        "R",
+        "3R",
+        "2R",
+        "R/2"
+      ]
+    },
+    {
+      "no": 80,
+      "section": "B",
+      "marks": 2,
+      "subject": "Physics",
+      "chapter": "Waves & Sound",
+      "topic": "Sound",
+      "text": "Two open organ pipes of lengths 50 cm and 51 cm sounded together produce 6 beats per second with their fundamental notes. The speed of sound in air is:",
+      "options": [
+        "306 m/s",
+        "330 m/s",
+        "340 m/s",
+        "300 m/s"
+      ]
+    },
+    {
+      "no": 81,
+      "section": "B",
+      "marks": 2,
+      "subject": "Physics",
+      "chapter": "Heat & Thermodynamics",
+      "topic": "Heat & Thermodynamics",
+      "text": "One mole of an ideal diatomic gas is heated at constant pressure so that its temperature rises by 50 K. The work done by the gas is:",
+      "options": [
+        "1452.5 J",
+        "415 J",
+        "1037.5 J",
+        "830 J"
+      ]
+    },
+    {
+      "no": 82,
+      "section": "B",
+      "marks": 2,
+      "subject": "Physics",
+      "chapter": "Heat & Thermodynamics",
+      "topic": "Heat & Thermodynamics",
+      "text": "A Carnot engine works between 500 K and 300 K and absorbs 1000 J of heat from the source in each cycle. The work done per cycle is:",
+      "options": [
+        "600 J",
+        "1000 J",
+        "300 J",
+        "400 J"
+      ]
+    },
+    {
+      "no": 83,
+      "section": "B",
+      "marks": 2,
+      "subject": "Physics",
+      "chapter": "Optics",
+      "topic": "Geometric Optics",
+      "text": "Light travels from a medium of refractive index 1.5 into a medium of refractive index 1.2. The critical angle for the pair of media is nearly:",
+      "options": [
+        "42°",
+        "37°",
+        "60°",
+        "53°"
+      ]
+    },
+    {
+      "no": 84,
+      "section": "B",
+      "marks": 2,
+      "subject": "Physics",
+      "chapter": "Electricity & Magnetism",
+      "topic": "Electrostatics",
+      "text": "Two point charges +4 μC and −4 μC are placed 10 cm apart. The magnitude of the electric field at the midpoint of the line joining them is:",
+      "options": [
+        "zero",
+        "5.76 × 10⁷ N/C",
+        "1.44 × 10⁷ N/C",
+        "2.88 × 10⁷ N/C"
+      ]
+    },
+    {
+      "no": 85,
+      "section": "B",
+      "marks": 2,
+      "subject": "Physics",
+      "chapter": "Electricity & Magnetism",
+      "topic": "Electrostatics",
+      "text": "Two capacitors of 2 μF and 3 μF are joined in series and this combination is connected in parallel with a capacitor of 6 μF. The equivalent capacitance is:",
+      "options": [
+        "11 μF",
+        "7.2 μF",
+        "1.2 μF",
+        "6.6 μF"
+      ]
+    },
+    {
+      "no": 86,
+      "section": "B",
+      "marks": 2,
+      "subject": "Physics",
+      "chapter": "Electricity & Magnetism",
+      "topic": "Current Electricity",
+      "text": "In a balanced Wheatstone bridge the resistances in the first three arms are P = 10 Ω, Q = 20 Ω and R = 30 Ω. The resistance in the fourth arm is:",
+      "options": [
+        "60 Ω",
+        "20 Ω",
+        "15 Ω",
+        "40 Ω"
+      ]
+    },
+    {
+      "no": 87,
+      "section": "B",
+      "marks": 2,
+      "subject": "Physics",
+      "chapter": "Electricity & Magnetism",
+      "topic": "Magnetism & Electromagnetic Induction",
+      "text": "A coil of 100 turns, area 0.05 m² and resistance 10 Ω is placed with its plane perpendicular to a magnetic field that changes from 0.2 T to 0.6 T in 0.1 s. The induced current in the coil is:",
+      "options": [
+        "20 A",
+        "0.2 A",
+        "4 A",
+        "2 A"
+      ]
+    },
+    {
+      "no": 88,
+      "section": "B",
+      "marks": 2,
+      "subject": "Physics",
+      "chapter": "Modern Physics",
+      "topic": "Modern Physics (Photoelectric, Atomic, Nuclear)",
+      "text": "The half-life of a radioactive sample is 20 minutes. The fraction of the original nuclei that has decayed after one hour is:",
+      "options": [
+        "1/8",
+        "3/4",
+        "1/3",
+        "7/8"
+      ]
+    },
+    {
+      "no": 89,
+      "section": "B",
+      "marks": 2,
+      "subject": "Chemistry",
+      "chapter": "Physical Chemistry",
+      "topic": "Mole Concept & Stoichiometry",
+      "text": "The volume of oxygen, measured at STP, required for the complete combustion of 8 g of methane is:",
+      "options": [
+        "22.4 L",
+        "44.8 L",
+        "11.2 L",
+        "33.6 L"
+      ]
+    },
+    {
+      "no": 90,
+      "section": "B",
+      "marks": 2,
+      "subject": "Chemistry",
+      "chapter": "Physical Chemistry",
+      "topic": "Mole Concept & Stoichiometry",
+      "text": "An organic compound contains carbon 40%, hydrogen 6.7% and oxygen 53.3% by mass. Its empirical formula is:",
+      "options": [
+        "CHO",
+        "CH₂O",
+        "C₂H₆O",
+        "C₂H₄O₂"
+      ]
+    },
+    {
+      "no": 91,
+      "section": "B",
+      "marks": 2,
+      "subject": "Chemistry",
+      "chapter": "Physical Chemistry",
+      "topic": "Electrochemistry",
+      "text": "For the cell reaction between zinc and copper, the standard electrode potentials are −0.76 V for zinc and +0.34 V for copper. The standard e.m.f. of the cell is:",
+      "options": [
+        "1.10 V",
+        "0.42 V",
+        "0.76 V",
+        "−1.10 V"
+      ]
+    },
+    {
+      "no": 92,
+      "section": "B",
+      "marks": 2,
+      "subject": "Chemistry",
+      "chapter": "Physical Chemistry",
+      "topic": "Ionic Equilibrium & pH",
+      "text": "The pH of a 0.005 M aqueous solution of calcium hydroxide at 25 °C, assuming complete dissociation, is:",
+      "options": [
+        "12",
+        "11",
+        "2",
+        "13"
+      ]
+    },
+    {
+      "no": 93,
+      "section": "B",
+      "marks": 2,
+      "subject": "Chemistry",
+      "chapter": "Physical Chemistry",
+      "topic": "Solutions & Concentration",
+      "text": "The mole fraction of the solute in a solution prepared by dissolving 18 g of glucose in 178.2 g of water is:",
+      "options": [
+        "0.10",
+        "0.09",
+        "0.99",
+        "0.01"
+      ]
+    },
+    {
+      "no": 94,
+      "section": "B",
+      "marks": 2,
+      "subject": "Chemistry",
+      "chapter": "Organic Chemistry",
+      "topic": "Aromatic Compounds & Amines",
+      "text": "Aniline treated with sodium nitrite and hydrochloric acid at 0–5 °C gives:",
+      "options": [
+        "benzene diazonium chloride",
+        "chlorobenzene",
+        "nitrobenzene",
+        "phenol"
+      ]
+    },
+    {
+      "no": 95,
+      "section": "B",
+      "marks": 2,
+      "subject": "Chemistry",
+      "chapter": "Organic Chemistry",
+      "topic": "Haloalkanes, Alcohols & Carbonyl Compounds",
+      "text": "Which of the following compounds gives a positive iodoform test?",
+      "options": [
+        "Diethyl ether",
+        "Benzaldehyde",
+        "Methanol",
+        "Acetone"
+      ]
+    },
+    {
+      "no": 96,
+      "section": "B",
+      "marks": 2,
+      "subject": "Chemistry",
+      "chapter": "Organic Chemistry",
+      "topic": "Named Reactions & Conversions",
+      "text": "Ethanal warmed with dilute sodium hydroxide gives 3-hydroxybutanal. This reaction is known as the:",
+      "options": [
+        "Perkin reaction",
+        "Cannizzaro reaction",
+        "Aldol condensation",
+        "Clemmensen reduction"
+      ]
+    },
+    {
+      "no": 97,
+      "section": "B",
+      "marks": 2,
+      "subject": "English",
+      "chapter": "Grammar II",
+      "topic": "Voice (Active / Passive)",
+      "text": "Change into the passive voice: 'Who wrote this letter?'",
+      "options": [
+        "By whom this letter was written?",
+        "By whom was this letter written?",
+        "Who was written this letter?",
+        "Whom was this letter written?"
+      ]
+    },
+    {
+      "no": 98,
+      "section": "B",
+      "marks": 2,
+      "subject": "English",
+      "chapter": "Comprehension",
+      "topic": "Reading Comprehension",
+      "text": "The statement 'Science merely reflects the prevailing social forces' suggests that Science is:",
+      "options": [
+        "destructive by its very nature",
+        "wholly responsible for starting modern wars",
+        "neutral in itself, taking its character from the society that uses it",
+        "incapable of being used for constructive purposes"
+      ],
+      "passage": "Read the following passage and answer the questions given below.\n\nThe greatest enemy of mankind, as people have discovered, is not Science, but war. Science merely reflects the prevailing social forces. It is found that, when there is peace, Science is constructive; when there is war, Science is perverted to destructive ends. The weapons which Science gives us do not necessarily cause war; they make war increasingly terrible. Till now, it has brought us to the doorstep of doom. Our main problem, therefore, is not to curb Science, but to stop war — to substitute law for force, and international government for anarchy in the relations of one nation with another. That is a job in which everybody must participate, including the scientists. But the bombing of Hiroshima suddenly woke us up to the fact that we have very little time. The hour is late and our work has scarcely begun. Now we are face to face with an urgent question — can education and tolerance, understanding and creative intelligence run fast enough to keep us abreast with our own mounting capacity to destroy? That is the question which we shall have to answer one way or the other in this generation. Science must help us in arriving at the answer, but the main decision lies within ourselves."
+    },
+    {
+      "no": 99,
+      "section": "B",
+      "marks": 2,
+      "subject": "English",
+      "chapter": "Comprehension",
+      "topic": "Reading Comprehension",
+      "text": "In the passage, the reference to the bombing of Hiroshima is made chiefly in order to:",
+      "options": [
+        "describe the technical achievement behind the weapon",
+        "prove that all scientific research should be abandoned",
+        "stress how urgent the situation is and how little time is left",
+        "blame one particular nation for beginning the war"
+      ],
+      "passage": "Read the following passage and answer the questions given below.\n\nThe greatest enemy of mankind, as people have discovered, is not Science, but war. Science merely reflects the prevailing social forces. It is found that, when there is peace, Science is constructive; when there is war, Science is perverted to destructive ends. The weapons which Science gives us do not necessarily cause war; they make war increasingly terrible. Till now, it has brought us to the doorstep of doom. Our main problem, therefore, is not to curb Science, but to stop war — to substitute law for force, and international government for anarchy in the relations of one nation with another. That is a job in which everybody must participate, including the scientists. But the bombing of Hiroshima suddenly woke us up to the fact that we have very little time. The hour is late and our work has scarcely begun. Now we are face to face with an urgent question — can education and tolerance, understanding and creative intelligence run fast enough to keep us abreast with our own mounting capacity to destroy? That is the question which we shall have to answer one way or the other in this generation. Science must help us in arriving at the answer, but the main decision lies within ourselves."
+    },
+    {
+      "no": 100,
+      "section": "B",
+      "marks": 2,
+      "subject": "English",
+      "chapter": "Comprehension",
+      "topic": "Reading Comprehension",
+      "text": "According to the closing lines of the passage, the final decision about the future of mankind rests with:",
+      "options": [
+        "the scientific community alone",
+        "an international government alone",
+        "the system of education alone",
+        "human beings themselves, with Science only assisting them"
+      ],
+      "passage": "Read the following passage and answer the questions given below.\n\nThe greatest enemy of mankind, as people have discovered, is not Science, but war. Science merely reflects the prevailing social forces. It is found that, when there is peace, Science is constructive; when there is war, Science is perverted to destructive ends. The weapons which Science gives us do not necessarily cause war; they make war increasingly terrible. Till now, it has brought us to the doorstep of doom. Our main problem, therefore, is not to curb Science, but to stop war — to substitute law for force, and international government for anarchy in the relations of one nation with another. That is a job in which everybody must participate, including the scientists. But the bombing of Hiroshima suddenly woke us up to the fact that we have very little time. The hour is late and our work has scarcely begun. Now we are face to face with an urgent question — can education and tolerance, understanding and creative intelligence run fast enough to keep us abreast with our own mounting capacity to destroy? That is the question which we shall have to answer one way or the other in this generation. Science must help us in arriving at the answer, but the main decision lies within ourselves."
+    }
+  ]
+}

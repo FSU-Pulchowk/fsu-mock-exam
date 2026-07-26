@@ -52,5 +52,5 @@ WORKERS: int = int(os.getenv("WORKERS", str(_default_workers())))
 
 # ── Data files ────────────────────────────────────────────────────────────────
 BASE_DIR = Path(__file__).parent
-QUESTIONS_FILE: Path = BASE_DIR / os.getenv("QUESTIONS_FILE", "sets_new.json")
-ANSWERS_FILE: Path = BASE_DIR / os.getenv("ANSWERS_FILE", "answers.json")
+QUESTIONS_FILE: Path = BASE_DIR / os.getenv("QUESTIONS_FILE", "data/set_i.json")
+ANSWERS_FILE: Path = BASE_DIR / os.getenv("ANSWERS_FILE", "data/answers_i.json")
