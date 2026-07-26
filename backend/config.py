@@ -37,16 +37,11 @@ import multiprocessing as _mp
 
 def _default_workers() -> int:
     """
-    Conservative formula that fits in 2.3 GB RAM:
-    each Uvicorn worker costs ~55-70 MB; reserve 400 MB for OS + cache.
-    Never exceed 2 × CPU + 1 (diminishing returns on I/O-bound async work).
+    Optimized low-RAM formula:
+    Each Uvicorn worker costs ~55-70 MB RAM. 
+    Using 2 workers is ideal for low RAM environments while maintaining high throughput.
     """
-    cpu_based = min(_mp.cpu_count() * 2 + 1, 8)
-    ram_mb = 2300
-    overhead_mb = 400
-    per_worker_mb = 65
-    ram_based = (ram_mb - overhead_mb) // per_worker_mb
-    return max(1, min(cpu_based, ram_based))
+    return int(os.getenv("WORKERS", "2"))
 
 WORKERS: int = int(os.getenv("WORKERS", str(_default_workers())))
 

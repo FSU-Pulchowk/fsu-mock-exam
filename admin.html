@@ -400,19 +400,21 @@
       <div class="table-wrap">
         <div class="table-toolbar">
           <span>All submitted exams — most recent first</span>
-          <input type="text" id="sub-search" placeholder="Search student ID…" oninput="filterSubs()" />
+          <input type="text" id="sub-search" placeholder="Search Name or Email…" oninput="filterSubs()" />
         </div>
         <table id="subs-table">
           <thead>
             <tr>
-              <th onclick="sortSubs('studentId')">Student ID</th>
+              <th onclick="sortSubs('studentName')">Candidate Name</th>
+              <th onclick="sortSubs('studentEmail')">Email Address</th>
+              <th onclick="sortSubs('setSuffix')">Set</th>
               <th onclick="sortSubs('score')" class="sorted">Score</th>
               <th onclick="sortSubs('answered')">Answered</th>
               <th onclick="sortSubs('ts')">Submitted At</th>
             </tr>
           </thead>
           <tbody id="subs-body">
-            <tr><td colspan="4" class="empty"><span class="spinner"></span></td></tr>
+            <tr><td colspan="6" class="empty"><span class="spinner"></span></td></tr>
           </tbody>
         </table>
         <div class="pager">
@@ -704,13 +706,13 @@
   function filterSubs() {
     const q = document.getElementById('sub-search').value.toLowerCase();
     filteredSubs = q
-      ? subsData.filter(s => s.studentId.toLowerCase().includes(q))
+      ? subsData.filter(s => (s.studentName || '').toLowerCase().includes(q) || (s.studentEmail || '').toLowerCase().includes(q))
       : [...subsData];
     subsPage = 1;
     renderSubsTable();
   }
 
-  let _sortDir = { studentId: 1, score: -1, answered: -1, ts: -1 };
+  let _sortDir = { studentName: 1, studentEmail: 1, setSuffix: 1, score: -1, answered: -1, ts: -1 };
   function sortSubs(key) {
     _sortDir[key] = -_sortDir[key];
     filteredSubs.sort((a, b) => _sortDir[key] * (a[key] > b[key] ? 1 : a[key] < b[key] ? -1 : 0));
@@ -727,13 +729,15 @@
     const totalPages = Math.max(1, Math.ceil(filteredSubs.length / PER_PAGE));
 
     if (slice.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="4" class="empty">No submissions yet.</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="6" class="empty">No submissions yet.</td></tr>';
     } else {
       tbody.innerHTML = slice.map(s => {
         const sc = s.score;
         const cls = sc >= 100 ? 'score-hi' : sc >= 60 ? 'score-mid' : 'score-lo';
         return `<tr>
-          <td class="mono">${esc(s.studentId)}</td>
+          <td><b>${esc(s.studentName || '—')}</b></td>
+          <td class="mono" style="color:var(--muted);">${esc(s.studentEmail || '—')}</td>
+          <td class="mono"><span class="topbar-badge" style="background:#252a38;color:#93c5fd;font-size:10px;">${esc(s.setSuffix ? 'Set ' + s.setSuffix.toUpperCase() : 'Set I')}</span></td>
           <td class="score ${cls}">${sc}</td>
           <td class="mono">${s.answered}</td>
           <td style="color:var(--muted);font-size:12px;">${s.time || '—'}</td>

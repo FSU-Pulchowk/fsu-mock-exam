@@ -24,6 +24,10 @@ _answers_store: dict[str, dict[str, Any]] = {}
 _submissions: dict[str, dict] = {}
 _submissions_lock = Lock()
 
+# Active Exam Sessions: { token: { "name": str, "email": str, "set": str, "created_at": float } }
+_sessions: dict[str, dict] = {}
+_sessions_lock = Lock()
+
 _default_suffix: str | None = None
 
 # ── Telemetry stores ──────────────────────────────────────────────────────────
@@ -107,6 +111,9 @@ def get_all_submissions() -> list[dict]:
         return [
             {
                 "studentId": sid,
+                "studentName": data.get("studentName", ""),
+                "studentEmail": data.get("studentEmail", ""),
+                "setSuffix": data.get("setSuffix", ""),
                 "score": data.get("score", 0),
                 "answered": data.get("answered", 0),
                 "ts": data.get("ts", 0),
@@ -227,6 +234,28 @@ def load_answers(path: Path) -> None:
         logger.error("[ERROR] Invalid JSON in answers file: %s", exc)
 
 
+# ── Session store ─────────────────────────────────────────────────────────────
+
+def create_session(name: str, email: str, set_suffix: str) -> str:
+    """Generate a secure server-side session token for candidate login."""
+    import uuid
+    token = f"sess_{uuid.uuid4().hex}"
+    with _sessions_lock:
+        _sessions[token] = {
+            "name": name,
+            "email": email,
+            "set": set_suffix,
+            "created_at": time.time(),
+        }
+    return token
+
+
+def get_session(token: str) -> dict | None:
+    """Validate and return session data if token is active."""
+    with _sessions_lock:
+        return _sessions.get(token)
+
+
 # ── Accessors ─────────────────────────────────────────────────────────────────
 
 def get_questions(suffix: str | None = None) -> dict[str, Any] | None:
@@ -260,10 +289,20 @@ def is_answers_loaded(suffix: str | None = None) -> bool:
 
 # ── Submission store ──────────────────────────────────────────────────────────
 
-def store_submission(student_id: str, answers: dict, score: float) -> None:
+def store_submission(
+    student_id: str,
+    answers: dict,
+    score: float,
+    student_name: str | None = None,
+    student_email: str | None = None,
+    set_suffix: str | None = None,
+) -> None:
     """Thread-safe write to the in-memory submission store."""
     with _submissions_lock:
         _submissions[student_id] = {
+            "studentName": student_name or "",
+            "studentEmail": student_email or "",
+            "setSuffix": set_suffix or "",
             "answers": answers,
             "score": score,
             "answered": len(answers),

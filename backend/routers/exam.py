@@ -20,7 +20,7 @@ import logging
 from datetime import datetime, timezone
 from typing import Any
 
-from fastapi import APIRouter, HTTPException, Request, Response
+from fastapi import APIRouter, Header, HTTPException, Request, Response
 from fastapi.responses import JSONResponse
 
 import cache
@@ -28,6 +28,8 @@ from config import EXAM_START, EXAM_END, RATE_LIMIT
 from middleware.rate_limit import limiter
 from models import (
     AnswersResponse,
+    LoginRequest,
+    LoginResponse,
     NotTimeResponse,
     SubmitRequest,
     SubmitResponse,
@@ -115,17 +117,51 @@ def _calculate_score(
 
 # ── Routes ────────────────────────────────────────────────────────────────────
 
+@router.post(
+    "/login",
+    response_model=LoginResponse,
+    summary="Candidate Login",
+    description="Registers an active exam session and issues a session token required to retrieve questions.",
+)
+@limiter.limit("20/minute")
+async def login(request: Request, response: Response, payload: LoginRequest) -> LoginResponse:
+    if not cache.is_questions_loaded(payload.setSuffix):
+        raise HTTPException(status_code=404, detail="Selected question set is invalid or unavailable.")
+    
+    token = cache.create_session(payload.fullName, payload.email, payload.setSuffix)
+    logger.info("[LOGIN] Session created for %s (%s) set=%s", payload.fullName, payload.email, payload.setSuffix)
+    return LoginResponse(
+        sessionToken=token,
+        studentName=payload.fullName,
+        setSuffix=payload.setSuffix,
+    )
+
+
 @router.get(
     "/getQuestions",
     summary="Fetch exam questions",
     description=(
-        "Returns the full question set if the exam window is open. "
+        "Returns the full question set if the exam window is open and a valid session token is provided. "
         "Returns `isNotTime: true` if the exam hasn't started or has ended."
     ),
 )
 @limiter.limit(RATE_LIMIT)
-async def get_questions(request: Request, response: Response):
-    questions = cache.get_questions()
+async def get_questions(
+    request: Request,
+    response: Response,
+    set: str | None = None,
+    authorization: str | None = Header(default=None),
+):
+    token = None
+    if authorization and authorization.startswith("Bearer "):
+        token = authorization.split("Bearer ", 1)[1]
+
+    session = cache.get_session(token) if token else None
+    if not session:
+        raise HTTPException(status_code=401, detail="Unauthorized. Active exam login session required.")
+
+    set_to_load = session["set"] if session else (set or cache.get_default_suffix())
+    questions = cache.get_questions(set_to_load)
     if questions is None:
         raise HTTPException(status_code=503, detail="Question data not loaded. Try again shortly.")
 
@@ -180,11 +216,11 @@ async def get_answers(request: Request, response: Response):
 )
 @limiter.limit("10/minute")  # tighter limit — one real submission per student
 async def submit_answers(request: Request, response: Response, payload: SubmitRequest) -> SubmitResponse:
-    answers_data = cache.get_answers()
+    answers_data = cache.get_answers(payload.setSuffix)
     if answers_data is None:
         raise HTTPException(status_code=503, detail="Answer data not loaded.")
 
-    questions_data = cache.get_questions()
+    questions_data = cache.get_questions(payload.setSuffix)
     if questions_data is None:
         raise HTTPException(status_code=503, detail="Question data not loaded.")
 
@@ -198,13 +234,16 @@ async def submit_answers(request: Request, response: Response, payload: SubmitRe
 
     cache.store_submission(
         student_id=payload.studentId,
+        student_name=payload.studentName,
+        student_email=payload.studentEmail,
+        set_suffix=payload.setSuffix,
         answers=payload.answers,
         score=score,
     )
 
     logger.info(
-        "[SUBMIT] student=%s  answered=%d  score=%.1f/%.1f",
-        payload.studentId, len(payload.answers), score, max_score,
+        "[SUBMIT] student=%s (%s / %s) set=%s answered=%d score=%.1f/%.1f",
+        payload.studentId, payload.studentName or "Unknown", payload.studentEmail or "No Email", payload.setSuffix or "default", len(payload.answers), score, max_score,
     )
 
     return SubmitResponse(

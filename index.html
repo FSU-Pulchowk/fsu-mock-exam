@@ -712,6 +712,79 @@
             line-height: 1.6;
         }
 
+        /* ---------- Login Screen ---------- */
+        .login-card {
+            background: #ffffff;
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            padding: 28px 24px;
+            max-width: 440px;
+            margin: 20px auto;
+            box-shadow: 0 4px 14px rgba(20, 60, 80, 0.08);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--line);
+            padding-bottom: 16px;
+        }
+
+        .login-header h2 {
+            margin: 0 0 6px 0;
+            color: var(--teal-dark);
+            font-family: var(--font-display);
+            font-size: 20px;
+        }
+
+        .login-header p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 13px;
+            margin-bottom: 6px;
+            color: var(--ink);
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--line);
+            border-radius: 4px;
+            font-family: var(--font);
+            font-size: 14px;
+            color: var(--ink);
+            background: #fafcfd;
+            box-sizing: border-box;
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--teal);
+            box-shadow: 0 0 0 3px rgba(31, 134, 168, 0.15);
+            background: #ffffff;
+        }
+
+        .login-error {
+            color: var(--red);
+            font-size: 13px;
+            margin-bottom: 14px;
+            display: none;
+        }
+
         .hidden {
             display: none !important;
         }
@@ -733,7 +806,34 @@
             <div class="banner">B.E./B.Arch. Online Demo Examination</div>
 
             <main class="content">
-                <div id="gateScreen" class="instructions">
+                <!-- Login Screen -->
+                <div id="loginScreen" class="login-card">
+                    <div class="login-header">
+                        <h2>Candidate Login</h2>
+                        <p>Enter your details to proceed</p>
+                    </div>
+                    <form onsubmit="handleLogin(event)">
+                        <div class="form-group">
+                            <label for="fullName">Full Name</label>
+                            <input type="text" id="fullName" placeholder="e.g. Demo Student" required autocomplete="off" />
+                        </div>
+                        <div class="form-group">
+                            <label for="emailAddr">Email Address</label>
+                            <input type="email" id="emailAddr" placeholder="e.g. student@example.com" required autocomplete="off" />
+                        </div>
+                        <div class="form-group">
+                            <label for="examSetSelect">Select Model Set</label>
+                            <select id="examSetSelect">
+                                <option value="i">IOE Model Set I</option>
+                                <option value="ii">IOE Model Set II</option>
+                            </select>
+                        </div>
+                        <div id="loginError" class="login-error"></div>
+                        <button type="submit" class="btn btn-blue btn-lg" style="width: 100%; margin-top: 6px;">Login & Continue</button>
+                    </form>
+                </div>
+
+                <div id="gateScreen" class="instructions hidden">
                     <div class="welcome-banner">
                         <h2 class="welcome-title">Welcome!</h2>
                         <p class="welcome-sub">IOE Entrance · Online examination system.</p>
@@ -766,7 +866,7 @@
                 <div id="examScreen" class="exam-main hidden">
                     <div class="exam-infobox">
                         <div class="ei-text">
-                            <div class="ei-name">Demo Student (ID: DEMO123)</div>
+                            <div class="ei-name"><span id="studentDisplayName">Demo Student</span></div>
                             <div class="ei-timer">Time Remaining: <b id="timerText" class="">2:00:00</b></div>
                             <div class="ei-answered">You have answered <b id="answeredCount">0</b> out of <b id="totalCount">—</b>
                             </div>
@@ -871,9 +971,19 @@
         let timerId = null;
         let marksObtained = 0;
 
+        let studentName = localStorage.getItem('studentName') || '';
+        let studentEmail = localStorage.getItem('studentEmail') || '';
+        let studentId = localStorage.getItem('studentId') || '';
+        let selectedSet = localStorage.getItem('selectedSet') || 'i';
+        let sessionToken = localStorage.getItem('sessionToken') || '';
+
         async function getQuestions() {
             try {
-                const response = await fetch(`${API_BASE_URL}/getQuestions`);
+                const headers = {};
+                if (sessionToken) {
+                    headers['Authorization'] = `Bearer ${sessionToken}`;
+                }
+                const response = await fetch(`${API_BASE_URL}/getQuestions?set=${selectedSet}`, { headers });
                 if (!response.ok) throw new Error("Error occurred whilst fetching the questions!");
                 const result = await response.json();
                 if (result.isNotTime == true) {
@@ -979,16 +1089,65 @@
             startedAt = Number(savedStartedAt);
             submitted = false;
 
+            document.getElementById('loginScreen').classList.add('hidden');
             document.getElementById('gateScreen').classList.add('hidden');
             document.getElementById('submittedScreen').classList.add('hidden');
             document.getElementById('examScreen').classList.remove('hidden');
             document.getElementById('goTopBtn').classList.remove('hidden');
+
+            document.getElementById('studentDisplayName').textContent = studentName || 'Demo Student';
 
             clearInterval(timerId);
             renderAll();
             timerId = setInterval(tick, 1000);
             tick();
             return true;
+        }
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            const name = document.getElementById('fullName').value.trim();
+            const email = document.getElementById('emailAddr').value.trim();
+            const setVal = document.getElementById('examSetSelect').value;
+            const err = document.getElementById('loginError');
+
+            if (!name || !email) {
+                err.textContent = 'Please enter your Full Name and Email Address.';
+                err.style.display = 'block';
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API_BASE_URL}/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ fullName: name, email: email, setSuffix: setVal })
+                });
+
+                if (!res.ok) {
+                    const data = await res.json().catch(() => ({}));
+                    throw new Error(data.detail || 'Login failed.');
+                }
+
+                const data = await res.json();
+                studentName = data.studentName;
+                studentEmail = email;
+                sessionToken = data.sessionToken;
+                studentId = "STU" + Math.floor(1000 + Math.random() * 9000);
+                selectedSet = data.setSuffix;
+
+                localStorage.setItem('studentName', studentName);
+                localStorage.setItem('studentEmail', studentEmail);
+                localStorage.setItem('sessionToken', sessionToken);
+                localStorage.setItem('studentId', studentId);
+                localStorage.setItem('selectedSet', selectedSet);
+
+                document.getElementById('loginScreen').classList.add('hidden');
+                document.getElementById('gateScreen').classList.remove('hidden');
+            } catch (error) {
+                err.textContent = error.message || 'Login failed. Please try again.';
+                err.style.display = 'block';
+            }
         }
 
         async function startExam() {
@@ -1010,6 +1169,9 @@
             document.getElementById('gateScreen').classList.add('hidden');
             document.getElementById('examScreen').classList.remove('hidden');
             document.getElementById('goTopBtn').classList.remove('hidden');
+
+            document.getElementById('studentDisplayName').textContent = studentName || 'Demo Student';
+
             renderAll();
             timerId = setInterval(tick, 1000);
         }
@@ -1090,11 +1252,17 @@
 
             // Post answers to backend server-side scoring
             try {
-                const studentId = "DEMO" + Math.floor(1000 + Math.random() * 9000);
+                const sid = studentId || ("DEMO" + Math.floor(1000 + Math.random() * 9000));
                 const res = await fetch(`${API_BASE_URL}/submitAnswers`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ studentId: studentId, answers: answers })
+                    body: JSON.stringify({
+                        studentId: sid,
+                        studentName: studentName,
+                        studentEmail: studentEmail,
+                        setSuffix: selectedSet,
+                        answers: answers
+                    })
                 });
                 if (res.ok) {
                     const data = await res.json();
@@ -1214,9 +1382,17 @@
             document.getElementById('examPause').classList.toggle('hidden', !document.hidden);
         });
 
-        fetch(`${API_BASE_URL}/admin/ping`, { method: 'POST' }).catch(() => {});
+        async function initPage() {
+            fetch(`${API_BASE_URL}/admin/ping`, { method: 'POST' }).catch(() => {});
+            const isRestored = await rerender();
+            if (!isRestored) {
+                document.getElementById('loginScreen').classList.remove('hidden');
+                document.getElementById('gateScreen').classList.add('hidden');
+                document.getElementById('examScreen').classList.add('hidden');
+            }
+        }
 
-        void rerender();
+        void initPage();
     </script>
 </body>
 </html>

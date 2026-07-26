@@ -8,6 +8,20 @@ from pydantic import BaseModel, Field
 from typing import Any
 
 
+# ── Candidate Login ─────────────────────────────────────────────────────────────
+
+class LoginRequest(BaseModel):
+    fullName: str = Field(..., min_length=2, max_length=128)
+    email: str = Field(..., min_length=5, max_length=128)
+    setSuffix: str = Field(..., min_length=1, max_length=16)
+
+
+class LoginResponse(BaseModel):
+    sessionToken: str
+    studentName: str
+    setSuffix: str
+
+
 # ── /getQuestions response ────────────────────────────────────────────────────
 
 class QuestionSetResponse(BaseModel):
@@ -43,6 +57,9 @@ class AnswersResponse(BaseModel):
 
 class SubmitRequest(BaseModel):
     studentId: str = Field(..., min_length=1, max_length=64)
+    studentName: str | None = Field(default=None, max_length=128)
+    studentEmail: str | None = Field(default=None, max_length=128)
+    setSuffix: str | None = Field(default=None, max_length=32)
     answers: dict[str, int]   # {"1": 2, "3": 0, ...}  (question_no → option_index)
 
 
